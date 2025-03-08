@@ -3,7 +3,8 @@
         <div class="app-page-title">
             <div class="page-title-wrapper">
                 <div class="page-title-heading">
-                    <div>Ubah Ruang </div>
+                    <div>Ubah Ruang
+                         </div>
                 </div>
             </div>
         </div>

@@ -54,15 +54,17 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
       $('#editGuruForm').on('submit', function(e){
         e.preventDefault();
         $.ajax({
-          url: App.baseUrl + "guru/edit",
+          url: App.baseUrl + "guru/edit/" + App.currentId,
           method: "POST",
           data: $(this).serialize(),
           dataType: "json",
           success: function(response) {
             if(response.status === 'success'){
               toastr.success(response.message);
+              location.reload();
             } else {
               toastr.error(response.message);
+              location.reload();
             }
           },
           error: function(xhr, status, error) {

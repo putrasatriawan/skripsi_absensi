@@ -105,7 +105,7 @@
             </div>
           <div class="form-group">
             <label for="nip">NIP</label>
-            <input type="text" class="form-control" id="nip" name="nip" required />
+            <input type="text" class="form-control" id="nip" name="nip" readonly />
           </div>
           <div class="form-group">
             <label for="name">Name</label>

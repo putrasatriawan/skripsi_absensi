@@ -2,6 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once APPPATH . 'core/Admin_Controller.php';
 
+
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
@@ -131,6 +132,8 @@ class User extends Admin_Controller
 
 	public function edit($id)
 	{
+	
+		// $this->load->helper('dev');
 		$this->form_validation->set_rules('email', "Email", 'trim|required');
 		$this->form_validation->set_rules('name', "Nama", 'trim|required');
 		$this->form_validation->set_rules('role_id', "Role", 'trim|required');
@@ -144,11 +147,31 @@ class User extends Admin_Controller
 				'phone' => $this->input->post('phone'),
 			);
 
+			$role_id= $this->input->post('role_id');
 			$roles_id = array(
 				'role_id' => $this->input->post('role_id'),
 			);
 
 			$user_id = $id;
+			if ($role_id == 3) {
+				$parsing_guru = array(
+					
+					'name' => $this->input->post('name'),
+					'name' => $this->input->post('name'),
+					'users_id' => $user_id,
+					'nip' => $this->input->post('nik'),
+				);
+				$update = $this->guru_model->update($parsing_guru, array("users_id" => $id));
+			} 
+
+				// echo "<pre>";
+				// print_r($parsing_guru);
+				// die;
+				// foreach ($parsing_guru as $value) {
+				// 	echo "<pre>";
+				// 	print_r($value);
+				// }
+				// die;
 
 			if (!empty($_FILES['photo']['name'])) {
 				$config['upload_path'] = './uploads/photo_profile/';

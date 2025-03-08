@@ -63,7 +63,6 @@ class Guru extends Admin_Controller
 
 		if ($this->form_validation->run() === TRUE) {
 			$data = array(
-				'users_id' => $this->input->post('users_id'),
 				'name' => $this->input->post('name'),
 				'nip' => $this->input->post('nip'),
 				'jenis_kelamin' => $this->input->post('jenis_kelamin'),
@@ -75,14 +74,22 @@ class Guru extends Admin_Controller
 				'tanggal_lahir' => $this->input->post('tanggal_lahir'),
 			);
 
+				// echo "<pre>";
+				// print_r($id);
+				// die;
+				// foreach ($id as $value) {
+				// 	echo "<pre>";
+				// 	print_r($value);
+				// }
+				// die;
 			$update = $this->guru_model->update($data, array("id" => $id));
 
 			if ($update) {
-				// echo json_encode(['status' => 'success', 'message' => 'Data Guru Berhasil Diubah!']);
+				echo json_encode(['status' => 'success', 'message' => 'Data Guru Berhasil Diubah!']);
 				redirect("guru", "refresh");
 			} 
 			else {
-				// echo json_encode(['status' => 'error', 'message' => 'Data Guru Gagal Diubah!']);
+				echo json_encode(['status' => 'error', 'message' => 'Data Guru Gagal Diubah!']);
 				redirect("guru", "refresh");
 			}
 		} 
