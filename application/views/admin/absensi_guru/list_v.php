@@ -16,11 +16,16 @@
             </div>
         <?php else: ?>
 
+
         <!-- Card Biodata -->
         <div class="d-flex justify-content-center">
         <div class="card border-primary  shadow-lg">
-            <div class="card-header bg-primary text-white text-center font-weight-bold">
-                Biodata
+            <div class="d-flex justify-content-between align-items-center bg-secondary  text-white p-2 font-weight-bold">
+                <span style="color: black;">Biodata</span>
+                <div class="d-flex">
+                    <div class="sinyal shadow mx-2"></div>
+                    <div class="green_sinyal shadow d-none"></div>
+                </div>
             </div>
             <div class="card-body" style="font-size: 17px">
                 <div class="row">
@@ -53,10 +58,23 @@
             <div class="col-md-12 text-center">
                 <div class="location-box">
                     <p id="geo-location" class="text-muted">📍 Lokasi belum terdeteksi</p>
-                    <button class="btn btn-outline-info get-location">🔍 Cek Lokasi</button>
+                    <!-- <button class="btn btn-outline-info get-location">🔍 Cek Lokasi</button> -->
                 </div>
             </div>
         </div>
+        <div class="col-md-12 text-center d-none" id="open-camera">
+                <button class="btn btn-lg btn-outline-primary pulse">
+                        📸 Buka Kamera untuk Absen
+                </button>
+                <div class="camera-container" style="width: 320px; height: 320px; margin: auto; position: relative; overflow: hidden; border-radius: 10px;">
+                        <video id="video" width="100%" height="100%" autoplay style="object-fit: cover;"></video>
+                </div>
+                <canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
+                <button class="btn btn-lg btn-outline-success shoot-button" style="display: none;">
+                        📸 Shoot
+                </button>
+            </div>
+
         <div class="row mt-4">
             <div class="col-md-12 text-center">
                 <p id="submit-status" class="text-muted">Silakan ambil foto untuk melanjutkan absensi.</p>
@@ -159,6 +177,17 @@
         margin: 20px auto;
         /* Center horizontally with margin */
     }
+    .sinyal, .green_sinyal {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red; /* Warna default untuk sinyal */
+    }
+
+    .green_sinyal {
+        background-color: green; /* Warna hijau saat sinyal aktif */
+    }
+
 </style>
 
 

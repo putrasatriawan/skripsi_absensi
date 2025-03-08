@@ -16,8 +16,8 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
     init: function () {
       console.log("Defined Latitude: ", this.definedLatitude);
       console.log("Defined Longitude: ", this.definedLongitude);
-      $(document).on("click", ".open-camera", function () {
-        App.checkLocationAndOpenCamera();
+      $(document).on("click", "#open-camera", function () {
+        App.triggerCamera();
       });
 
       $(document).on("click", ".get-location", function () {
@@ -33,12 +33,14 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
     showLoading: function () {
       document.getElementById("loadingModal").style.display = "block";
     },
-
     hideLoading: function () {
       document.getElementById("loadingModal").style.display = "none";
     },
     hideOpenCamera: function () {
-      document.getElementById("open-camera").style.display = "none";
+      document.getElementById("open-camera").classList.remove('d-none');
+    },
+    hideCamera: function () {
+      document.getElementById("open-camera").addClass('d-none');
     },
     logoMerah: function() {
       const logo = document.getElementById("logo-merah");
@@ -73,12 +75,15 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
                       App.definedLatitude, 
                       App.definedLongitude
                   );
+
+                  console.log(distance)
                   
+                  var jarak = Math.floor(distance);
                   // Perbarui elemen lokasi
                   document.getElementById("geo-location").innerText = `📍 Latitude: ${App.userLatitude}, Longitude: ${App.userLongitude}`;
                   
                   // Perbarui elemen jarak di dalam kartu biodata
-                  document.getElementById("distance-info").innerText = `${distance.toFixed(2)} Meter`;
+                  document.getElementById("distance-info").innerText = `${Math.floor(distance)} Meter`;
                   
                   // Perbarui elemen jam dengan waktu real-time
                   const now = new Date();
@@ -86,7 +91,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
                   document.getElementById("time-info").innerText = timeString;
                   
                   toastr.success("Lokasi diperbarui secara real-time.");
-                  App.checkLocationAndOpenCamera();
+                  App.checkLocationAndOpenCamera(jarak);
               },
               (error) => {
                   // App.hideLoading();
@@ -96,7 +101,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
               {
                   enableHighAccuracy: true, // Meningkatkan akurasi lokasi
                   maximumAge: 0, // Tidak menggunakan cache
-                  timeout: 10000 // Timeout request
+                  timeout: 5000 // Timeout request
               }
           );
       } else {
@@ -104,40 +109,58 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
           document.getElementById("geo-location").innerText = "Geolocation tidak didukung oleh browser ini.";
           toastr.error("Geolocation tidak didukung oleh browser ini.");
       }
+    },
+    calculateDistance: function(lat2, lon2, lat1, lon1,) {
+      const R = 6371;
+      const dLat = (lat2 - lat1) * (Math.PI / 180);
+      const dLon = (lon2 - lon1) * (Math.PI / 180);
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return parseInt(R * c * 1000);
   },
   
-  calculateDistance: function (userLat, userLon, centerLat, centerLon) {
-      const latRange = 30 / 111320; // Selisih latitude untuk radius 30 meter
-      const lonRange = 30 / 111320; // Selisih longitude untuk radius 30 meter (tanpa cos)
+  // calculateDistance: function (userLat, userLon, centerLat, centerLon) {
+  //     const latRange = 30 / 111320; // Selisih latitude untuk radius 30 meter
+  //     const lonRange = 30 / 111320; // Selisih longitude untuk radius 30 meter (tanpa cos)
   
-      // Cek apakah user berada dalam rentang latitude & longitude
-      const isLatInRange = userLat >= centerLat - latRange && userLat <= centerLat + latRange;
-      const isLonInRange = userLon >= centerLon - lonRange && userLon <= centerLon + lonRange;
+  //     // Cek apakah user berada dalam rentang latitude & longitude
+  //     const isLatInRange = userLat >= centerLat - latRange && userLat <= centerLat + latRange;
+  //     const isLonInRange = userLon >= centerLon - lonRange && userLon <= centerLon + lonRange;
   
-      if (isLatInRange && isLonInRange) {
-          return 0; // Jika dalam radius 30 meter, jarak dianggap 0 meter
-      }
+  //     if (isLatInRange && isLonInRange) {
+  //         return 0; // Jika dalam radius 30 meter, jarak dianggap 0 meter
+  //     }
       
-      // Jika di luar radius 30 meter, hitung jarak dalam meter
-      const dLat = (userLat - centerLat) * 111320;
-      const dLon = (userLon - centerLon) * 111320; // Tidak dikalikan cos(latitude) karena pendekatan sederhana
-      return Math.sqrt(dLat * dLat + dLon * dLon); // Jarak dalam meter
-  },
+  //     // Jika di luar radius 30 meter, hitung jarak dalam meter
+  //     const dLat = (userLat - centerLat) * 111320;
+  //     const dLon = (userLon - centerLon) * 111320; // Tidak dikalikan cos(latitude) karena pendekatan sederhana
+  //     return Math.sqrt(dLat * dLat + dLon * dLon); // Jarak dalam meter
+  // },
   
   
 
-    checkLocationAndOpenCamera: function () {
-      // if (App.checkLocation()) {
+  checkLocationAndOpenCamera: function (jarak) {
+    let redSignal = document.querySelector(".sinyal");
+    let greenSignal = document.querySelector(".green_sinyal");
+    let camera = document.getElementById("open-camera");
+
+    if (jarak < 30) {
         console.log("Dalam radius yang diizinkan, membuka kamera...");
-        // App.triggerCamera();
-        // App.hideOpenCamera();
-        App.logoHijau();
-      // } else {
-      //   // App.hideOpenCamera();
-      //   toastr.error("Anda berada di luar radius lokasi yang diizinkan!");
-      //   App.logoMerah();
-      // }
-    },
+        camera.classList.remove("d-none");
+        redSignal.classList.add("d-none");
+        greenSignal.classList.remove("d-none"); // Munculkan sinyal hijau
+    } else {
+        console.log("Di luar radius, menyembunyikan kamera...");
+        camera.classList.add("d-none");
+        redSignal.classList.remove("d-none"); // Munculkan sinyal merah
+        greenSignal.classList.add("d-none");
+    }
+  },
+
+
+
 
     // Open the camera
     triggerCamera: function () {
