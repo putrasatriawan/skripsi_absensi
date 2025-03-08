@@ -1,0 +1,113 @@
+
+body, html {
+    height: 100%;
+    margin: 0;
+}
+.col-md-4{
+    height:100vh;
+    border-radius: 10px;
+}
+
+.col-md-8{
+    background-color: #EBF1FF;
+    height: 100vh;
+}
+.larger-image {
+    width: 80%; 
+    height: auto; 
+}
+
+h1,h3{
+    position: relative;
+    bottom: 70px;
+    padding-left: 20px;
+}
+
+.form-group{
+    padding-left: 20px;
+    position: relative;
+    bottom: 40px;
+}
+
+.btn-block{
+    position: relative;
+    left: 21px;
+    bottom: 30px;
+    margin-top: 50px;
+}
+.img-1 {
+    display: flex;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin-left: auto;
+    bottom: auto;
+}
+h5, .h5 {
+    font-size: 15px;
+    color: #0047E7;
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    right: 10px;
+    margin-right: auto;
+}
+.password-container {
+    position: relative;
+}
+  .password-container input[type="password"],
+  .password-container input[type="text"]{
+    width: 84%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  .toggle-password {
+    position: absolute;
+    right: 5vw; 
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 1; 
+  }
+
+  @media (max-width: 767px) {
+    .col-md-4 {
+        order: 2; 
+        height: auto;
+    }
+
+    .col-md-8 {
+        order: 1;
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .larger-image {
+        width: 100%;
+    }
+
+    h1, h3{
+        position: relative;
+        bottom: 10px;
+        left: auto;
+        margin: 0;
+        padding: 0;
+    }
+    .btn-block {
+        position: static;
+        left: auto;
+        margin: 15px;
+        margin-top: 0px;
+    }
+    .form-group {
+        position: static;
+        bottom: auto;
+        left: auto;
+        margin: 0;
+    }
+    .img-1 {
+       width: 15%;
+}
+  }

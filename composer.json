@@ -1,0 +1,14 @@
+{
+    "require": {
+        "dompdf/dompdf": "^3.0",
+        "phpoffice/phpspreadsheet": "^1.17",
+        "workerman/mqtt": "^1.6",
+        "firebase/php-jwt": "^6.10",
+        "chriskacerguis/codeigniter-restserver": "^3.1"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.21"
+         }
+   }
+}
