@@ -57,7 +57,7 @@ class Guru extends Admin_Controller
 		}
 	}
 
-	public function edit($id)
+	public function edit($id, $users_id)
 	{
 		$this->form_validation->set_rules('name', "Name Harus Diisi", 'trim|required');
 
@@ -75,9 +75,9 @@ class Guru extends Admin_Controller
 			);
 
 				// echo "<pre>";
-				// print_r($id);
+				// print_r($data);
 				// die;
-				// foreach ($id as $value) {
+				// foreach ($data as $value) {
 				// 	echo "<pre>";
 				// 	print_r($value);
 				// }
@@ -85,7 +85,12 @@ class Guru extends Admin_Controller
 			$update = $this->guru_model->update($data, array("id" => $id));
 
 			if ($update) {
-				echo json_encode(['status' => 'success', 'message' => 'Data Guru Berhasil Diubah!']);
+					$data_user = array(
+						'first_name' => $this->input->post('name'),
+						'nik' => $this->input->post('nip'),
+					);
+					$this->user_model->update($data_user, array("id" => $users_id));
+					echo json_encode(['status' => 'success', 'message' => 'Data Guru Berhasil Diubah!']);
 				redirect("guru", "refresh");
 			} 
 			else {
@@ -217,7 +222,7 @@ class Guru extends Admin_Controller
      			$delete_url_hard = "";
      		
             	if($this->data['is_can_edit'] && $data->is_deleted == 0){
-					$edit_url = "<button class='btn btn-sm btn-info white edit-button' data-id='".$data->id."'><i class='fas fa-edit'></i> Ubah</button>";
+					$edit_url = "<button class='btn btn-sm btn-info white edit-button' data-id='".$data->id."'  data-users-id='".$data->users_id."'><i class='fas fa-edit'></i> Ubah</button>";
             	}  
             	if($this->data['is_can_delete']){
 	            	if($data->is_deleted == 0){

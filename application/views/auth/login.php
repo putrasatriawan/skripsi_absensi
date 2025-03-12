@@ -95,7 +95,7 @@
     <div class="main">
         <div class="col-md-6 col-sm-12">
             <div class="login-form">
-                <form action="<?php echo base_url(); ?>auth/login" method="post" id="form-login">
+                <form action="<?php echo base_url(); ?>Auth/login" method="post" id="form-login">
                     <?php if (!empty($this->session->flashdata('message_error'))) { ?>
                     <div class="alert alert-danger">
                         <?php echo $this->session->flashdata('message_error'); ?>

@@ -41,6 +41,27 @@
                     <div class="col-6 font-weight-bold py-2 border-bottom">Departemen</div>
                     <div class="col-6 py-2 border-bottom">Teknologi</div>
 
+                    <?php
+                    $hari = [
+                        'Sunday' => 'Minggu',
+                        'Monday' => 'Senin',
+                        'Tuesday' => 'Selasa',
+                        'Wednesday' => 'Rabu',
+                        'Thursday' => 'Kamis',
+                        'Friday' => 'Jumat',
+                        'Saturday' => 'Sabtu'
+                    ];
+
+                    $namaHari = $hari[date('l')];
+                    $tanggal = date('d-m-Y');
+                    ?>
+
+                    <div class="col-6 font-weight-bold py-2 border-bottom">Tanggal</div>
+                    <div class="col-6 py-2 border-bottom">
+                        <?php echo "$namaHari, $tanggal"; ?>
+                    </div>
+
+
                     <div class="col-6 font-weight-bold py-2 border-bottom">Jam</div>
                     <div class="col-6 py-2 border-bottom" id="time-info"></div>
 

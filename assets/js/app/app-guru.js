@@ -47,14 +47,17 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
 
       $('#table').on('click', '.edit-button', function(){
         var id = $(this).data('id');
+        var users_id = $(this).data('users-id');
+        console.log(users_id)
         App.currentId = id;
+        App.users_id = users_id;
         App.loadRecord(id);
       });
 
       $('#editGuruForm').on('submit', function(e){
         e.preventDefault();
         $.ajax({
-          url: App.baseUrl + "guru/edit/" + App.currentId,
+          url: App.baseUrl + "guru/edit/" + App.currentId + '/' + App.users_id,
           method: "POST",
           data: $(this).serialize(),
           dataType: "json",

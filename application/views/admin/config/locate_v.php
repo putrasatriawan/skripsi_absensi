@@ -5,26 +5,26 @@
                 <h4 class="title">Config</h4>
                 <hr>
 
-<div class="container mt-5">
-    <h2>Configure Longitude and Latitude</h2>
+                <div class="container mt-5">
 
-    <!-- Alerts for success/error -->
-    <div id="alert-container"></div>
+                    <!-- Alerts for success/error -->
+                    <div id="alert-container"></div>
 
-    <form id="configForm">
-        <div class="form-group">
-            <label for="longitude">Longitude:</label>
-            <input type="text" name="longitude" id="longitude" value="<?= isset($longitude) ? $longitude : '' ?>" class="form-control" placeholder="Enter longitude">
-        </div>
+                    <form id="configForm">
+                        <div class="form-group">
+                            <label for="longitude">Longitude:</label>
+                            <input type="text" name="longitude" id="longitude" value="<?= isset($longitude) ? $longitude : '' ?>" class="form-control" placeholder="Enter longitude">
+                        </div>
 
-        <div class="form-group">
-            <label for="latitude">Latitude:</label>
-            <input type="text" name="latitude" id="latitude" value="<?= isset($latitude) ? $latitude : '' ?>" class="form-control" placeholder="Enter latitude">
-        </div>
+                        <div class="form-group">
+                            <label for="latitude">Latitude:</label>
+                            <input type="text" name="latitude" id="latitude" value="<?= isset($latitude) ? $latitude : '' ?>" class="form-control" placeholder="Enter latitude">
+                        </div>
 
-        <button type="submit" id="save-btn" class="btn btn-primary">Save Settings</button>
-    </form>
-</div>
+                        <button type="submit" id="save-btn" class="btn btn-primary">Save Settings</button>
+                    </form>
+                    
+                </div>
             </div>
         </div>
     </div>

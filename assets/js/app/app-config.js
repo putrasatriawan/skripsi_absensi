@@ -9,13 +9,13 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
     },
     initEvent: function() {
           $('#configForm').on('submit', function(event) {
-              event.preventDefault(); // Prevent form submission
-              
+              event.preventDefault(); 
+
               var longitude = $('#longitude').val();
               var latitude = $('#latitude').val();
 
               $.ajax({
-                  url: App.baseUrl + 'config/save', // Use site_url as a global variable or pass it
+                  url: App.baseUrl + 'config/save', 
                   method: 'POST',
                   data: {
                       longitude: longitude,

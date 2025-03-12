@@ -65,32 +65,41 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
           navigator.geolocation.watchPosition(
               (position) => {
                   App.hideLoading();
-                  App.userLatitude = position.coords.latitude;
-                  App.userLongitude = position.coords.longitude;
+                
                   
                   // Hitung jarak dari lokasi yang ditentukan
                   const distance = App.calculateDistance(
-                      App.userLatitude, 
-                      App.userLongitude, 
-                      App.definedLatitude, 
-                      App.definedLongitude
+                    App.userLatitude = (position.coords.latitude),
+                    App.userLongitude = (position.coords.longitude),
+                    // '-6.9178',
+                    // '107.6604',
+                    '-6.9564297',
+                    '107.7719317',
+                    // App.definedLatitude = App.definedLatitude,
+                    // App.definedLongitude = App.definedLongitude,
+                    
                   );
 
-                  console.log(distance)
-                  
-                  var jarak = Math.floor(distance);
+                  // console.log("User Lat:", App.userLatitude, "User Lon:", App.userLongitude);
+                  // console.log("Defined Lat:", App.definedLatitude, "Defined Lon:", App.definedLongitude);
+                  console.log("Calculated Distance:", distance);
+
                   // Perbarui elemen lokasi
                   document.getElementById("geo-location").innerText = `📍 Latitude: ${App.userLatitude}, Longitude: ${App.userLongitude}`;
                   
                   // Perbarui elemen jarak di dalam kartu biodata
-                  document.getElementById("distance-info").innerText = `${Math.floor(distance)} Meter`;
+                  var jarak = Math.round(distance);
+                  let formattedDistance = jarak.toLocaleString() + " m"; // Semua dalam meter
+                  
+                  document.getElementById("distance-info").innerText = formattedDistance;
+                  
                   
                   // Perbarui elemen jam dengan waktu real-time
                   const now = new Date();
                   const timeString = now.toLocaleTimeString();
                   document.getElementById("time-info").innerText = timeString;
                   
-                  toastr.success("Lokasi diperbarui secara real-time.");
+                  // toastr.success("Lokasi diperbarui secara real-time.");
                   App.checkLocationAndOpenCamera(jarak);
               },
               (error) => {
@@ -110,34 +119,32 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
           toastr.error("Geolocation tidak didukung oleh browser ini.");
       }
     },
-    calculateDistance: function(lat2, lon2, lat1, lon1,) {
-      const R = 6371;
-      const dLat = (lat2 - lat1) * (Math.PI / 180);
-      const dLon = (lon2 - lon1) * (Math.PI / 180);
+    // calculateDistance: function(lat1, lon1, lat2, lon2) { // Urutan dibalik
+    //   const R = 6371; // Radius Bumi dalam km
+    //   const dLat = (lat2 - lat1) * (Math.PI / 180);
+    //   const dLon = (lon2 - lon1) * (Math.PI / 180);
+    //   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    //             Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+    //             Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    //   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    //   return Math.round(R * c * 1000); // Menggunakan `Math.round` agar hasil lebih akurat
+    // },
+  
+  
+    calculateDistance: function (userLat, userLon, centerLat, centerLon) {
+      const R = 6371; // Radius bumi dalam km
+      const dLat = (centerLat - userLat) * (Math.PI / 180);
+      const dLon = (centerLon - userLon) * (Math.PI / 180);
+  
       const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+                Math.cos(userLat * (Math.PI / 180)) * Math.cos(centerLat * (Math.PI / 180)) *
                 Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return parseInt(R * c * 1000);
+  
+      return Math.round(R * c * 1000); // Hasil dalam meter, dibulatkan
   },
   
-  // calculateDistance: function (userLat, userLon, centerLat, centerLon) {
-  //     const latRange = 30 / 111320; // Selisih latitude untuk radius 30 meter
-  //     const lonRange = 30 / 111320; // Selisih longitude untuk radius 30 meter (tanpa cos)
-  
-  //     // Cek apakah user berada dalam rentang latitude & longitude
-  //     const isLatInRange = userLat >= centerLat - latRange && userLat <= centerLat + latRange;
-  //     const isLonInRange = userLon >= centerLon - lonRange && userLon <= centerLon + lonRange;
-  
-  //     if (isLatInRange && isLonInRange) {
-  //         return 0; // Jika dalam radius 30 meter, jarak dianggap 0 meter
-  //     }
-      
-  //     // Jika di luar radius 30 meter, hitung jarak dalam meter
-  //     const dLat = (userLat - centerLat) * 111320;
-  //     const dLon = (userLon - centerLon) * 111320; // Tidak dikalikan cos(latitude) karena pendekatan sederhana
-  //     return Math.sqrt(dLat * dLat + dLon * dLon); // Jarak dalam meter
-  // },
   
   
 
@@ -146,6 +153,8 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
     let greenSignal = document.querySelector(".green_sinyal");
     let camera = document.getElementById("open-camera");
 
+
+    console.log("jarak",jarak)
     if (jarak < 30) {
         console.log("Dalam radius yang diizinkan, membuka kamera...");
         camera.classList.remove("d-none");
