@@ -34,7 +34,7 @@ class Migrate_data extends CI_Controller
 			array('id' => 5, 'module_id' => 1, 'name' => 'Hak Akses', 'url' => 'privileges', 'parent_id' => 3, 'icon' => "", 'sequence' => 2, 'description' => '', "show_at" => 0),
 			array('id' => 6, 'module_id' => 1, 'name' => 'User', 'url' => 'user', 'parent_id' => 1, 'icon' => "pe-7s-users", 'sequence' => 3, 'description' => '', "show_at" => 0),
 			array('id' => 7, 'module_id' => 1, 'name' => 'Report', 'url' => 'report', 'parent_id' => 1, 'icon' => "pe-7s-print", 'sequence' => 9, 'description' => '', "show_at" => 0),
-			array('id' => 8, 'module_id' => 1, 'name' => 'Absensi Guru', 'url' => 'absensi_guru', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 12, 'description' => '', "show_at" => 0),
+			array('id' => 8, 'module_id' => 1, 'name' => 'Absensi', 'url' => 'absensi', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 12, 'description' => '', "show_at" => 0),
 			array('id' => 9, 'module_id' => 1, 'name' => 'Config Lat Lon', 'url' => 'config', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 13, 'description' => '', "show_at" => 0),
 			array('id' => 10, 'module_id' => 1, 'name' => 'Data Absen', 'url' => 'data_absen', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 14, 'description' => '', "show_at" => 0),
 			array('id' => 12, 'module_id' => 1, 'name' => 'Config Jam Masuk', 'url' => 'config_jam', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 15, 'description' => '', "show_at" => 0),
@@ -143,7 +143,7 @@ class Migrate_data extends CI_Controller
 		$data = array(
 			// array('id' => 11, 'module_id' => 1, 'name' => 'Konfigurasi Pengguna', 'url' => '#', 'parent_id' => 1, 'icon' => "pe-7s-server", 'sequence' => 6, 'description' => 'Master Kelas', "show_at" => 0),
 			// array('id' => 12, 'module_id' => 1, 'name' \> 'Data Kelas', 'url' => 'kelas', 'parent_id' => 11, 'icon' => "", 'sequence' => 1, 'description' => 'Data Kelas', "show_at" => 0),
-			array('id' => 11, 'module_id' => 1, 'name' => 'Master Pengguna', 'url' => 'guru', 'parent_id' => 1, 'icon' => "pe-7s-server", 'sequence' => 7, 'description' => 'Data Guru', "show_at" => 0),
+			array('id' => 11, 'module_id' => 1, 'name' => 'Master Pengguna', 'url' => 'master_user', 'parent_id' => 1, 'icon' => "pe-7s-server", 'sequence' => 7, 'description' => 'Data Guru', "show_at" => 0),
 			// array('id' => 17, 'module_id' => 1, 'name' => 'Data Siswa', 'url' => 'siswa', 'parent_id' => 7, 'icon' => "pe-7s-server", 'sequence' => 7, 'description' => 'Data Siswa', "show_at" => 0),
 
 		);

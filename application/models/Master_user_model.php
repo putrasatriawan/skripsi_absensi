@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 
-class Guru_model extends CI_Model
+class Master_user_model extends CI_Model
 {
 	public function __construct()
 	{
@@ -11,8 +11,8 @@ class Guru_model extends CI_Model
 
 	public function getAllById($where = array())
 	{
-		$this->db->select("guru.*")->from("guru");
-		$this->db->where("guru.is_deleted", 0);
+		$this->db->select("master_user.*")->from("master_user");
+		$this->db->where("master_user.is_deleted", 0);
 		$this->db->where($where);
 
 		$query = $this->db->get();
@@ -23,8 +23,8 @@ class Guru_model extends CI_Model
 	}
 	public function getAllIdSuperadmin($where = array())
 	{
-		$this->db->select("guru.*")->from("guru");
-		$this->db->where("guru.is_deleted", 0);
+		$this->db->select("master_user.*")->from("master_user");
+		$this->db->where("master_user.is_deleted", 0);
 		$this->db->where($where);
 
 		$query = $this->db->get();
@@ -35,20 +35,20 @@ class Guru_model extends CI_Model
 	}
 	public function insert($data)
 	{
-		$this->db->insert('guru', $data);
+		$this->db->insert('master_user', $data);
 		return $this->db->insert_id();
 	}
 
 	public function update($data, $where)
 	{
-		$this->db->update('guru', $data, $where);
+		$this->db->update('master_user', $data, $where);
 		return $this->db->affected_rows();
 	}
 
 	public function delete($where)
 	{
 		$this->db->where($where);
-		$this->db->delete('guru');
+		$this->db->delete('master_user');
 		if ($this->db->affected_rows()) {
 			return TRUE;
 		}
@@ -57,7 +57,7 @@ class Guru_model extends CI_Model
 
 	function getAllBy($limit, $start, $search, $col, $dir)
 	{
-		$this->db->select("guru.*")->from("guru");
+		$this->db->select("master_user.*")->from("master_user");
 
 		$this->db->limit($limit, $start)->order_by($col, $dir);
 		if (!empty($search)) {
@@ -76,13 +76,13 @@ class Guru_model extends CI_Model
 	public function getById($id)
 	{
 		$this->db->where('id', $id);
-		$query = $this->db->get('guru');  // Assuming the table name is 'guru'
+		$query = $this->db->get('master_user');  // Assuming the table name is 'master_user'
 		return $query->row(); // Returns a single row (object)
 	}
 
 	public function getCountAllBy($limit, $start, $search, $order, $dir)
 	{
-		$this->db->select("guru.*")->from("guru");
+		$this->db->select("master_user.*")->from("master_user");
 		if (!empty($search)) {
 			foreach ($search as $key => $value) {
 				$this->db->or_like($key, $value);
@@ -96,7 +96,7 @@ class Guru_model extends CI_Model
 	{
 		$this->db->where('id <', $currentId);
 		$this->db->order_by('id', 'DESC');
-		$query = $this->db->get('guru', 1);
+		$query = $this->db->get('master_user', 1);
 		return $query->result();
 	}
 
@@ -104,7 +104,7 @@ class Guru_model extends CI_Model
 	{
 		$this->db->where('id >', $currentId);
 		$this->db->order_by('id', 'ASC');
-		$query = $this->db->get('guru', 1);
+		$query = $this->db->get('master_user', 1);
 		return $query->result();
 	}
 }

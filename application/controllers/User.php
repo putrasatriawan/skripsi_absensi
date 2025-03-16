@@ -13,7 +13,7 @@ class User extends Admin_Controller
 		parent::__construct();
 		$this->load->model('user_model');
 		$this->load->model('kelas_model');
-		$this->load->model('guru_model');
+		$this->load->model('master_user_model');
 		$this->load->model('ion_auth_model');
 		$this->load->model("roles_model");
 	}
@@ -96,7 +96,7 @@ class User extends Admin_Controller
 						'users_id' => $user_id,
 						'nip' => $this->input->post('nik'),
 					);
-					$this->guru_model->insert($parsing_guru);
+					$this->master_user_model->insert($parsing_guru);
 				} 
 				elseif ($role_id == 4) { // Role ID 4 is for 'Siswa'
 					$parsing_siswa = array(
@@ -161,7 +161,7 @@ class User extends Admin_Controller
 					'users_id' => $user_id,
 					'nip' => $this->input->post('nik'),
 				);
-				$update = $this->guru_model->update($parsing_guru, array("users_id" => $id));
+				$update = $this->master_user_model->update($parsing_guru, array("users_id" => $id));
 			} 
 
 				// echo "<pre>";
@@ -229,7 +229,7 @@ class User extends Admin_Controller
 
 				$this->data['roles'] = $this->roles_model->getAllById();
 				$this->data['kelas'] = $this->kelas_model->getAllById();
-
+				
 				$this->data['first_name'] = $data->first_name;
 				$this->data['last_name'] = $data->last_name;
 				$this->data['username'] = $data->username;
@@ -355,6 +355,8 @@ class User extends Admin_Controller
 		$id = $this->uri->segment(3);
 		$is_deleted = $this->uri->segment(4);
 		if (!empty($id)) {
+			$this->destroy_master($id);
+
 			$this->load->model("user_model");
 			$data = array(
 				'is_deleted' => ($is_deleted == 1) ? 0 : 1
@@ -380,7 +382,8 @@ class User extends Admin_Controller
 		$id = $this->uri->segment(3);
 		$is_deleted = $this->uri->segment(4);
 		if (!empty($id)) {
-			$this->load->model("roles_model");
+			$this->destroy_hard_master($id);
+			$this->load->model("user_model");
 			$data = array(
 				'is_deleted' => ($is_deleted == 1) ? 0 : 1
 			);
@@ -394,6 +397,56 @@ class User extends Admin_Controller
 		}
 		echo json_encode($response_data);
 	}
+
+	public function destroy_master($id)
+	{
+		$response_data = array();
+		$response_data['status'] = false;
+		$response_data['msg'] = "";
+		$response_data['data'] = array();
+
+		$is_deleted = $this->uri->segment(4);
+		if (!empty($id)) {
+			$this->load->model("master_user_model");
+			$data = array(
+				'is_deleted' => ($is_deleted == 1) ? 0 : 1
+			);
+			$update = $this->master_user_model->update($data, array("users_id" => $id));
+
+			$response_data['data'] = $data;
+			$response_data['status'] = true;
+		} else {
+			$response_data['msg'] = "ID Harus Diisi";
+		}
+
+		echo json_encode($response_data);
+	}
+
+	public function destroy_hard_master()
+	{
+		$response_data = array();
+		$response_data['status'] = false;
+		$response_data['msg'] = "";
+		$response_data['data'] = array();
+
+		$id = $this->uri->segment(3);
+		$is_deleted = $this->uri->segment(4);
+		if (!empty($id)) {
+			$this->load->model("master_user_model");
+			$data = array(
+				'is_deleted' => ($is_deleted == 1) ? 0 : 1
+			);
+			$update = $this->master_user_model->delete(array("users_id" => $id));
+
+			$response_data['data'] = $data;
+			$response_data['status'] = true;
+		} else {
+			$response_data['msg'] = "ID Harus Diisi";
+		}
+
+		echo json_encode($response_data);
+	}
+
 
 	public function reset_password($id, $status)
 	{
@@ -525,7 +578,7 @@ class User extends Admin_Controller
 								'tempat_lahir' => $row['K'],
 								'tanggal_lahir' => $row['L'],
 							];
-							$this->guru_model->insert($insert_guru_data);
+							$this->master_user_model->insert($insert_guru_data);
 							$insert_count++;
 						}
 					}

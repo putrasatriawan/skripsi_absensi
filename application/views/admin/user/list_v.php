@@ -14,10 +14,10 @@
                 </div>
 
                 <!-- import data button -->
-                <button type="button" class="btn-shadow mr-3 btn btn-primary" data-toggle="modal"
+                <!-- <button type="button" class="btn-shadow mr-3 btn btn-primary" data-toggle="modal"
                     data-target="#importModal">
                     <span class="btn-icon-wrapper pr-2 opacity-7"> <i class="fa fa-upload fa-w-20"></i> </span> Import
-                </button>
+                </button> -->
 
                 <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
                     aria-hidden="true">

@@ -22,9 +22,9 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-3 control-label">NIS/NIK/NIP</label>
+                                <label class="col-sm-3 control-label">NIK</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" id="nik" placeholder="Masukan NIK/NIS/NIP"
+                                    <input type="number" class="form-control" id="nik" placeholder="Masukan NIK"
                                         name="nik">
                                 </div>
                             </div>

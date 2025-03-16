@@ -95,6 +95,27 @@ class User_model extends CI_Model
 		}
 		return FALSE;
 	}
+	function getAndMaster($where = array())
+	{
+		$this->db->select("users.*, roles.id as role_id, roles.name as role_name, unit_kerja.name as unit_kerja_name")->from("users");
+		$this->db->join("users_roles", "users.id = users_roles.user_id", 'LEFT');
+		$this->db->join('unit_kerja', 'users.unit_kerja = unit_kerja.id', 'left');
+		$this->db->join("roles", "roles.id = users_roles.role_id", 'LEFT');
+		$this->db->join("master_user", "users.id = master_user.users_id", 'LEFT');
+
+		// $roles_default = array('1', '2');
+		// $this->db->where_not_in('roles.id', $roles_default);
+
+		$this->db->where("users.is_deleted", 0);
+		$this->db->where("roles.is_deleted", 0);
+		$this->db->where($where);
+
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->row();
+		}
+		return FALSE;
+	}
 
 	function getRolesById($where = array())
 	{

@@ -162,7 +162,7 @@ class Role extends Admin_Controller
      			$delete_url = "";
      			$delete_url_hard = "";
 				
-				if ($data->id != 3 && $data->id != 4) {
+				if ($this->data['is_can_edit'] && isset($data->is_deleted) && $data->is_deleted == 0) {
 					if($this->data['is_can_edit'] && $data->is_deleted == 0){
 						$edit_url = "<a href='".base_url()."role/edit/".$data->id."' class='btn btn-sm btn-info white'><i class='fa fa-pencil'></i> Ubah</a>";
 					}  

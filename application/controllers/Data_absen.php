@@ -4,7 +4,7 @@ require_once APPPATH . 'core/Admin_Controller.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
-
+	
 class Data_absen extends Admin_Controller
 {
 	public function __construct()

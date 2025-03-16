@@ -6,13 +6,13 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
-class Guru extends Admin_Controller
+class Master_user extends Admin_Controller
 {
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->library('upload');
-		$this->load->model('guru_model');
+		$this->load->model('master_user_model');
 		$this->load->model('user_model');
 	}
 
@@ -21,7 +21,7 @@ class Guru extends Admin_Controller
 
 		$this->load->helper('url');
 		if ($this->data['is_can_read']) {
-			$this->data['content'] = 'admin/guru/list_v';
+			$this->data['content'] = 'admin/master_user/list_v';
 		} else {
 			$this->data['content'] = 'errors/html/restrict';
 		}
@@ -42,7 +42,7 @@ class Guru extends Admin_Controller
 				'updated_by' => $this->data['users']->id,
 				'is_deleted' => 0
 			);
-			if ($this->guru_model->insert($data)) {
+			if ($this->master_user_model->insert($data)) {
 				$response = array('status' => 'success', 'message' => 'guruan Berhasil Disimpan!');
 				header('Content-Type: application/json');
 				echo json_encode($response);
@@ -52,7 +52,7 @@ class Guru extends Admin_Controller
 				echo json_encode($response);
 			}
 		} else {
-			$this->data['content'] = 'admin/guru/create_v';
+			$this->data['content'] = 'admin/master_user/create_v';
 			$this->load->view('admin/layouts/page', $this->data);
 		}
 	}
@@ -82,7 +82,7 @@ class Guru extends Admin_Controller
 				// 	print_r($value);
 				// }
 				// die;
-			$update = $this->guru_model->update($data, array("id" => $id));
+			$update = $this->master_user_model->update($data, array("id" => $id));
 
 			if ($update) {
 					$data_user = array(
@@ -91,32 +91,32 @@ class Guru extends Admin_Controller
 					);
 					$this->user_model->update($data_user, array("id" => $users_id));
 					echo json_encode(['status' => 'success', 'message' => 'Data Guru Berhasil Diubah!']);
-				redirect("guru", "refresh");
+				redirect("master_user", "refresh");
 			} 
 			else {
 				echo json_encode(['status' => 'error', 'message' => 'Data Guru Gagal Diubah!']);
-				redirect("guru", "refresh");
+				redirect("master_user", "refresh");
 			}
 		} 
 		else {
 			if (!empty($_POST)) {
 				$this->session->set_flashdata('message_error', validation_errors());
-				return redirect("guru/edit/" . $id);
+				return redirect("master_user/edit/" . $id);
 			} else {
-				$guru = $this->guru_model->getAllById(array("guru.id" => $id));
+				$master_user = $this->master_user_model->getAllById(array("master_user.id" => $id));
 
-				if (!empty($guru)) {
-					$this->data['id'] = $guru[0]->id;
-					$this->data['users_id'] = $guru[0]->users_id;
-					$this->data['name'] = $guru[0]->name;
-					$this->data['nip'] = $guru[0]->nip;
-					$this->data['jenis_kelamin'] = $guru[0]->jenis_kelamin;
-					$this->data['no_hp'] = $guru[0]->no_hp;
-					$this->data['agama'] = $guru[0]->agama;
-					$this->data['alamat'] = $guru[0]->alamat;
-					$this->data['gaji'] = $guru[0]->gaji;
-					$this->data['tempat_lahir'] = $guru[0]->tempat_lahir;
-					$this->data['tanggal_lahir'] = $guru[0]->tanggal_lahir;
+				if (!empty($master_user)) {
+					$this->data['id'] = $master_user[0]->id;
+					$this->data['users_id'] = $master_user[0]->users_id;
+					$this->data['name'] = $master_user[0]->name;
+					$this->data['nip'] = $master_user[0]->nip;
+					$this->data['jenis_kelamin'] = $master_user[0]->jenis_kelamin;
+					$this->data['no_hp'] = $master_user[0]->no_hp;
+					$this->data['agama'] = $master_user[0]->agama;
+					$this->data['alamat'] = $master_user[0]->alamat;
+					$this->data['gaji'] = $master_user[0]->gaji;
+					$this->data['tempat_lahir'] = $master_user[0]->tempat_lahir;
+					$this->data['tanggal_lahir'] = $master_user[0]->tanggal_lahir;
 				} else {
 					$this->data['id'] = "";
 					$this->data['users_id'] = "";
@@ -131,7 +131,7 @@ class Guru extends Admin_Controller
 					$this->data['tanggal_lahir'] = "";
 				}
 
-				$this->data['content'] = 'admin/guru/edit_v';
+				$this->data['content'] = 'admin/master_user/edit_v';
 				$this->load->view('admin/layouts/page', $this->data);
 			}
 		}
@@ -140,20 +140,20 @@ class Guru extends Admin_Controller
 	public function getGuruById()
 	{
 		$id = $this->input->post('id');
-		$guru = $this->guru_model->getAllById(array("guru.id" => $id));
+		$master_user = $this->master_user_model->getAllById(array("master_user.id" => $id));
 		
-		if (!empty($guru)) {
+		if (!empty($master_user)) {
 			$response = array(
-				'id' => $guru[0]->id,
-				'nip' => $guru[0]->nip,
-				'name' => $guru[0]->name,
-				'jenis_kelamin' => $guru[0]->jenis_kelamin,
-				'no_hp' => $guru[0]->no_hp,
-				'agama' => $guru[0]->agama,
-				'alamat' => $guru[0]->alamat,
-				'gaji' => $guru[0]->gaji,	
-				'tempat_lahir' => $guru[0]->tempat_lahir,
-				'tanggal_lahir' => $guru[0]->tanggal_lahir,
+				'id' => $master_user[0]->id,
+				'nip' => $master_user[0]->nip,
+				'name' => $master_user[0]->name,
+				'jenis_kelamin' => $master_user[0]->jenis_kelamin,
+				'no_hp' => $master_user[0]->no_hp,
+				'agama' => $master_user[0]->agama,
+				'alamat' => $master_user[0]->alamat,
+				'gaji' => $master_user[0]->gaji,	
+				'tempat_lahir' => $master_user[0]->tempat_lahir,
+				'tanggal_lahir' => $master_user[0]->tanggal_lahir,
 			);
 			echo json_encode($response);
 		} else {
@@ -165,8 +165,8 @@ class Guru extends Admin_Controller
 	{
 		$id = $this->input->post('id');
 
-		$prevRecord = $this->guru_model->getPreviousRecord($id);
-		$nextRecord = $this->guru_model->getNextRecord($id);
+		$prevRecord = $this->master_user_model->getPreviousRecord($id);
+		$nextRecord = $this->master_user_model->getNextRecord($id);
 
 		$response = array(
 			'prevId' => !empty($prevRecord) ? $prevRecord[0]->id : null,
@@ -192,17 +192,17 @@ class Guru extends Admin_Controller
 		$search = array();
 		$limit = 0;
 		$start = 0;
-		$totalData = $this->guru_model->getCountAllBy($limit, $start, $search, $order, $dir);
+		$totalData = $this->master_user_model->getCountAllBy($limit, $start, $search, $order, $dir);
 
 		if (!empty($this->input->post('search')['value'])) {
 			$search_value = $this->input->post('search')['value'];
 			$search = array(
-				"guru.name" => $search_value,
-				"guru.nip" => $search_value,
-				"guru.jenis_kelamin" => $search_value
+				"master_user.name" => $search_value,
+				"master_user.nip" => $search_value,
+				"master_user.jenis_kelamin" => $search_value
 			);
 
-           	$totalFiltered = $this->guru_model->getCountAllBy($limit,$start,$search,$order,$dir); 
+           	$totalFiltered = $this->master_user_model->getCountAllBy($limit,$start,$search,$order,$dir); 
         }
 		else{
         	$totalFiltered = $totalData;
@@ -210,7 +210,7 @@ class Guru extends Admin_Controller
        
         $limit = $this->input->post('length');
         $start = $this->input->post('start');
-     	$datas = $this->guru_model->getAllBy($limit,$start,$search,$order,$dir);
+     	$datas = $this->master_user_model->getAllBy($limit,$start,$search,$order,$dir);
      	
         $new_data = array();
         if(!empty($datas))
@@ -224,25 +224,6 @@ class Guru extends Admin_Controller
             	if($this->data['is_can_edit'] && $data->is_deleted == 0){
 					$edit_url = "<button class='btn btn-sm btn-info white edit-button' data-id='".$data->id."'  data-users-id='".$data->users_id."'><i class='fas fa-edit'></i> Ubah</button>";
             	}  
-            	if($this->data['is_can_delete']){
-	            	if($data->is_deleted == 0){
-	        			$delete_url = "<a href='#' 
-	        				url='".base_url()."guru/destroy/".$data->id."/".$data->is_deleted."'
-	        				class='btn btn-sm btn-danger white delete' >Non Aktifkan
-	        				</a>";
-					} else {
-						$delete_url = "<a href='#' 
-	        				url='" . base_url() . "guru/destroy/" . $data->id . "/" . $data->is_deleted . "'
-	        				class='btn btn-sm btn-primary white delete' 
-	        				 >Aktifkan
-	        				</a>";
-						$delete_url_hard = "<a href='#' 
-	        				url='" . base_url() . "guru/destroy_hard/" . $data->id . "/" . $data->is_deleted . "'
-	        				class='btn btn-sm btn-danger white delete' 
-	        				 >Delete
-	        				</a>";
-					}
-				}
 
 				$nestedData['id'] = $start + $key + 1;
 				$nestedData['name'] = $data->name;
@@ -272,11 +253,11 @@ class Guru extends Admin_Controller
 		$id = $this->uri->segment(3);
 		$is_deleted = $this->uri->segment(4);
 		if (!empty($id)) {
-			$this->load->model("guru_model");
+			$this->load->model("master_user_model");
 			$data = array(
 				'is_deleted' => ($is_deleted == 1) ? 0 : 1
 			);
-			$update = $this->guru_model->update($data, array("id" => $id));
+			$update = $this->master_user_model->update($data, array("id" => $id));
 
 			$response_data['data'] = $data;
 			$response_data['status'] = true;
@@ -297,11 +278,11 @@ class Guru extends Admin_Controller
 		$id = $this->uri->segment(3);
 		$is_deleted = $this->uri->segment(4);
 		if (!empty($id)) {
-			$this->load->model("guru_model");
+			$this->load->model("master_user_model");
 			$data = array(
 				'is_deleted' => ($is_deleted == 1) ? 0 : 1
 			);
-			$update = $this->guru_model->delete(array("id" => $id));
+			$update = $this->master_user_model->delete(array("id" => $id));
 
 			$response_data['data'] = $data;
 			$response_data['status'] = true;
@@ -342,7 +323,7 @@ class Guru extends Admin_Controller
 				foreach ($data as $key => $row) {
 					if ($key < 6) continue;
 					if (!empty($row['B']) && !empty($row['C']) && !empty($row['D'])) {
-						$existing_data = $this->guru_model->get_by_code($row['B']);
+						$existing_data = $this->master_user_model->get_by_code($row['B']);
 
 						if (!$existing_data) {
 							$insert_data = array(
@@ -353,7 +334,7 @@ class Guru extends Admin_Controller
 								'is_deleted' => 0,
 							);
 
-							$this->guru_model->insert($insert_data);
+							$this->master_user_model->insert($insert_data);
 							$insert_count++;
 						}
 					}

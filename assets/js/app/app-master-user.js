@@ -31,7 +31,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
         processing: true,
         serverSide: true,
         ajax: {
-          url: App.baseUrl + "guru/dataList",
+          url: App.baseUrl + "master_user/dataList",
           dataType: "json",
           type: "POST",
         },
@@ -57,7 +57,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
       $('#editGuruForm').on('submit', function(e){
         e.preventDefault();
         $.ajax({
-          url: App.baseUrl + "guru/edit/" + App.currentId + '/' + App.users_id,
+          url: App.baseUrl + "master_user/edit/" + App.currentId + '/' + App.users_id,
           method: "POST",
           data: $(this).serialize(),
           dataType: "json",
@@ -91,7 +91,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
 
     loadRecord: function(id) {
       $.ajax({
-        url: App.baseUrl + "guru/getGuruById",
+        url: App.baseUrl + "master_user/getGuruById",
         method: "POST",
         data: {id: id},
         dataType: "json",
@@ -114,7 +114,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
     },
     loadAdjacentRecords: function(currentId) {
       $.ajax({
-        url: App.baseUrl + "guru/getAdjacentRecords",
+        url: App.baseUrl + "master_user/getAdjacentRecords",
         method: "POST",
         data: {id: currentId},
         dataType: "json",
