@@ -26,11 +26,13 @@
                     <table class="table table-striped dt-responsive " id="table" style="width:100%; text-align: center;">
                     <thead>
                         <th class="w-1">No</th>
+                        <th>Tanggal</th>
                         <th>Nama</th>
-                        <th>Kelas</th>
-                        <th>Jurusan</th>
-                        <th>Tahun Angkatan</th>
-                        <th>Kode Kelas</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Status Kerja</th>
+                        <th>Status</th>
+                        <th>Foto</th>
                         <th>Aksi</th>
                     </thead>
                 </table>
@@ -39,32 +41,106 @@
     </div>
 </div>
 
-<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
-    aria-hidden="true">
+<!-- Modal Edit -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="importModalLabel">Upload File</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit Data Absen</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form id="importForm" action="<?php echo base_url('data_absen/import_data') ?>" method="post"
-                    enctype="multipart/form-data">
+            <form id="editForm" method="post" action="<?php echo base_url('data_absen/update'); ?>">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="edit-id">
+                    
                     <div class="form-group">
-                        <label for="fileInput">Pilih file untuk diunggah</label>
-                        <input type="file" class="form-control-file" id="userfile" name="userfile" required>
+                        <label>Nama User</label>
+                        <input type="text" class="form-control" name="nama_user" id="edit-nama_user" readonly>
                     </div>
-                </form>
+                    
+                    <div class="form-group">
+                        <label id="label-init-time">Check In</label>
+                        <input type="time" class="form-control" name="init_time" id="edit-init_time">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status_work">Status Kerja</label>
+                        <select class="form-control" name="status_work" id="edit-status_work">
+                            <option value="Work From Home">Work From Home</option>
+                            <option value="Work From Office">Work From Office</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" name="status" id="edit-status">
+                            <option value="Tepat Waktu">Tepat Waktu</option>
+                            <option value="Terlambat">Terlambat</option>
+                            <option value="Pulang">Pulang</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Foto</label><br>
+                        <img id="edit-photo" src="" alt="Foto" style="width: 150px; height: auto;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Detail Modal -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">Detail Data Absen</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="width: 30%;"><strong>Nama User</strong></td>
+                        <td>: <span id="detail-nama_user"></span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jam Masuk</strong></td>
+                        <td>: <span id="detail-init_time"></span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Status Kerja</strong></td>
+                        <td>: <span id="detail-status_work"></span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Status</strong></td>
+                        <td>: <span id="detail-status"></span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jenis Absen</strong></td>
+                        <td>: <span id="detail-is_check_in"></span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Foto</strong></td>
+                        <td>: <img id="detail-photo" src="" alt="Foto" style="width: 150px;"></td>
+                    </tr>
+                </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" form="importForm" class="btn btn-primary">Upload</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
 </div>
+
+
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script data-main="<?php echo base_url() ?>assets/js/main/main-data_absen"
     src="<?php echo base_url() ?>assets/js/require.js">

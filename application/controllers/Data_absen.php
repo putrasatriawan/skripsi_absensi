@@ -11,6 +11,7 @@ class Data_absen extends Admin_Controller
 	{
 		parent::__construct();
 		$this->load->library('upload');
+		$this->load->model('absensi_model');
 	}
 
 	public function index()
@@ -122,101 +123,168 @@ class Data_absen extends Admin_Controller
 	// 	}
 	// }
 
-	// public function dataList()
-	// {
+	public function dataList()
+	{
 
-	// 	$columns = array(
-	// 		0 => 'id',
-	// 		1 => 'kelas.name',
-	// 		2 => 'nomor_kelas',
-	// 		3 => 'jurusan.name',
-	// 		4 => 'tahun_angkatan',
-	// 		5 => 'kode_kelas',
-	// 		6 => '',
-	// 	);
-
-
-	// 	$order = $columns[$this->input->post('order')[0]['column']];
-	// 	$dir = $this->input->post('order')[0]['dir'];
-	// 	$search = array();
-	// 	$limit = 0;
-	// 	$start = 0;
-	// 	$totalData = $this->kelompok_kelas_model->getCountAllBy($limit, $start, $search, $order, $dir);
+		$columns = array(
+			0 => 'id',
+			1 => 'tanggal_absen',
+			2 => 'nama_users',
+			3 => 'check_in',
+			4 => 'check_out',
+			5 => 'status_kerja',
+			6 => 'status',
+			7 => 'foto',
+			8 => '',
+		);
 
 
-	// 	if (!empty($this->input->post('search')['value'])) {
-	// 		// $isSearchColumn = true;
-	// 		$search_value = $this->input->post('search')['value'];
-	// 		$search = array(
-	// 			"kelompok_kelas.kode_kelas" => $search_value,
-	// 		);
-	// 		//    	 }
-	// 		// if($isSearchColumn){
-	// 		$totalFiltered = $this->kelompok_kelas_model->getCountAllBy($limit, $start, $search, $order, $dir);
-	// 	} else {
-	// 		$totalFiltered = $totalData;
-	// 	}
+		$where = [
+			'absensi.id_users' => $this->data['users']->id, 
+		];
+		$order = $columns[$this->input->post('order')[0]['column']];
+		$dir = $this->input->post('order')[0]['dir'];
+		$search = array();
+		$limit = 0;
+		$start = 0;
+		$totalData = $this->absensi_model->getCountAllBy($limit, $start, $search, $order, $dir, $where);
+		if (!empty($this->input->post('search')['value'])) {
+			// $isSearchColumn = true;
+			$search_value = $this->input->post('search')['value'];
+			// $search = array(
+			// 	"kelompok_kelas.kode_kelas" => $search_value,
+			// );
+			//    	 }
+			// if($isSearchColumn){
+			$totalFiltered = $this->absensi_model->getCountAllBy($limit, $start, $search, $order, $dir, $where);
+		} else {
+			$totalFiltered = $totalData;
+		}
 
-	// 	$limit = $this->input->post('length');
-	// 	$start = $this->input->post('start');
-	// 	$datas = $this->kelompok_kelas_model->getAllBy($limit, $start, $search, $order, $dir);
+		$limit = $this->input->post('length');
+		$start = $this->input->post('start');
+		$datas = $this->absensi_model->getAllBy($limit, $start, $search, $order, $dir);
+				// 		echo "<pre>";
+				// print_r($datas);
+				// die;
+				// foreach ($datas as $value) {
+				// 	echo "<pre>";
+				// 	print_r($value);
+				// }
+				// die;
+		$new_data = array();
+		if (!empty($datas)) {
 
-	// 	$new_data = array();
-	// 	if (!empty($datas)) {
+			foreach ($datas as $key => $data) {
 
-	// 		foreach ($datas as $key => $data) {
+				$edit_url = "";
 
-	// 			$edit_url = "";
-	// 			$delete_url = "";
-	// 			$delete_url_hard = "";
+				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
+					$edit_url = "<button class='btn btn-sm btn-info white edit-button' 
+									data-id='{$data->id}' 
+									data-nama_user='{$data->nama_user}' 
+									data-init_time='{$data->init_time}' 
+									data-status_work='{$data->status_work}' 
+									data-is_check_in='{$data->is_check_in}' 
+									data-status='{$data->status}' 
+									data-photo='{$data->photo}'>
+									<i class='fas fa-edit'></i> Ubah
+								</button>";
+				}
+				
+				
+				if ($this->data['is_can_read'] && $data->is_deleted == 0) {
+					$detail_url = "<button class='btn btn-sm btn-warning white detail-button' 
+									data-id='{$data->id}' 
+									data-nama_user='{$data->nama_user}' 
+									data-init_time='{$data->init_time}' 
+									data-status_work='{$data->status_work}' 
+									data-is_check_in='{$data->is_check_in}' 
+									data-status='{$data->status}' 
+									data-photo='{$data->photo}'>
+									<i class='fas fa-eye'></i> Detail
+								</button>";
+				}
+				
 
-	// 			if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
-	// 				$edit_url = "<a href='" . base_url() . "kelompok_kelas/edit/" . $data->id . "' class='btn btn-sm btn-info white'><i class='fas fa-edit'></i> Ubah</a>";
-	// 			}
-	// 			if ($this->data['is_can_read'] && $data->is_deleted == 0) {
-	// 				$detail_url = "<a href='" . base_url() . "kelompok_kelas/detail/" . $data->id . "' class='btn btn-sm btn-warning white'><i class='fas fa-eye'></i> Detail</a>";
-	// 			}
-	// 			if ($this->data['is_can_delete']) {
-	// 				if ($data->is_deleted == 0) {
-	// 					$delete_url = "<a href='#' y
-	//         				url='" . base_url() . "kelompok_kelas/destroy/" . $data->id . "/" . $data->is_deleted . "'
-	//         				class='btn btn-sm btn-danger white delete' ><i class='fas fa-times'></i> Non Aktifkan
-	//         				</a>";
-	// 				} else {
-	// 					$delete_url = "<a href='#' 
-	//         				url='" . base_url() . "kelompok_kelas/destroy/" . $data->id . "/" . $data->is_deleted . "'
-	//         					class='btn btn-sm btn-primary white delete' 
-	//         				 ><i class='fas fa-check'></i> Aktifkan
-	//         				</a>";
-	// 					$delete_url_hard = "<a href='#' 
-	//         				url='" . base_url() . "kelompok_kelas/destroy_hard/" . $data->id . "/" . $data->is_deleted . "'
-	//         				class='btn btn-sm btn-danger white delete' 
-	//         				 ><i class='fas fa-trash'></i> Delete
-	//         				</a>";
-	// 				}
-	// 			}
+				if (!empty($data->photo)) {
+					$photo = '<img src="data:image/jpeg;base64,' . $data->photo . '" alt="Foto" width="150" height="auto">';
+				} else {
+					$photo = '<img src="' . base_url('assets/img/default.png') . '" alt="Foto" width="200" height="200">';
+				}
+				
+				$status = $data->status;
+				$statusButton = '';
 
-	// 			$nestedData['id'] = $start + $key + 1;
-	// 			$nestedData['kelas_name'] = $data->kelas_name;
-	// 			$nestedData['nomor_kelas'] = $data->nomor_kelas;
-	// 			$nestedData['jurusan_name'] = $data->jurusan_name;
-	// 			$nestedData['tahun_angkatan'] = $data->tahun_angkatan;
-	// 			$nestedData['kode_kelas'] = $data->kode_kelas;
-	// 			$nestedData['action'] = $edit_url . " " . $delete_url . " " . $delete_url_hard;
-	// 			$new_data[] = $nestedData;
-	// 		}
-	// 	}
+				switch ($status) {
+					case 'Tepat Waktu':
+						$statusButton = '<button class="mb-2 mr-2 btn-pill btn btn-success">Tepat Waktu</button>';
+						break;
+					case 'Terlambat':
+						$statusButton = '<button class="mb-2 mr-2 btn-pill btn btn-danger">Terlambat</button>';
+						break;
+					case 'Pulang':
+						$statusButton = '<button class="mb-2 mr-2 btn-pill btn btn-secondary">Pulang</button>';
+						break;
+					default:
+						$statusButton = '<button class="mb-2 mr-2 btn-pill btn btn-dark">Tidak Diketahui</button>';
+						break;
+				}
 
-	// 	$json_data = array(
-	// 		"draw" => intval($this->input->post('draw')),
-	// 		"recordsTotal" => intval($totalData),
-	// 		"recordsFiltered" => intval($totalFiltered),
-	// 		"data" => $new_data
-	// 	);
+				$nestedData['id'] = $start + $key + 1;
+				$nestedData['tanggal_absen'] = formatTanggal($data->tanggal_absen);
+				$nestedData['users_name'] = $data->nama_user;
+				
+				if ($data->is_check_in == 'check_in') {
+					$nestedData['check_in'] = $data->init_time;
+					$nestedData['check_out'] = '-'; 
+				} else {
+					$nestedData['check_in'] = '-'; 
+					$nestedData['check_out'] = $data->init_time;
+				}
+				
+				$nestedData['jarak'] = $data->distance;
+				$nestedData['status_kerja'] = $data->status_work;
+				$nestedData['status'] = $statusButton;
+				$nestedData['foto'] = $photo;
+				$nestedData['action'] = $edit_url . " " . $detail_url;
+				$new_data[] = $nestedData;
+				
+			}
+		}
 
-	// 	echo json_encode($json_data);
-	// }
+		$json_data = array(
+			"draw" => intval($this->input->post('draw')),
+			"recordsTotal" => intval($totalData),
+			"recordsFiltered" => intval($totalFiltered),
+			"data" => $new_data
+		);
 
+		echo json_encode($json_data);
+	}
+
+	public function update()
+{
+    $id = $this->input->post('id');
+    $init_time = $this->input->post('init_time');
+    $status_work = $this->input->post('status_work');
+    $status = $this->input->post('status');
+    $is_check_in = $this->input->post('is_check_in');
+
+    $data = array(
+        'init_time' => $init_time . ':00',
+        'status_work' => $status_work,
+        'status' => $status,
+    );
+
+    $where = array('id' => $id); // Kondisi where untuk update data
+
+    $this->absensi_model->update($data, $where); // Format update($data, $where) sesuai dengan yang kamu gunakan
+    $this->session->set_flashdata('message', 'Data berhasil diubah.');
+    redirect('data_absen');
+}
+
+	
 	// public function destroy()
 	// {
 	// 	$response_data = array();

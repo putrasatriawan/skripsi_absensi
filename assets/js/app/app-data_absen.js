@@ -5,7 +5,8 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
       App.initFunc();
       App.initEvent();
       App.initConfirm();
-      App.importData();
+      App.editAbsen();
+      App.detailAbsen();
       $(".loadingpage").hide();
     },
     initEvent: function () {
@@ -34,11 +35,13 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
         },
         columns: [
           { data: "id" },
-          { data: "kelas_name" },
-          { data: "nomor_kelas" },
-          { data: "jurusan_name" },
-          { data: "tahun_angkatan" },
-          { data: "kode_kelas" },
+          { data: "tanggal_absen" },
+          { data: "users_name" },
+          { data: "check_in" },
+          { data: "check_out" },
+          { data: "status_kerja" },
+          { data: "status" },
+          { data: "foto" },
           { data: "action", orderable: false },
         ],
       });
@@ -128,55 +131,62 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
         url: App.baseUrl + "data_absen/delete_data",
       });
     },
-    importData: function () {
-      $(document).ready(function () {
-        $("#importForm").on("submit", function (event) {
-          event.preventDefault();
+    editAbsen: function () {
+      $(document).on('click', '.edit-button', function () {
+        const id = $(this).data('id');
+        const nama_user = $(this).data('nama_user');
+        const is_check_in = $(this).data('is_check_in');
+        const init_time = $(this).data('init_time');
+        const status_work = $(this).data('status_work');
+        const status = $(this).data('status');
+        const photo = $(this).data('photo');
 
-          var fileInput = document.getElementById("userfile");
-          if (!fileInput.files.length) {
-            alert("Silakan pilih file untuk diupload.");
-            return;
+        $('#edit-id').val(id);
+        $('#edit-nama_user').val(nama_user);
+        $('#edit-status_work').val(status_work);
+        $('#edit-status').val(status);
+        $('#edit-is_check_in').val(is_check_in);
+        $('#edit-photo').attr('src', 'data:image/jpeg;base64,' + photo);
+
+        if (init_time) {
+          const timeParts = init_time.split(":");
+          if (timeParts.length >= 2) {
+              const formattedTime = timeParts[0] + ":" + timeParts[1];
+              $('#edit-init_time').val(formattedTime);
           }
 
-          var formData = new FormData(this);
+        }
 
-          $.ajax({
-            url: App.baseUrl + "data_absen/import_data",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            dataType: "json",
-            success: function (response) {
-              if (response.status === "success") {
-                toastr.success(response.message);
-                setTimeout(function () {
-                  window.location.reload(); // Reload halaman setelah 2 detik
-                }, 2000); // 2000 ms = 2 detik
-              } else if (response.status === "error") {
-                toastr.error(response.message);
-              }
-            },
-            error: function (xhr, status, error) {
-              toastr.error("Terjadi kesalahan saat mengimport data.");
-            },
-          });
-        });
+        // console.log(is_check_in);
+        if (is_check_in === 'check_out') {
+          $('#label-init-time').text('Check Out');
+        } else {
+            $('#label-init-time').text('Check In');
+        }
+        
 
-        $('[data-toggle="modal"]').on("click", function () {
-          $("#importModal").modal("show");
-        });
-
-        $(".modal .close").on("click", function () {
-          $("#importModal").modal("hide");
-        });
-
-        $(".btn-info").on("click", function () {
-          window.location.href =
-            App.baseUrl + "assets/template/template-data-kelas.xlsx";
-        });
+        // Tampilkan modal
+        $('#editModal').modal('show');
       });
     },
+    detailAbsen: function () {
+      $(document).on('click', '.detail-button', function () {
+        const nama_user = $(this).data('nama_user');
+        const init_time = $(this).data('init_time');
+        const status_work = $(this).data('status_work');
+        const is_check_in = $(this).data('is_check_in');
+        const status = $(this).data('status');
+        const photo = $(this).data('photo');
+
+        $('#detail-nama_user').text(nama_user);
+        $('#detail-init_time').text(init_time);
+        $('#detail-status_work').text(status_work);
+        $('#detail-is_check_in').text(is_check_in);
+        $('#detail-status').text(status);
+        $('#detail-photo').attr('src', 'data:image/jpeg;base64,' + photo);
+
+        $('#detailModal').modal('show');
+      });
+    }
   };
 });

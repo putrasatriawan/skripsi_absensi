@@ -251,7 +251,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
         processData: false,
         contentType: false,
         success: function (response) {
-          document.getElementById("submit-status").innerText = "Foto berhasil dikirim!";
+          document.getElementById("submit-status").innerText = "Absen Berhasil!";
           toastr.success("Foto berhasil dikirim!");
         },
         error: function () {

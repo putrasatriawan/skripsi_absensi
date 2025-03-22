@@ -2,20 +2,44 @@
     <div class="app-main__inner">
     <div class="main-card mb-3 card shadow-lg">
     <div class="card-body">
+        <?php if ($show_view): ?>
         <!-- Header -->
         <div class="text-center mb-4">
-            <h3 class="font-weight-bold text-primary">Absensi <br> Check in/ Check out</h3>
+            <h3 class="font-weight-bold text-primary">Absensi <br> Check in / Check out</h3>
         </div>
 
-        <?php if ($photo): ?>
+        <hr>
+       
             <div class="row mt-4">
                 <div class="col-md-12 text-center">
-                    <h4 class="text-success">Anda sudah absen hari ini!</h4>
-                    <img src="data:image/png;base64,<?= $photo ?>" alt="Attendance Photo" class="img-fluid rounded shadow-sm" />
+                    <h4 class="text-success">✅ Anda Sudah <?php echo $label_check ?></h4>
+                    <img src="data:image/png;base64,<?= $photo ?>" alt="Attendance Photo" class="img-fluid rounded shadow-sm mb-4" style="width: 200px; height: auto;" />
+
+                    <div class="card p-3 mb-3">
+                        <div class="d-flex flex-column">
+                            <div class="mb-2">
+                                <span class="text-info">💼 Status Kerja:</span><br>
+                                <strong><?= $status_work ?></strong>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-info">📋 Status:</span><br>
+                                <strong><?= $status ?></strong>
+                            </div>
+                            <div>
+                                <span class="text-info">🕒 Init Time:</span><br>
+                                <strong><?= $init_time ?></strong>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php else: ?>
 
+        <div class="text-center mb-4">
+            <h3 class="font-weight-bold text-primary">Absensi <br> Check in / Check out</h3>
+        </div>
+
+        <hr>
 
         <!-- Card Biodata -->
     <div class="d-flex justify-content-center">

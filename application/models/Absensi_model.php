@@ -67,10 +67,10 @@ class Absensi_model extends CI_Model
         return $this->db->insert_id();
     }
 
-    function getAllBy($limit, $start, $search, $col, $dir)
+    function getAllBy($limit, $start, $search, $col, $dir, $where = array())
     {
-        $this->db->select("absensi.*")->from("absensi");
-
+        $this->db->select("absensi.*, users.first_name as nama_user")->from("absensi");
+        $this->db->join("users","users.id = absensi.id_user","left"); 
         $this->db->limit($limit, $start)->order_by($col, $dir);
         if (!empty($search)) {
             foreach ($search as $key => $value) {
@@ -84,7 +84,7 @@ class Absensi_model extends CI_Model
             return null;
         }
     }
-    function getCountAllBy($limit, $start, $search, $order, $dir)
+    function getCountAllBy($limit, $start, $search, $order, $dir, $where)
     {
         $this->db->select("absensi.*")->from("absensi");
         if (!empty($search)) {
@@ -96,7 +96,7 @@ class Absensi_model extends CI_Model
         return $result->num_rows();
     }
     
-    public function getCountAllById($where = array())
+    public function getCountAllById($where)
     {
         $this->db->select("COUNT(*) as total_rows")->from("absensi");
         $this->db->where($where);
@@ -118,10 +118,11 @@ class Absensi_model extends CI_Model
         $this->db->where('id_user', $id_user);
         $this->db->like('tanggal_absen', $date);
         $this->db->where('is_deleted', 0);
+        $this->db->limit(2);
         
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
-            return $query->row();
+            return $query->result();
         } else {
             return false;
         }
