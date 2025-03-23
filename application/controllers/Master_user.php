@@ -218,18 +218,23 @@ class Master_user extends Admin_Controller
             foreach ($datas as $key=>$data)
             {  
             	$edit_url = "";
+            	$mapel_url = "";
      			$delete_url = "";
      			$delete_url_hard = "";
      		
             	if($this->data['is_can_edit'] && $data->is_deleted == 0){
 					$edit_url = "<button class='btn btn-sm btn-info white edit-button' data-id='".$data->id."'  data-users-id='".$data->users_id."'><i class='fas fa-edit'></i> Ubah</button>";
             	}  
+     		
+            	if($this->data['is_can_edit'] && $data->is_deleted == 0){
+					$mapel_url = "<a href='" . base_url() . "master_user/mapel/" . $data->id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Mapel</a>";
+            	}  
 
 				$nestedData['id'] = $start + $key + 1;
 				$nestedData['name'] = $data->name;
 				$nestedData['nip'] = substr(strip_tags($data->nip), 0, 50);
 				$nestedData['jenis_kelamin'] = $data->jenis_kelamin;
-				$nestedData['action'] = $edit_url . " " . $delete_url . " " . $delete_url_hard;
+				$nestedData['action'] = $edit_url . " " . $mapel_url . " " . $delete_url_hard;
 				$new_data[] = $nestedData;
 			}
 		}
@@ -243,6 +248,127 @@ class Master_user extends Admin_Controller
 		echo json_encode($json_data);
 	}
 
+	public function mapel($id)
+	{
+	
+				$this->data['id'] = $id;
+				// $data = $this->user_model->getOneBy(array("users.id" => $this->data['id']));
+
+				// if (empty($data)) {
+				// 	$this->session->set_flashdata('message_error', 'User not found');
+				// 	return redirect('user');
+				// }
+
+				// $this->data['photo'] = (!empty($data)) ? $data->photo : "";
+
+				// $this->data['roles'] = $this->roles_model->getAllById();
+				// $this->data['kelas'] = $this->kelas_model->getAllById();
+				
+				// $this->data['first_name'] = $data->first_name;
+				// $this->data['last_name'] = $data->last_name;
+				// $this->data['username'] = $data->username;
+				// $this->data['address'] = $data->address;
+				// $this->data['email'] = $data->email;
+				// $this->data['nik'] = $data->nik;
+				// $this->data['phone'] = $data->phone;
+				// $this->data['role_id'] = $data->role_id;
+
+				// $this->data['photo'] = (!empty($data->photo)) ? $data->photo : "";
+
+				$this->data['content'] = 'admin/master_user/mapel_v';
+				$this->load->view('admin/layouts/page', $this->data);
+		
+	}
+	public function save_jadwal($id)
+	{
+		$this->load->model('master_user_model');
+
+		$id_user = $id;
+		$hariList = $this->input->post('hari');
+		$namaMapelList = $this->input->post('nama_mapel');
+		$jamMulaiList = $this->input->post('jam_mulai');
+		$jamSelesaiList = $this->input->post('jam_selesai');
+		$durasiList = $this->input->post('durasi');
+
+		if (!empty($namaMapelList)) {
+			foreach ($namaMapelList as $day => $mapelNameList) {
+				
+				$dataJadwal = [
+					'id_user' => $id_user,
+					'hari' => $day,
+				];
+
+				$dataMapel = [];
+
+				foreach ($mapelNameList as $key => $nama_mapel) {
+					$dataMapel[] = [
+						'id_user' => $id_user,
+						'nama_mapel' => $nama_mapel,
+						'jam_mulai' => $jamMulaiList[$day][$key],
+						'jam_selesai' => $jamSelesaiList[$day][$key],
+						'durasi' => $durasiList[$day][$key],
+					];
+				}
+
+				$this->master_user_model->save_jadwal($dataJadwal, $dataMapel);
+			}
+		}
+
+		echo json_encode(['success' => true, 'message' => 'Jadwal berhasil disimpan!']);
+	}
+	public function update_jadwal($id_user)
+	{
+		$hariList = $this->input->post('mapel'); 
+		$jamMulai = $this->input->post('jam_mulai');
+		$jamSelesai = $this->input->post('jam_selesai');
+
+		$dataMapel = [];
+
+		foreach ($hariList as $hari => $mapelNames) {
+			foreach ($mapelNames as $index => $nama_mapel) {
+				$mulai = new DateTime($jamMulai[$hari][$index]);
+				$selesai = new DateTime($jamSelesai[$hari][$index]);
+				$durasi = $mulai->diff($selesai);
+
+				$dataMapel[] = [
+					'id_user'   => $id_user,
+					'nama_mapel' => $nama_mapel,
+					'jam_mulai'  => $jamMulai[$hari][$index],
+					'jam_selesai'=> $jamSelesai[$hari][$index],
+					'durasi'     => $durasi->format('%h Jam %i Menit')
+				];
+			}
+		}
+
+		// Data untuk tabel jadwal_mapel
+		$dataJadwal = [
+			'id_user' => $id_user,
+			'hari' => implode(',', array_keys($hariList))
+		];
+
+		$this->load->model('master_user_model');
+		$this->master_user_model->update_jadwal($id_user, $dataJadwal, $dataMapel);
+
+		echo json_encode(['status' => 'success', 'message' => 'Jadwal berhasil diperbarui!']);
+	}
+
+
+    public function get_jadwal($id)
+    {
+        $data = $this->db->where('id_user', $id)->get('jadwal_mapel')->row();
+        $mapel_details = $this->db->where('id_user', $id)->get('mapel_detail')->result();
+
+        echo json_encode(['data' => $data, 'mapel_details' => $mapel_details]);
+    }
+	public function delete_jadwal()
+	{
+		$id = $this->input->post('id');
+		$this->db->where('id', $id)->delete('jadwal_mapel');
+		echo json_encode(['success' => true]);
+	}
+
+
+	
 	public function destroy()
 	{
 		$response_data = array();

@@ -107,4 +107,36 @@ class Master_user_model extends CI_Model
 		$query = $this->db->get('master_user', 1);
 		return $query->result();
 	}
+	public function save_jadwal($dataJadwal, $dataMapel)
+    {
+
+	
+        $this->db->insert('jadwal_mapel', $dataJadwal);
+        $jadwal_id = $this->db->insert_id();
+
+        foreach ($dataMapel as &$mapel) {
+            $mapel['jadwal_id'] = $jadwal_id;
+        }
+
+        $this->db->insert_batch('mapel_detail', $dataMapel);
+
+        return true;
+    }
+
+	public function update_jadwal($id_user, $dataJadwal, $dataMapel)
+	{
+		$this->db->where('id_user', $id_user);
+		$this->db->delete('jadwal_mapel');
+
+		$this->db->insert('jadwal_mapel', $dataJadwal);
+		$jadwal_id = $this->db->insert_id();
+
+		foreach ($dataMapel as &$mapel) {
+			$mapel['jadwal_id'] = $jadwal_id;
+		}
+		$this->db->insert_batch('mapel_detail', $dataMapel);
+
+		return true;
+	}
+
 }

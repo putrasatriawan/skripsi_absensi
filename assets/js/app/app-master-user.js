@@ -7,7 +7,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
       App.initFunc();
       App.initEvent();
       App.initConfirm();
-      App.importData();
+      App.mapelData();
       $(".loadingpage").hide();
     },
 
@@ -165,55 +165,93 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
         url: App.baseUrl + "guru/delete_data",
       });
     },
-    importData: function () {
+    mapelData: function () {
       $(document).ready(function () {
-        $("#importForm").on("submit", function (event) {
-          event.preventDefault();
-
-          var fileInput = document.getElementById("userfile");
-          if (!fileInput.files.length) {
-            alert("Silakan pilih file untuk diupload.");
-            return;
+          function calculateDuration(startTime, endTime) {
+              const start = new Date(`1970-01-01T${startTime}:00`);
+              const end = new Date(`1970-01-01T${endTime}:00`);
+              
+              const diffInMs = end - start;
+              const diffInMinutes = Math.floor(diffInMs / 60000);
+              const hours = Math.floor(diffInMinutes / 60);
+              const minutes = diffInMinutes % 60;
+  
+              if (diffInMs <= 0) return "0 Jam 0 Menit";
+  
+              return `${hours} Jam ${minutes} Menit`;
           }
-
-          var formData = new FormData(this);
-
-          $.ajax({
-            url: App.baseUrl + "guru/import_data",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            dataType: "json",
-            success: function (response) {
-              if (response.status === "success") {
-                toastr.success(response.message);
-                setTimeout(function () {
-                  window.location.reload(); // Reload halaman setelah 2 detik
-                }, 2000); // 2000 ms = 2 detik
-              } else if (response.status === "error") {
-                toastr.error(response.message);
-              }
-            },
-            error: function (xhr, status, error) {
-              toastr.error("Terjadi kesalahan saat mengimport data.");
-            },
+  
+          $('.add-mapel').click(function () {
+              const day = $(this).data('day');
+              const mapelContainer = $('#mapel-container-' + day);
+  
+              const index = mapelContainer.children().length;
+              const newRow = `
+                  <div class="row mt-2" id="${day}-mapel-${index}">
+                      <div class="col-md-3">
+                          <input type="text" name="nama_mapel[${day}][]" class="form-control" placeholder="Nama Mapel" required>
+                      </div>
+                      <div class="col-md-2">
+                          <input type="time" name="jam_mulai[${day}][]" class="form-control start-time" required>
+                      </div>
+                      <div class="col-md-2">
+                          <input type="time" name="jam_selesai[${day}][]" class="form-control end-time" required>
+                      </div>
+                      <div class="col-md-3">
+                          <input type="text" name="durasi[${day}][]" class="form-control duration" placeholder="Durasi" readonly>
+                      </div>
+                      <div class="col-md-2">
+                          <button type="button" class="btn btn-danger remove-mapel" data-target="#${day}-mapel-${index}">Hapus</button>
+                      </div>
+                  </div>
+              `;
+              mapelContainer.append(newRow);
           });
-        });
-
-        $('[data-toggle="modal"]').on("click", function () {
-          $("#importModal").modal("show");
-        });
-
-        $(".modal .close").on("click", function () {
-          $("#importModal").modal("hide");
-        });
-
-        $(".btn-info").on("click", function () {
-          window.location.href =
-            App.baseUrl + "assets/template/template-data-guru.xlsx";
-        });
+  
+          $(document).on('click', '.remove-mapel', function () {
+              const target = $(this).data('target');
+              $(target).remove();
+          });
+  
+          $(document).on('change', '.start-time, .end-time', function () {
+              const parentRow = $(this).closest('.row');
+              const startTime = parentRow.find('.start-time').val();
+              const endTime = parentRow.find('.end-time').val();
+              const durationField = parentRow.find('.duration');
+  
+              if (startTime && endTime) {
+                  const duration = calculateDuration(startTime, endTime);
+                  durationField.val(duration);
+              }
+          });
+  
+          $('#mapelForm').submit(function (e) {
+              e.preventDefault();
+  
+              const formData = $(this).serialize();
+              console.log(formData);
+  
+              $.ajax({
+                  type: "POST",
+                  url: App.baseUrl + "master_user/save_jadwal/" + id,
+                  data: formData,
+                  dataType: "json",
+                  success: function (response) {
+                      if (response.success) {
+                          alert('Jadwal berhasil disimpan!');
+                          location.reload();
+                      } else {
+                          alert('Gagal menyimpan jadwal.');
+                      }
+                  },
+                  error: function () {
+                      alert('Terjadi kesalahan. Coba lagi.');
+                  }
+              });
+          });
       });
-    },
-  };
-});
+  }
+  
+    };
+  });
+

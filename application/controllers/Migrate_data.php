@@ -142,7 +142,7 @@ class Migrate_data extends CI_Controller
 		$table = 'menu';
 		$data = array(
 			// array('id' => 11, 'module_id' => 1, 'name' => 'Konfigurasi Pengguna', 'url' => '#', 'parent_id' => 1, 'icon' => "pe-7s-server", 'sequence' => 6, 'description' => 'Master Kelas', "show_at" => 0),
-			// array('id' => 12, 'module_id' => 1, 'name' \> 'Data Kelas', 'url' => 'kelas', 'parent_id' => 11, 'icon' => "", 'sequence' => 1, 'description' => 'Data Kelas', "show_at" => 0),
+			// array('id' => 12, 'module_id' => 1, 'name' => 'Data Kelas', 'url' => 'kelas', 'parent_id' => 11, 'icon' => "", 'sequence' => 1, 'description' => 'Data Kelas', "show_at" => 0),
 			array('id' => 11, 'module_id' => 1, 'name' => 'Master Pengguna', 'url' => 'master_user', 'parent_id' => 1, 'icon' => "pe-7s-server", 'sequence' => 7, 'description' => 'Data Guru', "show_at" => 0),
 			// array('id' => 17, 'module_id' => 1, 'name' => 'Data Siswa', 'url' => 'siswa', 'parent_id' => 7, 'icon' => "pe-7s-server", 'sequence' => 7, 'description' => 'Data Siswa', "show_at" => 0),
 
