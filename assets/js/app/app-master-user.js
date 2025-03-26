@@ -167,6 +167,8 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
     },
     mapelData: function () {
       $(document).ready(function () {
+  
+          // Fungsi untuk menghitung durasi
           function calculateDuration(startTime, endTime) {
               const start = new Date(`1970-01-01T${startTime}:00`);
               const end = new Date(`1970-01-01T${endTime}:00`);
@@ -177,36 +179,80 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
               const minutes = diffInMinutes % 60;
   
               if (diffInMs <= 0) return "0 Jam 0 Menit";
-  
               return `${hours} Jam ${minutes} Menit`;
           }
   
-          $('.add-mapel').click(function () {
-              const day = $(this).data('day');
-              const mapelContainer = $('#mapel-container-' + day);
+          // Mengambil data jadwal dari API
+          $.ajax({
+              type: "GET",
+              url: App.baseUrl + "master_user/get_jadwal/" + id,
+              dataType: "json",
+              success: function (response) {
+                  if (response.data) {
+                      const mapelDetails = response.mapel_details;
   
-              const index = mapelContainer.children().length;
-              const newRow = `
-                  <div class="row mt-2" id="${day}-mapel-${index}">
-                      <div class="col-md-3">
-                          <input type="text" name="nama_mapel[${day}][]" class="form-control" placeholder="Nama Mapel" required>
-                      </div>
-                      <div class="col-md-2">
-                          <input type="time" name="jam_mulai[${day}][]" class="form-control start-time" required>
-                      </div>
-                      <div class="col-md-2">
-                          <input type="time" name="jam_selesai[${day}][]" class="form-control end-time" required>
-                      </div>
-                      <div class="col-md-3">
-                          <input type="text" name="durasi[${day}][]" class="form-control duration" placeholder="Durasi" readonly>
-                      </div>
-                      <div class="col-md-2">
-                          <button type="button" class="btn btn-danger remove-mapel" data-target="#${day}-mapel-${index}">Hapus</button>
-                      </div>
-                  </div>
-              `;
-              mapelContainer.append(newRow);
+                      // Render data yang sudah ada
+                      mapelDetails.forEach(detail => {
+                          const day = detail.hari;  // Sesuaikan dengan hari dari detail
+                          const mapelContainer = $('#mapel-container-' + day);
+                          const index = mapelContainer.children().length;
+  
+                          const newRow = `
+                              <div class="row mt-2" id="${day}-mapel-${index}">
+                                  <div class="col-md-3">
+                                      <input type="text" name="nama_mapel[${day}][]" class="form-control" value="${detail.nama_mapel}" required>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <input type="time" name="jam_mulai[${day}][]" class="form-control start-time" value="${detail.jam_mulai}" required>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <input type="time" name="jam_selesai[${day}][]" class="form-control end-time" value="${detail.jam_selesai}" required>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <input type="text" name="durasi[${day}][]" class="form-control duration" value="${detail.durasi}" readonly>
+                                  </div>
+                                  <div class="col-md-2">
+                                      <button type="button" class="btn btn-danger remove-mapel" data-target="#${day}-mapel-${index}">Hapus</button>
+                                  </div>
+                              </div>
+                          `;
+                          mapelContainer.append(newRow);
+                      });
+                  }
+              },
+              error: function () {
+                  alert('Gagal mengambil data jadwal.');
+              }
           });
+  
+          $('.add-mapel').click(function () {
+            const day = $(this).data('day');
+            const mapelContainer = $('#mapel-container-' + day);
+        
+            const index = mapelContainer.children().length;
+            const newRow = `
+                <div class="row mt-2" id="${day}-mapel-${index}">
+                    <div class="col-md-3">
+                        <input type="text" name="nama_mapel[${day}][]" class="form-control" placeholder="Nama Mapel" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="time" name="jam_mulai[${day}][]" class="form-control start-time" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="time" name="jam_selesai[${day}][]" class="form-control end-time" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="durasi[${day}][]" class="form-control duration" placeholder="Durasi" readonly>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger remove-mapel" data-target="#${day}-mapel-${index}">Hapus</button>
+                    </div>
+                    <input type="hidden" name="hari_detail[${day}][]" value="${day}">
+                </div>
+            `;
+            mapelContainer.append(newRow);
+        });
+        
   
           $(document).on('click', '.remove-mapel', function () {
               const target = $(this).data('target');
@@ -251,6 +297,8 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
           });
       });
   }
+  
+  
   
     };
   });

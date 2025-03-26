@@ -212,6 +212,14 @@ class Master_user extends Admin_Controller
         $start = $this->input->post('start');
      	$datas = $this->master_user_model->getAllBy($limit,$start,$search,$order,$dir);
      	
+				// 	echo "<pre>";
+				// print_r($datas);
+				// die;
+				// foreach ($datas as $value) {
+				// 	echo "<pre>";
+				// 	print_r($value);
+				// }
+				// die;
         $new_data = array();
         if(!empty($datas))
         {
@@ -227,7 +235,7 @@ class Master_user extends Admin_Controller
             	}  
      		
             	if($this->data['is_can_edit'] && $data->is_deleted == 0){
-					$mapel_url = "<a href='" . base_url() . "master_user/mapel/" . $data->id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Mapel</a>";
+					$mapel_url = "<a href='" . base_url() . "master_user/mapel/" . $data->users_id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Mapel</a>";
             	}  
 
 				$nestedData['id'] = $start + $key + 1;
@@ -284,7 +292,7 @@ class Master_user extends Admin_Controller
 		$this->load->model('master_user_model');
 
 		$id_user = $id;
-		$hariList = $this->input->post('hari');
+		$hariList = $this->input->post('hari_detail');
 		$namaMapelList = $this->input->post('nama_mapel');
 		$jamMulaiList = $this->input->post('jam_mulai');
 		$jamSelesaiList = $this->input->post('jam_selesai');
@@ -303,6 +311,7 @@ class Master_user extends Admin_Controller
 				foreach ($mapelNameList as $key => $nama_mapel) {
 					$dataMapel[] = [
 						'id_user' => $id_user,
+						'hari' => $hariList[$day][$key],
 						'nama_mapel' => $nama_mapel,
 						'jam_mulai' => $jamMulaiList[$day][$key],
 						'jam_selesai' => $jamSelesaiList[$day][$key],
@@ -327,12 +336,13 @@ class Master_user extends Admin_Controller
 		foreach ($hariList as $hari => $mapelNames) {
 			foreach ($mapelNames as $index => $nama_mapel) {
 				$mulai = new DateTime($jamMulai[$hari][$index]);
+				$mulai = new DateTime($jamMulai[$hari][$index]);
 				$selesai = new DateTime($jamSelesai[$hari][$index]);
 				$durasi = $mulai->diff($selesai);
 
 				$dataMapel[] = [
 					'id_user'   => $id_user,
-					'nama_mapel' => $nama_mapel,
+					'hari'  => $hari_detail[$hari][$index],
 					'jam_mulai'  => $jamMulai[$hari][$index],
 					'jam_selesai'=> $jamSelesai[$hari][$index],
 					'durasi'     => $durasi->format('%h Jam %i Menit')
@@ -356,8 +366,8 @@ class Master_user extends Admin_Controller
     public function get_jadwal($id)
     {
         $data = $this->db->where('id_user', $id)->get('jadwal_mapel')->row();
+		// var_dump($data);
         $mapel_details = $this->db->where('id_user', $id)->get('mapel_detail')->result();
-
         echo json_encode(['data' => $data, 'mapel_details' => $mapel_details]);
     }
 	public function delete_jadwal()
