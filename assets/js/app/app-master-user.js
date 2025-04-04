@@ -7,7 +7,10 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
       App.initFunc();
       App.initEvent();
       App.initConfirm();
-      App.mapelData();
+      // App.mapelData();
+      App.editId();
+      App.addButtonEdit();
+      App.calculateDuration();
       $(".loadingpage").hide();
     },
 
@@ -165,9 +168,141 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
         url: App.baseUrl + "guru/delete_data",
       });
     },
-    mapelData: function () {
-      console.log(id);
-      if (!isNaN(id) && Number.isInteger(id)) { 
+    // mapelData: function () {
+    //   console.log(id);
+    //   if (!isNaN(id) && Number.isInteger(id)) { 
+    //     $(document).ready(function () {
+    
+    //         function calculateDuration(startTime, endTime) {
+    //             const start = new Date(`1970-01-01T${startTime}:00`);
+    //             const end = new Date(`1970-01-01T${endTime}:00`);
+                
+    //             const diffInMs = end - start;
+    //             const diffInMinutes = Math.floor(diffInMs / 60000);
+    //             const hours = Math.floor(diffInMinutes / 60);
+    //             const minutes = diffInMinutes % 60;
+    
+    //             if (diffInMs <= 0) return "0 Jam 0 Menit";
+    //             return `${hours} Jam ${minutes} Menit`;
+    //         }
+    
+    //         // Mengambil data jadwal dari API
+    //         $.ajax({
+    //             type: "GET",
+    //             url: App.baseUrl + "master_user/get_jadwal/" + id,
+    //             dataType: "json",
+    //             success: function (response) {
+    //                 if (response.data) {
+    //                     const mapelDetails = response.mapel_details;
+    
+    //                     // Render data yang sudah ada
+    //                     mapelDetails.forEach(detail => {
+    //                         const day = detail.hari;  // Sesuaikan dengan hari dari detail
+    //                         const mapelContainer = $('#mapel-container-' + day);
+    //                         const index = mapelContainer.children().length;
+    
+    //                         const newRow = `
+    //                             <div class="row mt-2" id="${day}-mapel-${index}">
+    //                                 <div class="col-md-3">
+    //                                     <input type="text" name="nama_mapel[${day}][]" class="form-control" value="${detail.nama_mapel}" required>
+    //                                 </div>
+    //                                 <div class="col-md-2">
+    //                                     <input type="time" name="jam_mulai[${day}][]" class="form-control start-time" value="${detail.jam_mulai}" required>
+    //                                 </div>
+    //                                 <div class="col-md-2">
+    //                                     <input type="time" name="jam_selesai[${day}][]" class="form-control end-time" value="${detail.jam_selesai}" required>
+    //                                 </div>
+    //                                 <div class="col-md-3">
+    //                                     <input type="text" name="durasi[${day}][]" class="form-control duration" value="${detail.durasi}" readonly>
+    //                                 </div>
+    //                                 <div class="col-md-2">
+    //                                     <button type="button" class="btn btn-danger remove-mapel" data-target="#${day}-mapel-${index}">Hapus</button>
+    //                                 </div>
+    //                             </div>
+    //                         `;
+    //                         mapelContainer.append(newRow);
+    //                     });
+    //                 }
+    //             },
+    //             error: function () {
+    //                 alert('Gagal mengambil data jadwal.');
+    //             }
+    //         });
+    
+    //         $('.add-mapel').click(function () {
+    //           const day = $(this).data('day');
+    //           const mapelContainer = $('#mapel-container-' + day);
+          
+    //           const index = mapelContainer.children().length;
+    //           const newRow = `
+    //               <div class="row mt-2" id="${day}-mapel-${index}">
+    //                   <div class="col-md-3">
+    //                       <input type="text" name="nama_mapel[${day}][]" class="form-control" placeholder="Nama Mapel" required>
+    //                   </div>
+    //                   <div class="col-md-2">
+    //                       <input type="time" name="jam_mulai[${day}][]" class="form-control start-time" required>
+    //                   </div>
+    //                   <div class="col-md-2">
+    //                       <input type="time" name="jam_selesai[${day}][]" class="form-control end-time" required>
+    //                   </div>
+    //                   <div class="col-md-3">
+    //                       <input type="text" name="durasi[${day}][]" class="form-control duration" placeholder="Durasi" readonly>
+    //                   </div>
+    //                   <div class="col-md-2">
+    //                       <button type="button" class="btn btn-danger remove-mapel" data-target="#${day}-mapel-${index}">Hapus</button>
+    //                   </div>
+    //                   <input type="hidden" name="hari_detail[${day}][]" value="${day}">
+    //               </div>
+    //           `;
+    //           mapelContainer.append(newRow);
+    //       });
+          
+    
+    //         $(document).on('click', '.remove-mapel', function () {
+    //             const target = $(this).data('target');
+    //             $(target).remove();
+    //         });
+    
+    //         $(document).on('change', '.start-time, .end-time', function () {
+    //             const parentRow = $(this).closest('.row');
+    //             const startTime = parentRow.find('.start-time').val();
+    //             const endTime = parentRow.find('.end-time').val();
+    //             const durationField = parentRow.find('.duration');
+    
+    //             if (startTime && endTime) {
+    //                 const duration = calculateDuration(startTime, endTime);
+    //                 durationField.val(duration);
+    //             }
+    //         });
+    
+    //         // $('#mapelForm').submit(function (e) {
+    //         //     e.preventDefault();
+    
+    //         //     const formData = $(this).serialize();
+    //         //     console.log(formData);
+    
+    //         //     $.ajax({
+    //         //         type: "POST",
+    //         //         url: App.baseUrl + "master_user/save_jadwal/" + id,
+    //         //         data: formData,
+    //         //         dataType: "json",
+    //         //         success: function (response) {
+    //         //             if (response.success) {
+    //         //                 alert('Jadwal berhasil disimpan!');
+    //         //                 location.reload();
+    //         //             } else {
+    //         //                 alert('Gagal menyimpan jadwal.');
+    //         //             }
+    //         //         },
+    //         //         error: function () {
+    //         //             alert('Terjadi kesalahan. Coba lagi.');
+    //         //         }
+    //         //     });
+    //         // });
+    //     });
+    //   }
+    // },
+    calculateDuration: function () {
         $(document).ready(function () {
     
             function calculateDuration(startTime, endTime) {
@@ -182,83 +317,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
                 if (diffInMs <= 0) return "0 Jam 0 Menit";
                 return `${hours} Jam ${minutes} Menit`;
             }
-    
-            // Mengambil data jadwal dari API
-            $.ajax({
-                type: "GET",
-                url: App.baseUrl + "master_user/get_jadwal/" + id,
-                dataType: "json",
-                success: function (response) {
-                    if (response.data) {
-                        const mapelDetails = response.mapel_details;
-    
-                        // Render data yang sudah ada
-                        mapelDetails.forEach(detail => {
-                            const day = detail.hari;  // Sesuaikan dengan hari dari detail
-                            const mapelContainer = $('#mapel-container-' + day);
-                            const index = mapelContainer.children().length;
-    
-                            const newRow = `
-                                <div class="row mt-2" id="${day}-mapel-${index}">
-                                    <div class="col-md-3">
-                                        <input type="text" name="nama_mapel[${day}][]" class="form-control" value="${detail.nama_mapel}" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="time" name="jam_mulai[${day}][]" class="form-control start-time" value="${detail.jam_mulai}" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="time" name="jam_selesai[${day}][]" class="form-control end-time" value="${detail.jam_selesai}" required>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="text" name="durasi[${day}][]" class="form-control duration" value="${detail.durasi}" readonly>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="button" class="btn btn-danger remove-mapel" data-target="#${day}-mapel-${index}">Hapus</button>
-                                    </div>
-                                </div>
-                            `;
-                            mapelContainer.append(newRow);
-                        });
-                    }
-                },
-                error: function () {
-                    alert('Gagal mengambil data jadwal.');
-                }
-            });
-    
-            $('.add-mapel').click(function () {
-              const day = $(this).data('day');
-              const mapelContainer = $('#mapel-container-' + day);
-          
-              const index = mapelContainer.children().length;
-              const newRow = `
-                  <div class="row mt-2" id="${day}-mapel-${index}">
-                      <div class="col-md-3">
-                          <input type="text" name="nama_mapel[${day}][]" class="form-control" placeholder="Nama Mapel" required>
-                      </div>
-                      <div class="col-md-2">
-                          <input type="time" name="jam_mulai[${day}][]" class="form-control start-time" required>
-                      </div>
-                      <div class="col-md-2">
-                          <input type="time" name="jam_selesai[${day}][]" class="form-control end-time" required>
-                      </div>
-                      <div class="col-md-3">
-                          <input type="text" name="durasi[${day}][]" class="form-control duration" placeholder="Durasi" readonly>
-                      </div>
-                      <div class="col-md-2">
-                          <button type="button" class="btn btn-danger remove-mapel" data-target="#${day}-mapel-${index}">Hapus</button>
-                      </div>
-                      <input type="hidden" name="hari_detail[${day}][]" value="${day}">
-                  </div>
-              `;
-              mapelContainer.append(newRow);
-          });
-          
-    
-            $(document).on('click', '.remove-mapel', function () {
-                const target = $(this).data('target');
-                $(target).remove();
-            });
+ 
     
             $(document).on('change', '.start-time, .end-time', function () {
                 const parentRow = $(this).closest('.row');
@@ -271,34 +330,194 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
                     durationField.val(duration);
                 }
             });
-    
-            $('#mapelForm').submit(function (e) {
-                e.preventDefault();
-    
-                const formData = $(this).serialize();
-                console.log(formData);
-    
-                $.ajax({
-                    type: "POST",
-                    url: App.baseUrl + "master_user/save_jadwal/" + id,
-                    data: formData,
-                    dataType: "json",
-                    success: function (response) {
-                        if (response.success) {
-                            alert('Jadwal berhasil disimpan!');
-                            location.reload();
-                        } else {
-                            alert('Gagal menyimpan jadwal.');
-                        }
-                    },
-                    error: function () {
-                        alert('Terjadi kesalahan. Coba lagi.');
-                    }
-                });
-            });
         });
+    },
+    editId: function () {
+      var path = window.location.pathname;
+      var match = path.match(/master_user\/mapel\/(\d+)/);
+      if (match !== null) {
+        var id_users = match[1];
+        console.log(id_users);
+        App.editRow(id_users);
       }
-    }
+    },
+    editRow: function (id_users) {
+      $.ajax({
+        url: App.baseUrl + "master_user/get_mapel",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].id_user == id_users) {
+              var html = '<div class="row">';
+              html += '<div class="col-md-2">';
+              html += '<div class="form-group">';
+              html +=
+                '<input type="hidden" name="id_jadwal[]"  value="' +
+                data[i].id +
+                '">';
+              html +=
+                '<input type="hidden" name="id_user[]"  value="' +
+                data[i].id_user +
+                '">';
+              html += '<label class="form-label">Hari</label>';
+              html += '<select name="hari[]" class="form-control">';
+              const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+              for (var d = 0; d < days.length; d++) {
+                var selected = data[i].hari == days[d] ? 'selected' : '';
+                html += `<option value="${days[d]}" ${selected}>${days[d]}</option>`;
+              }
+              html += '</select>';
+              html += "</div>";
+              html += "</div>";
+              html += '<div class="col-md-2">';
+              html += '<div class="form-group">';
+              html += '<label class="form-label">Nama Mapel</label>';
+              html += '<div class="input-group mb-2">';
+              html +=
+                '<input type="text" name="nama_mapel[]" class="form-control" placeholder="Masukkan Nama Mapel"value="' +
+                data[i].nama_mapel +
+                '">';
+
+              html += "</div>";
+              html += "</div>";
+              html += "</div>";
+
+              html += '<div class="col-md-2">';
+              html += '<div class="form-group">';
+              html += '<label class="form-label">Jam Mulai</label>';
+              html +=
+                '<input type="time" name="jam_mulai[]" class="form-control start-time" placeholder="Masukkan Jam Mulai"value="' +
+                data[i].jam_mulai +
+                '">';
+              html += "</div>";
+              html += "</div>";
+              html += '<div class="col-md-2">';
+              html += '<div class="form-group">';
+              html += '<label class="form-label">Jam Selesai</label>';
+              html +=
+                '<input type="time" name="jam_selesai[]" class="form-control end-time" placeholder="Masukkan jam selesai"value="' +
+                data[i].jam_selesai +
+                '">';
+              html += "</div>";
+              html += "</div>";
+              html += '<div class="col-md-2">';
+              html += '<div class="form-group">';
+              html += '<label class="form-label">Durasi</label>';
+              html +=
+                '<input type="text" name="durasi[]" class="form-control duration" placeholder="Durasi" value="' +
+                data[i].durasi +
+                '" readonly>';
+              html += "</div>";
+              html += "</div>";
+              html += '<div class="col-md-2 align-self-center">';
+              html +=
+                '<button type="button" class="btn btn-danger btn-remove-sub"><i class="fa fa-trash"></i></button>';
+              html += "</div>";
+              html += "</div>";
+
+              $("#form-container-edit").append(html);
+            }
+            console.log(data[i].id);
+          }
+          $(".btn-remove-sub").on("click", function () {
+            var id_delete = $(this)
+              .closest("div.row")
+              .find("input[name='id_jadwal[]']")
+              .val();
+            $(this).closest("div.row").remove();
+            $.ajax({
+              url: App.baseUrl + "master_user/delete_jadwal",
+              type: "POST",
+              dataType: "json",
+              data: { id_delete: id_delete },
+              success: function (id_delete) {
+                console.log(id_delete);
+              },
+              error: function (response) {
+                console.log("errorr");
+              },
+            });
+          });
+        },
+      });
+    },
+    addButtonEdit: function () {
+      $("#rowbuttonedit").click(function () {
+        var path = window.location.pathname;
+        var match = path.match(/master_user\/mapel\/(\d+)/);
+        if (match !== null) {
+          var id = match[1];
+          console.log(id);
+          App.addRowEdit(id);
+        }
+      });
+    },
+    addRowEdit: function (id) {
+      // Menyiapkan elemen HTML
+      var html = '<div class="row">';
+      html += '<div class="col-md-2">';
+      html += '<div class="form-group">';
+      html += '<label class="form-label">Hari</label>';
+      html += '<select name="hari[]" class="form-control">';
+      const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+      for (var d = 0; d < days.length; d++) {
+        html += `<option value="${days[d]}">${days[d]}</option>`;
+      }
+      html += '</select>';
+      
+      html += "</div>";
+      html += "</div>";
+      html += '<div class="col-md-2">';
+      html += '<div class="form-group">';
+      html += '<label class="form-label">Nama Mapel</label>';
+      html += '<div class="input-group mb-2">';
+      html +=
+        '<input type="text" name="nama_mapel[]" class="form-control" placeholder="Masukkan nama mapel">';
+      html +=
+        '<input type="hidden" name="id_user[]"  value="' + id_user +
+        '">';
+
+      html += "</div>";
+      html += "</div>";
+      html += "</div>";
+
+      html += '<div class="col-md-2">';
+      html += '<div class="form-group">';
+      html += '<label class="form-label">Jadwal Mulai</label>';
+      html +=
+        '<input type="time" name="jam_mulai[]" class="form-control start-time" placeholder="Masukkan jam mulai">';
+      html += "</div>";
+      html += "</div>";
+      html += '<div class="col-md-2">';
+      html += '<div class="form-group">';
+      html += '<label class="form-label">Jam Selesai</label>';
+      html +=
+        '<input type="time" name="jam_selesai[]" class="form-control end-time" placeholder="Masukkan sat">';
+      html += "</div>";
+      html += "</div>";
+      html += '<div class="col-md-2">';
+      html += '<div class="form-group">';
+      html += '<label class="form-label">Durasi</label>';
+      html +=
+        '<input type="text" name="durasi[]" class="form-control duration" placeholder="Durasi" readonly>';
+      html += "</div>";
+      html += "</div>";
+      html += '<div class="col-md-2 align-self-center">';
+      html +=
+        '<button type="button" class="btn btn-danger delete-row"><i class="fa fa-trash"></i></button>';
+      html += "</div>";
+      html += "</div>";
+
+      $("#form-container-edit").append(html);
+
+      // Mengaktifkan tombol delete
+      $(".delete-row").on("click", function () {
+        $(this).closest(".row").remove();
+      });
+    },
+    
+   
     };
   });
 

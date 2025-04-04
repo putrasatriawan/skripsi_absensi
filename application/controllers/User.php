@@ -12,7 +12,6 @@ class User extends Admin_Controller
 	{
 		parent::__construct();
 		$this->load->model('user_model');
-		$this->load->model('kelas_model');
 		$this->load->model('master_user_model');
 		$this->load->model('ion_auth_model');
 		$this->load->model("roles_model");
@@ -23,7 +22,7 @@ class User extends Admin_Controller
 		$this->load->helper('url');
 
 		if (!$this->ion_auth->logged_in()) {
-			redirect('auth/login'); 
+			redirect('auth/login');
 		}
 
 		$this->data['users'] = $this->ion_auth->user()->row();
@@ -31,11 +30,9 @@ class User extends Admin_Controller
 		if ($this->data['is_can_read']) {
 			if ($this->data['is_superadmin']) {
 				$this->data['roles'] = $this->roles_model->getAllById();
-				$this->data['kelas'] = $this->kelas_model->getAllById();
 			}
 			$this->data['content'] = 'admin/user/list_v';
-		} 
-		else {
+		} else {
 			$this->data['content'] = 'errors/html/restrict';
 		}
 		$this->load->view('admin/layouts/page', $this->data);
@@ -59,8 +56,7 @@ class User extends Admin_Controller
 			if (!$this->upload->do_upload('photo')) {
 				$this->session->set_flashdata('message_error', $this->upload->display_errors());
 				return redirect('user/create');
-			} 
-			else {
+			} else {
 				$fileData = $this->upload->data();
 				$file_name = $fileData['file_name'];
 			}
@@ -97,13 +93,11 @@ class User extends Admin_Controller
 						'nip' => $this->input->post('nik'),
 					);
 					$this->master_user_model->insert($parsing_guru);
-				} 
-				elseif ($role_id == 4) { // Role ID 4 is for 'Siswa'
+				} elseif ($role_id == 4) { // Role ID 4 is for 'Siswa'
 					$parsing_siswa = array(
 						'nama' => $this->input->post('name'),
 						'id_users' => $user_id,
 						'nis' => $this->input->post('nik'),
-						'kode_kelas_id' => $this->input->post('kelas_id'),
 						'jk' => $this->input->post('jk'),
 						'alamat' => $this->input->post('address'),
 						'ttl' => $this->input->post('ttl'),
@@ -115,14 +109,12 @@ class User extends Admin_Controller
 				$response = array('status' => 'success', 'message' => 'User Berhasil Disimpan!');
 				header('Content-Type: application/json');
 				echo json_encode($response);
-			} 
-			else {
+			} else {
 				$response = array('status' => 'error', 'message' => 'User Gagal Disimpan!');
 				header('Content-Type: application/json');
 				echo json_encode($response);
 			}
-		} 
-		else {
+		} else {
 			$this->data['roles'] = $this->roles_model->getAllById();
 			$this->data['content'] = 'admin/user/create_v';
 			$this->load->view('admin/layouts/page', $this->data);
@@ -132,7 +124,7 @@ class User extends Admin_Controller
 
 	public function edit($id)
 	{
-	
+
 		// $this->load->helper('dev');
 		$this->form_validation->set_rules('email', "Email", 'trim|required');
 		$this->form_validation->set_rules('name', "Nama", 'trim|required');
@@ -147,7 +139,7 @@ class User extends Admin_Controller
 				'phone' => $this->input->post('phone'),
 			);
 
-			$role_id= $this->input->post('role_id');
+			$role_id = $this->input->post('role_id');
 			$roles_id = array(
 				'role_id' => $this->input->post('role_id'),
 			);
@@ -155,23 +147,23 @@ class User extends Admin_Controller
 			$user_id = $id;
 			if ($role_id == 3) {
 				$parsing_guru = array(
-					
+
 					'name' => $this->input->post('name'),
 					'name' => $this->input->post('name'),
 					'users_id' => $user_id,
 					'nip' => $this->input->post('nik'),
 				);
 				$update = $this->master_user_model->update($parsing_guru, array("users_id" => $id));
-			} 
+			}
 
-				// echo "<pre>";
-				// print_r($parsing_guru);
-				// die;
-				// foreach ($parsing_guru as $value) {
-				// 	echo "<pre>";
-				// 	print_r($value);
-				// }
-				// die;
+			// echo "<pre>";
+			// print_r($parsing_guru);
+			// die;
+			// foreach ($parsing_guru as $value) {
+			// 	echo "<pre>";
+			// 	print_r($value);
+			// }
+			// die;
 
 			if (!empty($_FILES['photo']['name'])) {
 				$config['upload_path'] = './uploads/photo_profile/';
@@ -187,10 +179,9 @@ class User extends Admin_Controller
 
 					$old_photo = $this->user_model->getPhotoById($user_id);
 					if (!empty($old_photo)) {
-						unlink('./uploads/photo_profile/' . $old_photo); 
+						unlink('./uploads/photo_profile/' . $old_photo);
 					}
-				} 
-				else {
+				} else {
 					$this->session->set_flashdata('message_error', $this->upload->display_errors());
 					return redirect("user/edit/" . $id);
 				}
@@ -203,20 +194,17 @@ class User extends Admin_Controller
 				$response = array('status' => 'success', 'message' => 'User Berhasil Diubah!');
 				header('Content-Type: application/json');
 				echo json_encode($response);
-			} 
-			else {
+			} else {
 				$response = array('status' => 'error', 'message' => 'User Gagal Diubah!');
 				header('Content-Type: application/json');
 				echo json_encode($response);
 			}
-		} 
-		else {
+		} else {
 			if (!empty($_POST)) {
 				$id = $this->input->post('id');
 				$this->session->set_flashdata('message_error', validation_errors());
 				return redirect("user/edit/" . $id);
-			} 
-			else {
+			} else {
 				$this->data['id'] = $id;
 				$data = $this->user_model->getOneBy(array("users.id" => $this->data['id']));
 
@@ -228,8 +216,7 @@ class User extends Admin_Controller
 				$this->data['photo'] = (!empty($data)) ? $data->photo : "";
 
 				$this->data['roles'] = $this->roles_model->getAllById();
-				$this->data['kelas'] = $this->kelas_model->getAllById();
-				
+
 				$this->data['first_name'] = $data->first_name;
 				$this->data['last_name'] = $data->last_name;
 				$this->data['username'] = $data->username;
@@ -284,8 +271,7 @@ class User extends Admin_Controller
 		}
 		if ($isSearchColumn) {
 			$totalFiltered = $this->user_model->getCountAllBy($limit, $start, $search, $order, $dir, $where);
-		} 
-		else {
+		} else {
 			$totalFiltered = $totalData;
 		}
 		$limit = $this->input->post('length');
@@ -311,8 +297,7 @@ class User extends Admin_Controller
 	        				url='" . base_url() . "user/destroy/" . $data->id . "/" . $data->is_deleted . "'
 	        				class='btn btn-sm white btn-danger delete' ><i class='fas fa-times'></i> NonAktifkan
 	        				</a>";
-					} 
-					else {
+					} else {
 						$delete_url = "<a href='#' 
 	        				url='" . base_url() . "user/destroy/" . $data->id . "/" . $data->is_deleted . "'
 	        				class='btn btn-sm btn-primary white delete' 
@@ -365,8 +350,7 @@ class User extends Admin_Controller
 
 			$response_data['data'] = $data;
 			$response_data['status'] = true;
-		} 
-		else {
+		} else {
 			$response_data['msg'] = "ID Harus Diisi";
 		}
 		echo json_encode($response_data);
@@ -391,8 +375,7 @@ class User extends Admin_Controller
 
 			$response_data['data'] = $data;
 			$response_data['status'] = true;
-		} 
-		else {
+		} else {
 			$response_data['msg'] = "ID Harus Diisi";
 		}
 		echo json_encode($response_data);
@@ -465,8 +448,7 @@ class User extends Admin_Controller
 			$response_data['data'] = $data;
 			$response_data['msg'] = "Sukses Menonaktifkan Data";
 			$response_data['status'] = true;
-		} 
-		else {
+		} else {
 			$response_data['msg'] = "ID Kosong";
 		}
 		echo json_encode($response_data);
@@ -492,11 +474,9 @@ class User extends Admin_Controller
 
 		if ($role == 3) {
 			$templateUrl = base_url('user/generate_excel_guru');
-		} 
-		elseif ($role == 4) {
+		} elseif ($role == 4) {
 			$templateUrl = base_url('user/generate_excel_siswa');
-		} 
-		else {
+		} else {
 			$templateUrl = '';
 		}
 		echo json_encode(['templateUrl' => $templateUrl]);
@@ -582,8 +562,7 @@ class User extends Admin_Controller
 							$insert_count++;
 						}
 					}
-				} 
-				else {
+				} else {
 					$error_occurred = true;
 					echo json_encode(['status' => 'error', 'message' => 'Guru tidak diperbolehkan mengimpor data siswa.']);
 					unlink($file['full_path']);
@@ -591,8 +570,7 @@ class User extends Admin_Controller
 				}
 			}
 			unlink($file['full_path']);
-		} 
-		elseif ($role == 4) {
+		} elseif ($role == 4) {
 			$this->upload->initialize($config_siswa);
 			if (!$this->upload->do_upload('userfile')) {
 				echo json_encode(['status' => 'error', 'message' => $this->upload->display_errors('', '')]);
@@ -639,8 +617,7 @@ class User extends Admin_Controller
 							$insert_count++;
 						}
 					}
-				} 
-				else {
+				} else {
 					$error_occurred = true;
 					echo json_encode(['status' => 'error', 'message' => 'Siswa tidak diperbolehkan mengimpor data guru.']);
 					unlink($file['full_path']);
@@ -652,8 +629,7 @@ class User extends Admin_Controller
 
 		if (!$error_occurred && $insert_count > 0) {
 			echo json_encode(['status' => 'success', 'message' => 'Import data berhasil! Total data yang diimpor: ' . $insert_count]);
-		} 
-		else {
+		} else {
 			if (!$error_occurred) {
 				echo json_encode(['status' => 'error', 'message' => 'Siswa tidak diperbolehkan mengimpor data guru.']);
 			}
@@ -915,13 +891,11 @@ class User extends Admin_Controller
 			if ($update) {
 				$response_data['status'] = true;
 				$response_data['message'] = "Berhasil Menyimpan User";
-			} 
-			else {
+			} else {
 				$response_data['status'] = false;
 				$response_data['message'] = "Berhasil Menyimpan User, Tapi Gagal Menyimpan Foto";
 			}
-		} 
-		else {
+		} else {
 			$response_data['status'] = false;
 			$response_data['message'] = $this->upload->display_errors();
 		}
@@ -973,8 +947,7 @@ class User extends Admin_Controller
 		if ($update) {
 			$response_data['status'] = true;
 			$response_data['message'] = "Berhasil Menyimpan User";
-		} 
-		else {
+		} else {
 			$response_data['status'] = false;
 			$response_data['message'] = "Berhasil Menyimpan User, Tapi Gagal Menyimpan Foto";
 		}
@@ -1007,8 +980,7 @@ class User extends Admin_Controller
 		if ($update) {
 			$response_data['status'] = true;
 			$response_data['message'] = 'Berhasil Menghapus Foto';
-		} 
-		else {
+		} else {
 			$response_data['status'] = false;
 			$response_data['message'] = 'Gagal Menghapus Foto';
 		}

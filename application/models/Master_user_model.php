@@ -108,20 +108,29 @@ class Master_user_model extends CI_Model
 		return $query->result();
 	}
 	public function save_jadwal($dataJadwal, $dataMapel)
-    {
+	{
+		// Cek apakah sudah ada jadwal dengan id_user dan hari yang sama
+		$this->db->where('id_user', $dataJadwal['id_user']);
+		$this->db->where('hari', $dataJadwal['hari']);
+		$cek = $this->db->get('jadwal_mapel');
 
-	
-        $this->db->insert('jadwal_mapel', $dataJadwal);
-        $jadwal_id = $this->db->insert_id();
+		if ($cek->num_rows() > 0) {
+			// Jika sudah ada, jangan insert lagi
+			return false;
+		}
 
-        foreach ($dataMapel as &$mapel) {
-            $mapel['jadwal_id'] = $jadwal_id;
-        }
+		// Jika belum ada, insert data
+		$this->db->insert('jadwal_mapel', $dataJadwal);
+		$jadwal_id = $this->db->insert_id();
 
-        $this->db->insert_batch('mapel_detail', $dataMapel);
+		foreach ($dataMapel as &$mapel) {
+			$mapel['jadwal_id'] = $jadwal_id;
+		}
 
-        return true;
-    }
+		$this->db->insert_batch('mapel_detail', $dataMapel);
+
+		return true;
+	}
 
 	public function update_jadwal($id_user, $dataJadwal, $dataMapel)
 	{
@@ -138,5 +147,4 @@ class Master_user_model extends CI_Model
 
 		return true;
 	}
-
 }
