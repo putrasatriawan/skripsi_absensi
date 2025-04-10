@@ -114,17 +114,23 @@ class Config extends Admin_Controller {
 		$id = $this->input->post('id');
 		$config_check = $this->config_model->getAllById(array("config_check.id" => $id));
 		
-		if (!empty($config_check)) {
-			$response = array(
-				'id_check' => $config_check[0]->id,
-				'roles_id' => $id,
-				'check_in' => $config_check[0]->check_in,
-				'check_out' => $config_check[0]->check_out,
-			);
-			echo json_encode($response);
-		} else {
-			echo json_encode(array('status' => 'error', 'message' => 'Guru not found'));
-		}
+		//   echo "<pre>";
+    	// print_r($id);
+    	// die;
+    	// foreach ($id as $value) {
+    	// 	echo "<pre>";
+    	// 	print_r($value);
+    	// }
+    	// die;
+		$response = array(
+			'id_check'   => isset($config_check[0]->id) ? $config_check[0]->id : null,
+			'roles_id'   => $id,
+			'check_in'   => isset($config_check[0]->check_in) ? $config_check[0]->check_in : null,
+			'check_out'  => isset($config_check[0]->check_out) ? $config_check[0]->check_out : null,
+		);
+		
+		echo json_encode($response);
+		
 	}
 
     public function save_check()
@@ -140,6 +146,14 @@ class Config extends Admin_Controller {
             'check_out' => $check_out,
         ];
     
+		// echo "<pre>";
+    	// print_r($data);
+    	// die;
+    	// foreach ($data as $value) {
+    	// 	echo "<pre>";
+    	// 	print_r($value);
+    	// }
+    	// die;
         if (!empty($id_check)) {
             // Jika ID tersedia, coba update data
             $this->db->where('id', $id_check);

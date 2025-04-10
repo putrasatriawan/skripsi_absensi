@@ -134,8 +134,7 @@ class Role extends Admin_Controller
   		$search = array();
 		$limit = 0;
 		$start = 0;
-		$unit_kerja	= $this->data['users']->unit_kerja;
-        $totalData = $this->roles_model->getCountAllBy($limit,$start,$search,$order,$dir, $unit_kerja); 
+        $totalData = $this->roles_model->getCountAllBy($limit,$start,$search,$order,$dir,); 
         
         if(!empty($this->input->post('search')['value'])){
         	$search_value = $this->input->post('search')['value'];
@@ -143,7 +142,7 @@ class Role extends Admin_Controller
            		"roles.name"=>$search_value,
            		"roles.description"=>$search_value
            	); 
-           	$totalFiltered = $this->roles_model->getCountAllBy($limit,$start,$search,$order,$dir, $unit_kerja); 
+           	$totalFiltered = $this->roles_model->getCountAllBy($limit,$start,$search,$order,$dir,); 
         }
 		else{
         	$totalFiltered = $totalData;
@@ -151,7 +150,7 @@ class Role extends Admin_Controller
        
         $limit = $this->input->post('length');
         $start = $this->input->post('start');
-     	$datas = $this->roles_model->getAllBy($limit,$start,$search,$order,$dir,$unit_kerja);
+     	$datas = $this->roles_model->getAllBy($limit,$start,$search,$order,$dir);
      	
         $new_data = array();
         if(!empty($datas))
@@ -164,13 +163,13 @@ class Role extends Admin_Controller
 				
 				if ($this->data['is_can_edit'] && isset($data->is_deleted) && $data->is_deleted == 0) {
 					if($this->data['is_can_edit'] && $data->is_deleted == 0){
-						$edit_url = "<a href='".base_url()."role/edit/".$data->id."' class='btn btn-sm btn-info white'><i class='fa fa-pencil'></i> Ubah</a>";
+						$edit_url = "<a href='".base_url()."role/edit/".$data->id."' class='btn btn-sm btn-info white'><i class='fas fa-edit'></i> Ubah</a>";
 					}  
 					if($this->data['is_can_delete']){
 						if($data->is_deleted == 0){
 							$delete_url = "<a href='#' 
 								url='".base_url()."role/destroy/".$data->id."/".$data->is_deleted."'
-								class='btn btn-sm btn-danger white delete' >Non Aktifkan
+								class='btn btn-sm btn-danger white delete' ><i class='fa fa-times'></i> Non Aktifkan
 								</a>";
 						}
 						else{

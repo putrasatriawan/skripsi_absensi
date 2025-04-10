@@ -6,23 +6,7 @@
                     <div>Master User</div>
                 </div>
                 <div class="page-title-actions">
-                    <!-- <a href="<?php echo base_url() ?>guru/create" class="btn-shadow mr-3 btn btn-success">
-                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                            <i class="fa fa-plus fa-w-20"></i>
-                        </span> Tambah
-                    </a> -->
-                    <!-- <button type="button" class="btn-shadow mr-3 btn btn-primary" data-toggle="modal"
-                        data-target="#importModal">
-                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                            <i class="fa fa-upload fa-w-20"></i>
-                        </span> Import
-                    </button> -->
-                    <!-- <a href="<?php echo base_url() ?>assets/template/template-data-guru.xlsx"
-                        class="btn-shadow mr-3 btn btn-info">
-                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                            <i class="fa fa-download fa-w-20"></i>
-                        </span> Download Template
-                    </a> -->
+                  
                 </div>
             </div>
         </div>
@@ -47,6 +31,45 @@
                             <th>Nama Pengguna</th>
                             <th>NIP</th>
                             <th>JK</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="app-main__inner">
+        <div class="app-page-title">
+            <div class="page-title-wrapper">
+                <div class="page-title-heading">
+                    <div>Konfigurasi Waktu</div>
+                </div>
+                <div class="page-title-actions">
+                  
+                </div>
+            </div>
+        </div>
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <?php if (!empty($this->session->flashdata('message'))) { ?>
+                    <div class="alert alert-info">
+                        <?php echo $this->session->flashdata('message'); ?>
+                    </div>
+                <?php } ?>
+
+                <?php if (!empty($this->session->flashdata('message_error'))) { ?>
+                    <div class="alert alert-info">
+                        <?php echo $this->session->flashdata('message_error'); ?>
+                    </div>
+                <?php } ?>
+
+                <table class="table table-striped dt-responsive" id="table_waktu" style="width:100%; text-align: center;">
+                    <thead>
+                        <tr>
+                            <th class="w-1">No</th>
+                            <th>Kode</th>
+                            <th>Tahun</th>
+                            <th>Bulan</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -110,7 +133,7 @@
               </div>
               <div class="form-group">
                 <label for="name">Nama</label>
-                <input type="text" class="form-control" id="name" name="name" required />
+                <input type="text" class="form-control" id="name" name="name" required  readonly/>
               </div>
               <div class="form-group">
                 <label for="jenis_kelamin">Jenis Kelamin</label>
@@ -138,7 +161,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="alamat">Alamat</label>
-                <textarea class="form-control" id="alamat" name="alamat" required></textarea>
+                <textarea class="form-control" id="alamat" name="alamat" required nf></textarea>
               </div>
               <div class="form-group">
                 <label for="gaji">Gaji</label>

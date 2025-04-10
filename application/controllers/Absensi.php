@@ -76,6 +76,7 @@ class Absensi extends Admin_Controller
     $this->data['longitude'] = $this->config_model->get_setting('longitude');
     $this->data['latitude'] = $this->config_model->get_setting('latitude');
     $this->data['config_check'] = $this->config_model->get_config_chcek($role_id);
+  
     
     if ($this->data['is_can_read']) {
         $this->data['content'] = 'admin/absensi/list_v';

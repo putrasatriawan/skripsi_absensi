@@ -299,7 +299,6 @@ class Privileges extends Admin_Controller
 		$search = array();
 		$limit = 0;
 		$start = 0;
-		$unit_kerja = $this->data['users']->unit_kerja;
 		$totalData = $this->roles_model->getCountAllByRoles($limit, $start, $search, $order, $dir);
 
 		if (!empty($this->input->post('search')['value'])) {
@@ -307,7 +306,7 @@ class Privileges extends Admin_Controller
 			$search = array(
 				"roles.name" => $search_value
 			);
-			$totalFiltered = $this->roles_model->getCountAllBy($limit, $start, $search, $order, $dir, $unit_kerja);
+			$totalFiltered = $this->roles_model->getCountAllBy($limit, $start, $search, $order, $dir, );
 		} 
 		else {
 			$totalFiltered = $totalData;
@@ -325,11 +324,11 @@ class Privileges extends Admin_Controller
 				$view_url = "";
 
 				if ($this->data['is_can_edit']) {
-					$edit_url = "<a href='" . base_url() . "privileges/edit/" . $data->id . "' class='btn btn-sm btn-info white'><i class='fa fa-pencil'></i> Edit</a>";
+					$edit_url = "<a href='" . base_url() . "privileges/edit/" . $data->id . "' class='btn btn-sm btn-info white'><i class='fas fa-edit'></i> Ubah</a>";
 				}
 
 				if ($this->data['is_can_delete']) {
-					$delete_url = "<a  href='#' url='" . base_url() . "privileges/destroy/" . $data->id . "' class='btn btn-sm btn-danger white delete'><i class='fa fa-trash-o'></i> Delete</a>";
+					$delete_url = "<a  href='#' url='" . base_url() . "privileges/destroy/" . $data->id . "' class='btn btn-sm btn-danger white delete'><i class='fa fa-times'></i> Non Aktifkan</a>";
 				}
 
 				$nestedData['id'] = $start + $key + 1;

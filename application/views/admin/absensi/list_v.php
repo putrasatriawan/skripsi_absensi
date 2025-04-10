@@ -53,20 +53,31 @@
             </div>
             <div class="card-body" style="font-size: 17px">
                 <div class="row">
-                    <div class="col-6 font-weight-bold py-2 border-bottom">Nama</div>
-                    <div class="col-6 py-2 border-bottom"><?php echo $user_master->first_name . ' ' . $user_master->last_name; ?></div>
+                <div class="col-6 font-weight-bold py-2 border-bottom">Nama</div>
+                <div class="col-6 py-2 border-bottom">
+                    <?php echo (isset($user_master->first_name) ? $user_master->first_name : '') . ' ' . (isset($user_master->last_name) ? $user_master->last_name : ''); ?>
+                </div>
 
-                    <div class="col-6 font-weight-bold py-2 border-bottom">NIP</div>
-                    <div class="col-6 py-2 border-bottom"><?php echo $user_master->nik; ?></div>
+                <div class="col-6 font-weight-bold py-2 border-bottom">NIP</div>
+                <div class="col-6 py-2 border-bottom">
+                    <?php echo isset($user_master->nik) ? $user_master->nik : '-'; ?>
+                </div>
 
-                    <div class="col-6 font-weight-bold py-2 border-bottom">Jabatan</div>
-                    <div class="col-6 py-2 border-bottom"><?php echo $user_master->role_name; ?></div>
+                <div class="col-6 font-weight-bold py-2 border-bottom">Jabatan</div>
+                <div class="col-6 py-2 border-bottom">
+                    <?php echo isset($user_master->role_name) ? $user_master->role_name : '-'; ?>
+                </div>
 
-                    <div class="col-6 font-weight-bold py-2 border-bottom">Jam Masuk</div>
-                    <div class="col-6 py-2 border-bottom" id="check_in"><?php echo $config_check[0]->check_in; ?></div>
+                <div class="col-6 font-weight-bold py-2 border-bottom">Jam Masuk</div>
+                <div class="col-6 py-2 border-bottom" id="check_in">
+                    <?php echo isset($config_check[0]->check_in) ? $config_check[0]->check_in : '-'; ?>
+                </div>
 
-                    <div class="col-6 font-weight-bold py-2 border-bottom">Jam Keluar</div>
-                    <div class="col-6 py-2 border-bottom" id="check_out"><?php echo $config_check[0]->check_out; ?></div>
+                <div class="col-6 font-weight-bold py-2 border-bottom">Jam Keluar</div>
+                <div class="col-6 py-2 border-bottom" id="check_out">
+                    <?php echo isset($config_check[0]->check_out) ? $config_check[0]->check_out : '-'; ?>
+                </div>
+
 
                     <?php
                     $hari = [

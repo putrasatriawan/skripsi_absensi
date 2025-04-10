@@ -86,25 +86,16 @@ class User extends Admin_Controller
 				);
 				$this->user_model->insert_users_roles($user_role_data);
 
-				if ($role_id == 3) {
+		
 					$parsing_guru = array(
 						'name' => $this->input->post('name'),
 						'users_id' => $user_id,
 						'nip' => $this->input->post('nik'),
+						'alamat' => $this->input->post('address'),
+						'is_deleted' => 0,
 					);
 					$this->master_user_model->insert($parsing_guru);
-				} elseif ($role_id == 4) { // Role ID 4 is for 'Siswa'
-					$parsing_siswa = array(
-						'nama' => $this->input->post('name'),
-						'id_users' => $user_id,
-						'nis' => $this->input->post('nik'),
-						'jk' => $this->input->post('jk'),
-						'alamat' => $this->input->post('address'),
-						'ttl' => $this->input->post('ttl'),
-						'no_hp' => $this->input->post('no_hp'),
-					);
-					$this->siswa_model->insert($parsing_siswa);
-				}
+			
 
 				$response = array('status' => 'success', 'message' => 'User Berhasil Disimpan!');
 				header('Content-Type: application/json');
