@@ -174,6 +174,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
           url: App.baseUrl + "config/delete_data",
         });
       },
-    };
+  };
+  
   });
   

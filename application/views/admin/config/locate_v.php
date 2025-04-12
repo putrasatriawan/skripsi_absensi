@@ -1,32 +1,32 @@
 <div class="app-main__outer">
     <div class="app-main__inner">
         <div class="main-card mb-3 card">
-            <div class="card-body" > <?php if (!empty($this->session->flashdata('message'))) { ?> 
-                <div class="alert alert-info"> 
-                    <?php print_r($this->session->flashdata('message')); ?> 
-                </div> <?php } ?>
+            <div class="card-body"> <?php if (!empty($this->session->flashdata('message'))) { ?>
+                    <div class="alert alert-info">
+                        <?php print_r($this->session->flashdata('message')); ?>
+                    </div> <?php } ?>
                 <div id="alert-container"></div>
                 <h4 class="title">Config</h4>
                 <hr>
-                    <div id="alert-container"></div>
-                    <form id="configForm" class="mb-5">
-                        <div class="form-group">
-                            <label for="longitude">Longitude:</label>
-                            <input type="text" name="longitude" id="longitude" value="<?= isset($longitude) ? $longitude : '' ?>" class="form-control" placeholder="Enter longitude">
-                        </div>
+                <div id="alert-container"></div>
+                <form id="configForm" class="mb-5">
+                    <div class="form-group">
+                        <label for="longitude">Longitude:</label>
+                        <input type="text" name="longitude" id="longitude" value="<?= isset($longitude) ? $longitude : '' ?>" class="form-control" placeholder="Enter longitude">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="latitude">Latitude:</label>
-                            <input type="text" name="latitude" id="latitude" value="<?= isset($latitude) ? $latitude : '' ?>" class="form-control" placeholder="Enter latitude">
-                        </div>
+                    <div class="form-group">
+                        <label for="latitude">Latitude:</label>
+                        <input type="text" name="latitude" id="latitude" value="<?= isset($latitude) ? $latitude : '' ?>" class="form-control" placeholder="Enter latitude">
+                    </div>
 
-                        <button type="submit" id="save-btn" class="btn btn-primary">Update LAN & LAT</button>
-                    </form>
-                <?php if (!empty($this->session->flashdata('message_error'))) { ?> 
-                    <div class="alert alert-info"> 
-                        <?php print_r($this->session->flashdata('message_error')); ?> 
-                    </div> <?php } ?> 
-                    <table class="table table-striped dt-responsive " id="table" style="width:100%; text-align: center;">
+                    <button type="submit" id="save-btn" class="btn btn-primary">Update LAN & LAT</button>
+                </form>
+                <?php if (!empty($this->session->flashdata('message_error'))) { ?>
+                    <div class="alert alert-info">
+                        <?php print_r($this->session->flashdata('message_error')); ?>
+                    </div> <?php } ?>
+                <table class="table table-striped dt-responsive " id="table" style="width:100%; text-align: center;">
                     <thead>
                         <th class="w-1">No</th>
                         <th>Jabatan</th>

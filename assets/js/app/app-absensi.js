@@ -105,6 +105,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
                   
                   document.getElementById("distance-info").innerText = formattedDistance;
                   
+                  // console.log("jarak",jarak)
                   // toastr.success("Lokasi diperbarui secara real-time.");
                   App.checkLocationAndOpenCamera(jarak);
         
@@ -252,11 +253,13 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
         contentType: false,
         success: function (response) {
           document.getElementById("submit-status").innerText = "Absen Berhasil!";
-          toastr.success("Foto berhasil dikirim!");
+          toastr.success("Absen berhasil!");
+          location.reload();
         },
         error: function () {
           document.getElementById("submit-status").innerText = "Terjadi kesalahan saat mengirim foto!";
           toastr.error("Terjadi kesalahan saat mengirim foto!");
+          location.reload();
         },
       });
   },
