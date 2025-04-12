@@ -1,112 +1,118 @@
 <div class="app-main__outer">
-    <div class="app-main__inner">
-        <div class="app-page-title">
-            <div class="page-title-wrapper">
-                <div class="page-title-heading">
-                    <div>Master User</div>
-                </div>
-                <div class="page-title-actions">
-                  
-                </div>
-            </div>
+  <div class="app-main__inner">
+    <div class="app-page-title">
+      <div class="page-title-wrapper">
+        <div class="page-title-heading">
+          <div>Master User</div>
         </div>
-        <div class="main-card mb-3 card">
-            <div class="card-body">
-                <?php if (!empty($this->session->flashdata('message'))) { ?>
-                    <div class="alert alert-info">
-                        <?php echo $this->session->flashdata('message'); ?>
-                    </div>
-                <?php } ?>
+        <div class="page-title-actions">
 
-                <?php if (!empty($this->session->flashdata('message_error'))) { ?>
-                    <div class="alert alert-info">
-                        <?php echo $this->session->flashdata('message_error'); ?>
-                    </div>
-                <?php } ?>
-
-                <table class="table table-striped dt-responsive" id="table" style="width:100%; text-align: center;">
-                    <thead>
-                        <tr>
-                            <th class="w-1">No</th>
-                            <th>Nama Pengguna</th>
-                            <th>NIP</th>
-                            <th>JK</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
         </div>
+      </div>
     </div>
-    <div class="app-main__inner">
-        <div class="app-page-title">
-            <div class="page-title-wrapper">
-                <div class="page-title-heading">
-                    <div>Konfigurasi Waktu</div>
-                </div>
-                <div class="page-title-actions">
-                  
-                </div>
-            </div>
-        </div>
-        <div class="main-card mb-3 card">
-            <div class="card-body">
-                <?php if (!empty($this->session->flashdata('message'))) { ?>
-                    <div class="alert alert-info">
-                        <?php echo $this->session->flashdata('message'); ?>
-                    </div>
-                <?php } ?>
+    <div class="main-card mb-3 card">
+      <div class="card-body">
+        <?php if (!empty($this->session->flashdata('message'))) { ?>
+          <div class="alert alert-info">
+            <?php echo $this->session->flashdata('message'); ?>
+          </div>
+        <?php } ?>
 
-                <?php if (!empty($this->session->flashdata('message_error'))) { ?>
-                    <div class="alert alert-info">
-                        <?php echo $this->session->flashdata('message_error'); ?>
-                    </div>
-                <?php } ?>
+        <?php if (!empty($this->session->flashdata('message_error'))) { ?>
+          <div class="alert alert-info">
+            <?php echo $this->session->flashdata('message_error'); ?>
+          </div>
+        <?php } ?>
 
-                <table class="table table-striped dt-responsive" id="table_waktu" style="width:100%; text-align: center;">
-                    <thead>
-                        <tr>
-                            <th class="w-1">No</th>
-                            <th>Kode</th>
-                            <th>Tahun</th>
-                            <th>Bulan</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
+        <table class="table table-striped dt-responsive" id="table" style="width:100%; text-align: center;">
+          <thead>
+            <tr>
+              <th class="w-1">No</th>
+              <th>Nama Pengguna</th>
+              <th>NIP</th>
+              <th>JK</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
     </div>
+  </div>
+  <div class="app-main__inner">
+    <div class="app-page-title">
+      <div class="page-title-wrapper">
+        <div class="page-title-heading">
+          <div>Konfigurasi Waktu</div>
+        </div>
+        <div class="page-title-actions">
+          <div class="page-title-actions">
+            <a href="<?php echo base_url() ?>master_user/config_waktu"
+              class="btn-shadow mr-3 btn btn-success">
+              <span class="btn-icon-wrapper pr-2 opacity-7">
+                <i class="fa fa-plus fa-w-20"></i>
+              </span> Tambah </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="main-card mb-3 card">
+      <div class="card-body">
+        <?php if (!empty($this->session->flashdata('message'))) { ?>
+          <div class="alert alert-info">
+            <?php echo $this->session->flashdata('message'); ?>
+          </div>
+        <?php } ?>
+
+        <?php if (!empty($this->session->flashdata('message_error'))) { ?>
+          <div class="alert alert-info">
+            <?php echo $this->session->flashdata('message_error'); ?>
+          </div>
+        <?php } ?>
+
+        <table class="table table-striped dt-responsive" id="table_waktu" style="width:100%; text-align: center;">
+          <thead>
+            <tr>
+              <th class="w-1">No</th>
+              <th>Kode</th>
+              <th>Bulan & Tahun</th>
+              <th>Keterangan</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="importModalLabel">Upload File</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="importForm" action="<?php echo base_url('guru/import_data') ?>" method="post"
-                    enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="fileInput">Pilih file untuk diunggah</label>
-                        <input type="file" class="form-control-file" id="userfile" name="userfile" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" form="importForm" class="btn btn-primary">Upload</button>
-            </div>
-        </div>
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="importModalLabel">Upload File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="importForm" action="<?php echo base_url('guru/import_data') ?>" method="post"
+          enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="fileInput">Pilih file untuk diunggah</label>
+            <input type="file" class="form-control-file" id="userfile" name="userfile" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" form="importForm" class="btn btn-primary">Upload</button>
+      </div>
     </div>
+  </div>
 </div>
 <div class="modal fade" id="editGuruModal" tabindex="-1" role="dialog" aria-labelledby="editGuruModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document"> 
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="editGuruModalLabel">Edit Master</h5>
@@ -118,12 +124,6 @@
         <form id="editGuruForm">
           <input type="hidden" id="id" name="id" />
           <div class="row mb-3">
-            <div class="col text-left">
-              <button type="button" id="prevBtn" class="btn btn-secondary">Previous</button>
-            </div>
-            <div class="col text-right">
-              <button type="button" id="nextBtn" class="btn btn-secondary">Next</button>
-            </div>
           </div>
           <div class="row">
             <div class="col-md-6">
@@ -133,7 +133,7 @@
               </div>
               <div class="form-group">
                 <label for="name">Nama</label>
-                <input type="text" class="form-control" id="name" name="name" required  readonly/>
+                <input type="text" class="form-control" id="name" name="name" required readonly />
               </div>
               <div class="form-group">
                 <label for="jenis_kelamin">Jenis Kelamin</label>

@@ -23,13 +23,12 @@ class Migration_create_table_config_waktu_master extends CI_Migration
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'tahun' => [
+            'bulan_tahun' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'bulan' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
+            'keterangan' => [
+                'type' => 'TEXT',
             ],
             'is_deleted' => [
                 'type' => 'INT',

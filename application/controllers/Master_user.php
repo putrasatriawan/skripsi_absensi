@@ -252,82 +252,6 @@ class Master_user extends Admin_Controller
 		);
 		echo json_encode($json_data);
 	}
-	public function dataListWaktu()
-	{
-		$columns = array(
-			0 => 'id',
-			1 => 'kode',
-			2 => 'tahun',
-			3 => 'bulan',
-			4 => ''
-		);
-
-		$order = $columns[$this->input->post('order')[0]['column']];
-		$dir = $this->input->post('order')[0]['dir'];
-		$search = array();
-		$limit = 0;
-		$start = 0;
-		$totalData = $this->config_waktu_master_model->getCountAllBy($limit, $start, $search, $order, $dir);
-
-		if (!empty($this->input->post('search')['value'])) {
-			$search_value = $this->input->post('search')['value'];
-			// $search = array(
-			// 	"master_user.name" => $search_value,
-			// 	"master_user.nip" => $search_value,
-			// 	"master_user.jenis_kelamin" => $search_value
-			// );
-
-			$totalFiltered = $this->config_waktu_master_model->getCountAllBy($limit, $start, $search, $order, $dir);
-		} else {
-			$totalFiltered = $totalData;
-		}
-
-		$limit = $this->input->post('length');
-		$start = $this->input->post('start');
-		$datas = $this->config_waktu_master_model->getAllBy($limit, $start, $search, $order, $dir);
-
-		// 	echo "<pre>";
-		// print_r($datas);
-		// die;
-		// foreach ($datas as $value) {
-		// 	echo "<pre>";
-		// 	print_r($value);
-		// }
-		// die;
-		$new_data = array();
-		if (!empty($datas)) {
-			foreach ($datas as $key => $data) {
-				$edit_url = "";
-				$mapel_url = "";
-				$delete_url = "";
-				$delete_url_hard = "";
-
-				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
-					$edit_url = "<button class='btn btn-sm btn-info white edit-button' data-id='" . $data->id . "'  data-users-id='" . $data->users_id . "'><i class='fas fa-edit'></i> Ubah</button>";
-				}
-
-				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
-					$mapel_url = "<a href='" . base_url() . "master_user/mapel/" . $data->users_id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Mapel</a>";
-				}
-
-				$nestedData['id'] = $start + $key + 1;
-				$nestedData['name'] = $data->name;
-				$nestedData['nip'] = substr(strip_tags($data->nip), 0, 50);
-				$nestedData['jenis_kelamin'] = $data->jenis_kelamin;
-				$nestedData['action'] = $edit_url . " " . $mapel_url . " " . $delete_url_hard;
-				$new_data[] = $nestedData;
-			}
-		}
-
-		$json_data = array(
-			"draw"            => intval($this->input->post('draw')),
-			"recordsTotal"    => intval($totalData),
-			"recordsFiltered" => intval($totalFiltered),
-			"data"            => $new_data
-		);
-		echo json_encode($json_data);
-	}
-
 	public function mapel($id)
 	{
 
@@ -459,9 +383,6 @@ class Master_user extends Admin_Controller
 		$this->session->set_flashdata('message', "Data Mapel Berhasil disimpan!");
 		redirect("master_user");
 	}
-
-
-
 	public function get_jadwal($id)
 	{
 		$data = $this->db->where('id_user', $id)->get('jadwal_mapel')->row();
@@ -476,9 +397,6 @@ class Master_user extends Admin_Controller
 		$response = array('status' => 'success');
 		echo json_encode($response);
 	}
-
-
-
 	public function destroy()
 	{
 		$response_data = array();
@@ -503,7 +421,6 @@ class Master_user extends Admin_Controller
 
 		echo json_encode($response_data);
 	}
-
 	public function destroy_hard()
 	{
 		$response_data = array();
@@ -528,7 +445,6 @@ class Master_user extends Admin_Controller
 
 		echo json_encode($response_data);
 	}
-
 	public function import_data()
 	{
 		$this->load->library('upload');
@@ -587,5 +503,128 @@ class Master_user extends Admin_Controller
 				return;
 			}
 		}
+	}
+
+	//KONFIG WAKTU
+	public function config_waktu()
+	{
+		$this->data['content'] = 'admin/master_user/config_waktu_v';
+		$this->load->view('admin/layouts/page', $this->data);
+	}
+	public function dataListWaktu()
+	{
+		$columns = array(
+			0 => 'id',
+			1 => 'kode',
+			2 => 'tahun',
+			3 => 'bulan',
+			4 => ''
+		);
+
+		$order = $columns[$this->input->post('order')[0]['column']];
+		$dir = $this->input->post('order')[0]['dir'];
+		$search = array();
+		$limit = 0;
+		$start = 0;
+		$totalData = $this->config_waktu_master_model->getCountAllBy($limit, $start, $search, $order, $dir);
+
+		if (!empty($this->input->post('search')['value'])) {
+			$search_value = $this->input->post('search')['value'];
+			// $search = array(
+			// 	"master_user.name" => $search_value,
+			// 	"master_user.nip" => $search_value,
+			// 	"master_user.jenis_kelamin" => $search_value
+			// );
+
+			$totalFiltered = $this->config_waktu_master_model->getCountAllBy($limit, $start, $search, $order, $dir);
+		} else {
+			$totalFiltered = $totalData;
+		}
+
+		$limit = $this->input->post('length');
+		$start = $this->input->post('start');
+		$datas = $this->config_waktu_master_model->getAllBy($limit, $start, $search, $order, $dir);
+
+		// 	echo "<pre>";
+		// print_r($datas);
+		// die;
+		// foreach ($datas as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
+		$new_data = array();
+		if (!empty($datas)) {
+			foreach ($datas as $key => $data) {
+				$edit_url = "";
+				$mapel_url = "";
+				$delete_url = "";
+				$delete_url_hard = "";
+
+
+				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
+					$mapel_url = "<a href='" . base_url() . "master_user/mapel/" . $data->id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Config</a>";
+				}
+
+				$nestedData['id'] = $start + $key + 1;
+				$nestedData['kode'] = $data->kode;
+				$nestedData['bulan_tahun'] = $data->bulan_tahun;
+				$nestedData['keterangan'] = $data->keterangan;
+				$nestedData['action'] = $edit_url . " " . $mapel_url . " " . $delete_url_hard;
+				$new_data[] = $nestedData;
+			}
+		}
+
+		$json_data = array(
+			"draw"            => intval($this->input->post('draw')),
+			"recordsTotal"    => intval($totalData),
+			"recordsFiltered" => intval($totalFiltered),
+			"data"            => $new_data
+		);
+		echo json_encode($json_data);
+	}
+	public function save_config_waktu()
+	{
+		// Validasi input
+		$this->form_validation->set_rules('bulan', 'Bulan dan Tahun', 'required');
+		$this->form_validation->set_rules('kode', 'Kode Konfigurasi', 'required');
+		$this->form_validation->set_rules('keterangan', 'Keterangan', 'required');
+
+		if ($this->form_validation->run() === FALSE) {
+			$this->session->set_flashdata('message', validation_errors());
+			redirect('master_user');
+		}
+
+		$bulan      = $this->input->post('bulan');
+		$kode       = $this->input->post('kode');
+		$keterangan = $this->input->post('keterangan');
+
+		$parts = explode('/', $bulan);
+		$formatted_bulan = $parts[1] . '-' . $parts[0];
+		// Siapkan data untuk disimpan
+		$data = [
+			'bulan_tahun' => $formatted_bulan,
+			'kode'        => $kode,
+			'keterangan'  => $keterangan,
+			'created_at'  => date('Y-m-d H:i:s')
+		];
+
+		// Load model dan simpan data
+		$insert_id = $this->config_waktu_master_model->insert($data);
+
+		if ($insert_id) {
+			$this->session->set_flashdata('message', 'Konfigurasi berhasil disimpan.');
+		} else {
+			$this->session->set_flashdata('message', 'Gagal menyimpan konfigurasi.');
+		}
+
+		redirect('master_user');
+	}
+
+
+	public function get_config_waktu()
+	{
+		$data = $this->config_waktu_master_model->getAllById();
+		echo json_encode($data);
 	}
 }

@@ -13,7 +13,7 @@
             <div class=" main-card mb-3 card">
                 <div class="col-md-12 mt-3">
                     <div class="d-flex align-items-center justify-content-between">
-                        <p class="card-title mb-3">Daftar Sub</p>
+                        <p class="card-title mb-3">Daftar Mapel</p>
                         <div class="ml-auto">
                             <button id="rowbuttonedit"
                                 type="button"
@@ -26,7 +26,7 @@
                 <div id="form-container-edit"
                     class="col-md-12"></div>
                 <div class="card-footer bg-light align-items-center justify-content-end">
-                    <a href="<?php echo base_url() ?>p_mr01_02"
+                    <a href="<?php echo base_url() ?>master_user"
                         class="btn btn-outline-secondary mr-2">
                         <span class="btn-icon-wrapper pr-2 opacity-7">
                             <i class="fa fa-times fa-w-20"></i>
