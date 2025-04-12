@@ -282,6 +282,65 @@ class Master_user extends Admin_Controller
 		$this->data['content'] = 'admin/master_user/mapel_v';
 		$this->load->view('admin/layouts/page', $this->data);
 	}
+	public function waktu($id)
+	{
+		$this->load->model('config_model'); // adjust to your model name
+		$this->data['id_config_master'] = $id;
+
+		$config = $this->db->get_where('config_waktu_master', ['id' => $id])->row();
+
+		if ($config) {
+			$bulan_tahun = $config->bulan_tahun; // format: YYYY-MM
+			$year = date('Y', strtotime($bulan_tahun));
+			$month = date('m', strtotime($bulan_tahun));
+			$daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+
+			$tanggal_list = [];
+			for ($day = 1; $day <= $daysInMonth; $day++) {
+				$tanggal = sprintf('%s-%02d', $bulan_tahun, $day);
+				$hari = $this->getHariIndo(date('N', strtotime($tanggal)));
+
+				$tanggal_list[] = [
+					'tanggal' => $tanggal,
+					'hari' => $hari
+				];
+			}
+
+			$this->data['tanggal_list'] = $tanggal_list;
+		} else {
+			$this->data['tanggal_list'] = [];
+		}
+
+		$mapel_raw = $this->db->get('mapel_detail')->result();
+		$mapel_by_hari = [];
+		foreach ($mapel_raw as $row) {
+			$mapel_by_hari[$row->hari][] = [
+				'id_user' => $row->id_user,
+				'nama_mapel' => $row->nama_mapel,
+			];
+		}
+	
+		$this->data['tanggal_list'] = $tanggal_list;
+		$this->data['mapel_by_hari'] = $mapel_by_hari;	
+
+		$this->data['content'] = 'admin/master_user/waktu_v';
+		$this->load->view('admin/layouts/page', $this->data);
+	}
+
+	private function getHariIndo($dayNumber)
+	{
+		$hari = [
+			1 => 'Senin',
+			2 => 'Selasa',
+			3 => 'Rabu',
+			4 => 'Kamis',
+			5 => 'Jumat',
+			6 => 'Sabtu',
+			7 => 'Minggu'
+		];
+		return $hari[$dayNumber];
+	}
+
 	public function get_mapel()
 	{
 		$data = $this->master_user_jadwal_model->getAllById();
@@ -563,7 +622,7 @@ class Master_user extends Admin_Controller
 
 
 				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
-					$mapel_url = "<a href='" . base_url() . "master_user/mapel/" . $data->id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Config</a>";
+					$mapel_url = "<a href='" . base_url() . "master_user/waktu/" . $data->id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Config</a>";
 				}
 
 				$nestedData['id'] = $start + $key + 1;

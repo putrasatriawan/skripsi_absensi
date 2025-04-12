@@ -1,4 +1,4 @@
-define(["datatablesBS4", "jqvalidate", "toastr", "datepicker"], function (datatablesBS4, jqvalidate, toastr) {
+define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], function (datatablesBS4, jqvalidate, toastr, select2) {
   return {
     table: null,
     currentId: null,
@@ -17,6 +17,14 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker"], function (datata
     },
 
     initEvent: function () {
+      $('.select2').select2({
+        width: '100%',
+        placeholder: function(){
+          return $(this).data('placeholder');
+        },
+        allowClear: true,
+      });    
+
       App.table = $("#table").DataTable({
         language: {
           search: "Cari",
@@ -124,6 +132,25 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker"], function (datata
           { data: "keterangan" },
           { data: "action", orderable: false },
         ],
+      });
+    },
+    initEventKonfigurasiWaktuDetail: function () {
+      App.table = $("#table_waktu_detail").DataTable({
+        language: {
+          search: "Cari",
+          lengthMenu: "Tampilkan _MENU_ baris per halaman",
+          zeroRecords: "Data tidak ditemukan",
+          info: "Menampilkan _START_ - _END_ dari _TOTAL_",
+          infoEmpty: "Tidak ada data yang ditampilkan ",
+          infoFiltered: "(pencarian dari _MAX_ total records)",
+          paginate: {
+            first: "Pertama",
+            last: "Terakhir",
+            next: "Selanjutnya",
+            previous: "Sebelum",
+          },
+        },
+        responsive: true,
       });
     },
     loadRecord: function (id) {
