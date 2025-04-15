@@ -147,4 +147,25 @@ class Master_user_model extends CI_Model
 
 		return true;
 	}
+	
+	public function delete_existing_config($where)
+	{
+		// You can use delete or soft delete
+		$this->db->where($where);
+		$this->db->delete('config_waktu_detail');
+	}
+	
+	public function insert_config($data)
+	{
+		$this->db->insert('config_waktu_detail', $data);
+	}
+	
+	public function get_existing_configs($id_config_master)
+	{
+		$this->db->where('id_config_master', $id_config_master);
+		$this->db->where('is_deleted', 0);
+		return $this->db->get('config_waktu_detail')->result();
+	}
+	
+
 }

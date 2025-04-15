@@ -1,3 +1,9 @@
+const getIdFromUrl = () => {
+  const parts = window.location.pathname.split('/');
+  return parts[parts.length - 1];
+};
+const id_config_master = getIdFromUrl();
+
 define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], function (datatablesBS4, jqvalidate, toastr, select2) {
   return {
     table: null,
@@ -13,6 +19,7 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
       App.addButtonEdit();
       App.calculateDuration();
       App.initEventKonfigurasiWaktu();
+      App.initEventKonfigurasiWaktuDetail();
       $(".loadingpage").hide();
     },
 
@@ -134,6 +141,7 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
         ],
       });
     },
+    
     initEventKonfigurasiWaktuDetail: function () {
       App.table = $("#table_waktu_detail").DataTable({
         language: {
@@ -151,8 +159,53 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
           },
         },
         responsive: true,
+        paging: false,
+        searching: false,
+        info: false, 
+        order: [[1, "asc"]],
       });
-    },
+
+      $('#btn-save-config').on('click', function () {
+        let dataToSave = [];
+        const id_config_master = getIdFromUrl(); // <- from URL
+      
+        $('#table_waktu_detail tbody tr').each(function () {
+          let row = $(this);
+          let hari = row.find('td').eq(0).text().trim();
+          let tanggal = row.find('td').eq(1).text().trim();
+          let select = row.find('select.select2');
+      
+          if (select.length > 0) {
+            let selectedValues = select.val(); // Array of "id_user|nama_mapel"
+            if (selectedValues && selectedValues.length > 0) {
+              selectedValues.forEach(id_user_combo => {
+                const [id_user, id_mapel] = id_user_combo.split('|');
+                dataToSave.push({
+                  hari,
+                  tanggal,
+                  id_user,
+                  id_mapel,
+                  id_config_master
+                });
+              });
+            }
+          }
+        });
+      
+        $.ajax({
+          url: App.baseUrl + 'master_user/save_config_detail',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ data: dataToSave }),
+          success: function (res) {
+            toastr.success('Berhasil disimpan');
+          },
+          error: function () {
+            toastr.error('Gagal menyimpan');
+          }
+        });
+      });      
+    },  
     loadRecord: function (id) {
       $.ajax({
         url: App.baseUrl + "master_user/getGuruById",

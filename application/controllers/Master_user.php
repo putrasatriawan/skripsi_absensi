@@ -282,9 +282,9 @@ class Master_user extends Admin_Controller
 		$this->data['content'] = 'admin/master_user/mapel_v';
 		$this->load->view('admin/layouts/page', $this->data);
 	}
-	public function waktu($id)
+
+	public function waktu($id) 
 	{
-		$this->load->model('config_model'); // adjust to your model name
 		$this->data['id_config_master'] = $id;
 
 		$config = $this->db->get_where('config_waktu_master', ['id' => $id])->row();
@@ -311,20 +311,69 @@ class Master_user extends Admin_Controller
 			$this->data['tanggal_list'] = [];
 		}
 
+		// Load available pengampu
 		$mapel_raw = $this->db->get('mapel_detail')->result();
 		$mapel_by_hari = [];
 		foreach ($mapel_raw as $row) {
 			$mapel_by_hari[$row->hari][] = [
 				'id_user' => $row->id_user,
+				'id_mapel' => $row->id,
 				'nama_mapel' => $row->nama_mapel,
 			];
 		}
-	
-		$this->data['tanggal_list'] = $tanggal_list;
-		$this->data['mapel_by_hari'] = $mapel_by_hari;	
 
+		// Get saved configurations
+		$saved_pengampu = $this->db
+			->where('id_config_master', $id)
+			->get('config_waktu_detail')
+			->result();
+
+		// Store selected as 'id_user|id_mapel'
+		$selected = [];
+		foreach ($saved_pengampu as $s) {
+			$key = $s->id_user . '|' . $s->id_mapel;
+			$selected[$s->tanggal][] = $key;
+		}
+
+		$this->data['selected_pengampu'] = $selected;
+		$this->data['mapel_by_hari'] = $mapel_by_hari;	
 		$this->data['content'] = 'admin/master_user/waktu_v';
 		$this->load->view('admin/layouts/page', $this->data);
+	}
+
+	public function save_config_detail()
+	{
+		$json = file_get_contents('php://input');
+		$decoded = json_decode($json, true);
+
+		if (!empty($decoded['data'])) {
+			foreach ($decoded['data'] as $row) {
+				// Delete existing entry with matching keys
+				$this->master_user_model->delete_existing_config([
+					'hari' => $row['hari'],
+					'tanggal' => $row['tanggal'],
+					'id_mapel' => $row['id_mapel'],
+					'id_config_master' => $row['id_config_master'],
+					'id_user' => $row['id_user'] // optional if needed for more precision
+				]);
+
+				// Prepare item to insert
+				$item = [
+					'hari' => $row['hari'],
+					'tanggal' => $row['tanggal'],
+					'id_user' => $row['id_user'],
+					'id_mapel' => $row['id_mapel'] ?? null,
+					'id_config_master' => $row['id_config_master'],
+					'is_deleted' => 0
+				];
+
+				$this->master_user_model->insert_config($item);
+			}
+
+			echo json_encode(['status' => 'success']);
+		} else {
+			echo json_encode(['status' => 'empty']);
+		}
 	}
 
 	private function getHariIndo($dayNumber)

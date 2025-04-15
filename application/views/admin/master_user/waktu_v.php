@@ -39,11 +39,21 @@
               <td><?= date('d-m-Y', strtotime($row['tanggal'])) ?></td>
               <td>
                 <?php if (isset($mapel_by_hari[$row['hari']])): ?>
-                  <select name="pengampu[<?= $row['tanggal'] ?>][]" multiple class="form-control select2" data-placeholder="Pilih pengampu">
-                    <?php foreach ($mapel_by_hari[$row['hari']] as $m): ?>
-                      <option value="<?= $m['id_user'] ?>"><?= $m['id_user'] ?> / <?= $m['nama_mapel'] ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <?php
+                    $tanggal = $row['tanggal'];
+                    $tanggalKey = date('j', strtotime($tanggal));
+                    $hari = $row['hari'];
+                    $selected = $selected_pengampu[$tanggalKey] ?? [];
+                    ?>
+                    <select name="pengampu[<?= $tanggal ?>][]" multiple class="form-control select2" data-placeholder="Pilih pengampu">
+                      <?php foreach ($mapel_by_hari[$hari] ?? [] as $m): ?>
+                        <?php $value = $m['id_user'] . '|' . $m['id_mapel']; ?>
+                        <option value="<?= $value ?>"
+                          <?= in_array($value, $selected) ? 'selected' : '' ?>>
+                          <?= $m['id_user'] ?> / <?= $m['nama_mapel'] ?>
+                        </option>
+                      <?php endforeach; ?>
+                    </select>
                 <?php else: ?>
                   <span class="text-muted">-</span>
                 <?php endif; ?>
@@ -60,6 +70,11 @@
           <span class="btn-icon-wrapper pr-2 opacity-7">
             <!-- <i class="fa fa-back fa-w-20"></i> -->
           </span>Kembali </a>
+          <button id="btn-save-config"
+          class="btn btn-primary">
+          <span class="btn-icon-wrapper pr-2 opacity-7">
+          <i class="fa fa-save fa-w-20"></i></span>Simpan</button>
+
       </div>
     </div>
   </div>
