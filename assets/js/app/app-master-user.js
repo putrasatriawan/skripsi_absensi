@@ -20,6 +20,7 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
       App.calculateDuration();
       App.initEventKonfigurasiWaktu();
       App.initEventKonfigurasiWaktuDetail();
+      App.initFormatRupiah();
       $(".loadingpage").hide();
     },
 
@@ -650,6 +651,32 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
           todayHighlight: true
       });
     },
+    initFormatRupiah: function () {
+      $('.rupiah').on('input', function () {
+        let inputVal = $(this).val();
+  
+        // Hapus semua karakter non-digit
+        let numericVal = inputVal.replace(/[^,\d]/g, '');
+  
+        // Pisahkan angka dan desimal jika ada
+        let split = numericVal.split(',');
+        let sisa = split[0].length % 3;
+        let rupiah = split[0].substr(0, sisa);
+        let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+  
+        // Tambahkan titik sebagai pemisah ribuan
+        if (ribuan) {
+          let separator = sisa ? '.' : '';
+          rupiah += separator + ribuan.join('.');
+        }
+  
+        // Tambahkan desimal jika ada
+        rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+  
+        // Tambahkan prefix 'Rp. '
+        $(this).val('Rp. ' + rupiah);
+      });
+    }
   };
 });
 

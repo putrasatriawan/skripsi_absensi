@@ -33,7 +33,7 @@ class Migrate_data extends CI_Controller
 			array('id' => 4, 'module_id' => 1, 'name' => 'Jabatan', 'url' => 'role', 'parent_id' => 3, 'icon' => "", 'sequence' => 1, 'description' => 'Jabatan', "show_at" => 0),
 			array('id' => 5, 'module_id' => 1, 'name' => 'Hak Akses', 'url' => 'privileges', 'parent_id' => 3, 'icon' => "", 'sequence' => 2, 'description' => '', "show_at" => 0),
 			array('id' => 6, 'module_id' => 1, 'name' => 'User', 'url' => 'user', 'parent_id' => 1, 'icon' => "pe-7s-users", 'sequence' => 3, 'description' => '', "show_at" => 0),
-			// array('id' => 7, 'module_id' => 1, 'name' => 'Report', 'url' => 'report', 'parent_id' => 1, 'icon' => "pe-7s-print", 'sequence' => 9, 'description' => '', "show_at" => 0),
+			array('id' => 7, 'module_id' => 1, 'name' => 'Penggajian', 'url' => 'Penggajian', 'parent_id' => 1, 'icon' => "pe-7s-print", 'sequence' => 9, 'description' => '', "show_at" => 0),
 			array('id' => 8, 'module_id' => 1, 'name' => 'Absensi', 'url' => 'absensi', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 12, 'description' => '', "show_at" => 0),
 			array('id' => 9, 'module_id' => 1, 'name' => 'Config Lat Lon', 'url' => 'config', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 13, 'description' => '', "show_at" => 0),
 			array('id' => 10, 'module_id' => 1, 'name' => 'Data Absen', 'url' => 'data_absen', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 14, 'description' => '', "show_at" => 0),
@@ -153,7 +153,7 @@ class Migrate_data extends CI_Controller
 		$table = 'menu_function';
 
 		$menus = [
-	
+
 			"11" => [1, 2, 3, 4, 5],
 		];
 

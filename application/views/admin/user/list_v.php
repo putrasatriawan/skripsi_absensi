@@ -36,8 +36,8 @@
                                             <select class="form-control" id="filter-roles" name="role_id">
                                                 <option selected hidden disabled>Pilih Jabatan</option>
                                                 <?php foreach ($roles as $key => $value) { ?>
-                                                <option value="<?php echo $value->id ?>"> <?php echo $value->name ?>
-                                                </option>
+                                                    <option value="<?php echo $value->id ?>"> <?php echo $value->name ?>
+                                                    </option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -70,14 +70,14 @@
                     </form>
                 </div>
                 <!-- end import data button -->
+            </div>
         </div>
-    </div>
-    <div class="main-card mb-3 card">
-        <div class="card-body">
-            <!-- <p class="title">Filter</p> -->
-            <div class="row">
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <!-- <p class="title">Filter</p> -->
+                <div class="row">
 
-                        <!-- <div class="col-lg-3">
+                    <!-- <div class="col-lg-3">
                             <select class="form-control" id="filter-roles-jb" name="role_name">
                                 <option selected hidden disabled>Pilih Jabatan</option>
                                 <?php foreach ($roles as $key => $value) { ?>
@@ -85,31 +85,32 @@
                                 <?php } ?>
                             </select>
                         </div> -->
-                        <!-- <div class="col-lg-3">
+                    <!-- <div class="col-lg-3">
                             <button id="btn-apply-filter" class="btn btn-primary mr-2">Terapkan</button>
                             <button id="btn-reset-filter" class="btn btn-outline-danger">Reset</button>
                         </div> -->
-                    </div>
-                    <hr> <?php if (!empty($this->session->flashdata('message'))) { ?>
-                    <div class="alert alert-info"> <?php print_r($this->session->flashdata('message')); ?> </div>
-                    <?php } ?>
-                    <?php if (!empty($this->session->flashdata('message_error'))) { ?> <div class="alert alert-info">
-                        <?php print_r($this->session->flashdata('message_error')); ?> </div>
-                    <?php } ?>
-                    <table class="table table-striped dt-responsive " id="table" style="width:100%;">
-                        <thead>
-                            <th>No Urut</th>
-                            <th>Jabatan</th>
-                            <th>Nama</th>
-                            <th>NIK</th>
-                            <th>Aksi</th>
-                        </thead>
-                    </table>
                 </div>
+                <!-- <hr> -->
+                <?php if (!empty($this->session->flashdata('message'))) { ?>
+                    <div class="alert alert-info"> <?php print_r($this->session->flashdata('message')); ?> </div>
+                <?php } ?>
+                <?php if (!empty($this->session->flashdata('message_error'))) { ?> <div class="alert alert-info">
+                        <?php print_r($this->session->flashdata('message_error')); ?> </div>
+                <?php } ?>
+                <table class="table table-striped dt-responsive " id="table" style="width:100%;">
+                    <thead>
+                        <th>No Urut</th>
+                        <th>Jabatan</th>
+                        <th>Nama</th>
+                        <th>NIK</th>
+                        <th>Aksi</th>
+                    </thead>
+                </table>
             </div>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script data-main="<?php echo base_url() ?>assets/js/main/main-user"
-        src="<?php echo base_url() ?>assets/js/require.js">
-    </script>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script data-main="<?php echo base_url() ?>assets/js/main/main-user"
+    src="<?php echo base_url() ?>assets/js/require.js">
+</script>

@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 
-class config_waktu_master_model extends CI_Model
+class Config_waktu_master_model extends CI_Model
 {
 	public function __construct()
 	{
@@ -91,6 +91,4 @@ class config_waktu_master_model extends CI_Model
 		$result = $this->db->get();
 		return $result->num_rows();
 	}
-
-
 }

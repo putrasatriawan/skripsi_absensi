@@ -26,14 +26,14 @@ class Absensi extends Admin_Controller
 
         $has_check_in = false;
         $has_check_out = false;
-        echo "<pre>";
-        print_r($attendances);
-        die;
-        foreach ($attendances as $value) {
-            echo "<pre>";
-            print_r($value);
-        }
-        die;
+        // echo "<pre>";
+        // print_r($attendances);
+        // die;
+        // foreach ($attendances as $value) {
+        //     echo "<pre>";
+        //     print_r($value);
+        // }
+        // die;
         if ($attendances) {
             foreach ($attendances as $attendance) {
                 if ($attendance->is_check_in == 'check_in') {

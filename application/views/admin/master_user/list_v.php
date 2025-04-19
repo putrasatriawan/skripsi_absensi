@@ -111,22 +111,22 @@
     </div>
   </div>
 </div>
+<!-- Modal Edit Master -->
 <div class="modal fade" id="editGuruModal" tabindex="-1" role="dialog" aria-labelledby="editGuruModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="editGuruModalLabel">Edit Master</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form id="editGuruForm">
           <input type="hidden" id="id" name="id" />
-          <div class="row mb-3">
-          </div>
           <div class="row">
             <div class="col-md-6">
+              <!-- Informasi Pribadi -->
               <div class="form-group">
                 <label for="nip">NIP</label>
                 <input type="text" class="form-control" id="nip" name="nip" readonly />
@@ -159,13 +159,14 @@
               </div>
             </div>
             <div class="col-md-6">
+              <!-- Informasi Tambahan -->
               <div class="form-group">
                 <label for="alamat">Alamat</label>
-                <textarea class="form-control" id="alamat" name="alamat" required nf></textarea>
+                <textarea class="form-control" id="alamat" name="alamat" required></textarea>
               </div>
               <div class="form-group">
                 <label for="gaji">Gaji</label>
-                <input type="number" class="form-control" id="gaji" name="gaji" required />
+                <input type="text" class="form-control rupiah" id="gaji" name="gaji" required />
               </div>
               <div class="form-group">
                 <label for="tempat_lahir">Tempat Lahir</label>
@@ -174,6 +175,18 @@
               <div class="form-group">
                 <label for="tanggal_lahir">Tanggal Lahir</label>
                 <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required />
+              </div>
+              <!-- Pengaturan Pemotongan Gaji -->
+              <div class="form-group">
+                <label for="jenis_pemotongan">Jenis Pemotongan Gaji</label>
+                <select class="form-control" id="jenis_pemotongan" name="jenis_pemotongan" required>
+                  <option value="per_jam">Per Jam</option>
+                  <option value="per_menit">Per Menit</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="nilai_pemotongan">Nilai Pemotongan</label>
+                <input type="text" class="form-control rupiah" id="nilai_pemotongan" name="nilai_pemotongan" placeholder="Masukkan nilai pemotongan" required />
               </div>
             </div>
           </div>
@@ -185,6 +198,7 @@
     </div>
   </div>
 </div>
+
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
