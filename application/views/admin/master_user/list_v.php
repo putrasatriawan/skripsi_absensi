@@ -178,15 +178,15 @@
               </div>
               <!-- Pengaturan Pemotongan Gaji -->
               <div class="form-group">
-                <label for="jenis_pemotongan">Jenis Pemotongan Gaji</label>
-                <select class="form-control" id="jenis_pemotongan" name="jenis_pemotongan" required>
+                <label for="type_pemotongan">Jenis Pemotongan Gaji</label>
+                <select class="form-control" id="type_pemotongan" name="type_pemotongan" required>
                   <option value="per_jam">Per Jam</option>
                   <option value="per_menit">Per Menit</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="nilai_pemotongan">Nilai Pemotongan</label>
-                <input type="text" class="form-control rupiah" id="nilai_pemotongan" name="nilai_pemotongan" placeholder="Masukkan nilai pemotongan" required />
+                <label for="pemotongan">Nilai Pemotongan</label>
+                <input type="text" class="form-control rupiah" id="pemotongan" name="pemotongan" placeholder="Masukkan nilai pemotongan" required />
               </div>
             </div>
           </div>

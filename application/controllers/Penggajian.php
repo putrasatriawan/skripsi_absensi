@@ -112,8 +112,24 @@ class Penggajian extends Admin_Controller
 		$this->data['id'] = $id;
 		$this->load->view('admin/layouts/page', $this->data);
 	}
-	public function detail_gaji($id)
+	public function detail_gaji($id, $id_config_master)
 	{
+		$master_user = $this->master_user_model->getAllById(array("master_user.users_id" => $id));
+		$user = $this->config_waktu_master_model->getAllById(array("config_waktu_master.id" => $id_config_master));
+		$where = array(
+			'config_waktu_detail.id_config_master' => $id_config_master,
+			'config_waktu_detail.id_user' => $id
+		);
+		$users = $this->config_waktu_detail_model->getAllById($where);
+
+		echo "<pre>";
+		print_r($users);
+		die;
+		foreach ($users as $value) {
+			echo "<pre>";
+			print_r($value);
+		}
+		die;
 		$this->data['content'] = 'admin/penggajian/detail_gaji_v';
 		$this->data['id'] = $id;
 		$this->load->view('admin/layouts/page', $this->data);
@@ -148,7 +164,7 @@ class Penggajian extends Admin_Controller
 		$start = $this->input->post('start');
 		$datas = $this->config_waktu_detail_model->getAllBy($limit, $start, $search, $order, $dir, $id);
 
-		// 	echo "<pre>";
+		// echo "<pre>";
 		// print_r($datas);
 		// die;
 		// foreach ($datas as $value) {
@@ -166,7 +182,7 @@ class Penggajian extends Admin_Controller
 
 
 				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
-					$mapel_url = "<a href='" . base_url() . "penggajian/detail_gaji/" . $data->id . "' class='btn btn-sm white btn-warning'><i class='fas fa-eye'></i> Detail</a>";
+					$mapel_url = "<a href='" . base_url() . "penggajian/detail_gaji/" . $data->id_user . "/" . $data->id_config_master . "' class='btn btn-sm white btn-warning'><i class='fas fa-eye'></i> Detail</a>";
 				}
 
 				$nestedData['id'] = $start + $key + 1;

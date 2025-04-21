@@ -221,15 +221,32 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
           $('#editGuruModal #no_hp').val(data.no_hp);
           $('#editGuruModal #agama').val(data.agama);
           $('#editGuruModal #alamat').val(data.alamat);
-          $('#editGuruModal #gaji').val(data.gaji);
+          $('#editGuruModal #gaji').val(App.formatRupiah(data.gaji || 0));
           $('#editGuruModal #tempat_lahir').val(data.tempat_lahir);
           $('#editGuruModal #tanggal_lahir').val(data.tanggal_lahir);
+          $('#editGuruModal #pemotongan').val(App.formatRupiah(data.pemotongan || 0));
+          $('#editGuruModal #type_pemotongan').val(data.type_pemotongan);
           $('#editGuruModal').modal('show');
-
-          App.loadAdjacentRecords(id);
         }
+        
       });
     },
+     formatRupiah: function(angka) {
+      var number_string = angka.toString().replace(/[^,\d]/g, ''),
+          split = number_string.split(','),
+          sisa = split[0].length % 3,
+          rupiah = split[0].substr(0, sisa),
+          ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+    
+      if (ribuan) {
+        var separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+      }
+    
+      rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+      return 'Rp ' + rupiah;
+    },
+    
     initConfirm: function () {
       $("#table tbody").on("click", ".delete", function () {
         var url = $(this).attr("url");

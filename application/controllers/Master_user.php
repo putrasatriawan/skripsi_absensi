@@ -64,6 +64,14 @@ class Master_user extends Admin_Controller
 		$this->form_validation->set_rules('name', "Name Harus Diisi", 'trim|required');
 
 		if ($this->form_validation->run() === TRUE) {
+			$gaji_input = $this->input->post('gaji');
+			$pemotongan_input = $this->input->post('pemotongan');
+
+			// Hapus semua karakter non-digit
+			$gaji_bersih = preg_replace('/\D/', '', $gaji_input);
+			$pemotongan_bersih = preg_replace('/\D/', '', $pemotongan_input);
+
+			// Siapkan data untuk disimpan
 			$data = array(
 				'name' => $this->input->post('name'),
 				'nip' => $this->input->post('nip'),
@@ -71,9 +79,11 @@ class Master_user extends Admin_Controller
 				'no_hp' => $this->input->post('no_hp'),
 				'agama' => $this->input->post('agama'),
 				'alamat' => $this->input->post('alamat'),
-				'gaji' => $this->input->post('gaji'),
+				'gaji' => $gaji_bersih,
 				'tempat_lahir' => $this->input->post('tempat_lahir'),
 				'tanggal_lahir' => $this->input->post('tanggal_lahir'),
+				'type_pemotongan' => $this->input->post('type_pemotongan'),
+				'pemotongan' => $pemotongan_bersih,
 			);
 
 			// echo "<pre>";
@@ -154,6 +164,8 @@ class Master_user extends Admin_Controller
 				'gaji' => $master_user[0]->gaji,
 				'tempat_lahir' => $master_user[0]->tempat_lahir,
 				'tanggal_lahir' => $master_user[0]->tanggal_lahir,
+				'type_pemotongan' => $master_user[0]->type_pemotongan,
+				'pemotongan' => $master_user[0]->pemotongan,
 			);
 			echo json_encode($response);
 		} else {
@@ -283,7 +295,7 @@ class Master_user extends Admin_Controller
 		$this->load->view('admin/layouts/page', $this->data);
 	}
 
-	public function waktu($id) 
+	public function waktu($id)
 	{
 		$this->data['id_config_master'] = $id;
 
@@ -336,7 +348,7 @@ class Master_user extends Admin_Controller
 		}
 
 		$this->data['selected_pengampu'] = $selected;
-		$this->data['mapel_by_hari'] = $mapel_by_hari;	
+		$this->data['mapel_by_hari'] = $mapel_by_hari;
 		$this->data['content'] = 'admin/master_user/waktu_v';
 		$this->load->view('admin/layouts/page', $this->data);
 	}
