@@ -254,12 +254,12 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
         success: function (response) {
           document.getElementById("submit-status").innerText = "Absen Berhasil!";
           toastr.success("Absen berhasil!");
-          location.reload();
+          // location.reload();
         },
         error: function () {
           document.getElementById("submit-status").innerText = "Terjadi kesalahan saat mengirim foto!";
           toastr.error("Terjadi kesalahan saat mengirim foto!");
-          location.reload();
+          // location.reload();
         },
       });
   },

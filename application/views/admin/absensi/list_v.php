@@ -113,7 +113,7 @@
                         </div>
 
 
-                    <?php endif; ?>
+
                     </div>
             </div>
             <div class="row mt-5">
@@ -144,17 +144,18 @@
             </div>
         </div>
     </div>
+<?php endif; ?>
 
-    <div id="loadingModal" style="display: none;">
-        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;">
-            <div style="background-color: white; padding: 20px; border-radius: 8px; text-align: center;">
-                <h5>Sebentar, Lokasi Anda Sedang Dipindai...</h5>
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
+<div id="loadingModal" style="display: none;">
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 20px; border-radius: 8px; text-align: center;">
+            <h5>Sebentar, Lokasi Anda Sedang Dipindai...</h5>
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -10,7 +10,6 @@ class Absensi_model extends CI_Model
     {
         $this->db->select("absensi.*")->from("absensi");
         $this->db->where($where);
-        $this->db->where("absensi.is_deleted", 0);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -30,12 +29,23 @@ class Absensi_model extends CI_Model
         }
         return FALSE;
     }
+    public function getOneConfig($where = array())
+    {
+        $this->db->select("config_check.*")->from("config_check");
+        $this->db->where($where);
+
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->row();
+        }
+        return FALSE;
+    }
 
     public function getById($id)
     {
         $this->db->where('id', $id);
-        $query = $this->db->get('absensi'); 
-        return $query->row(); 
+        $query = $this->db->get('absensi');
+        return $query->row();
     }
 
     public function insert($data)
@@ -70,7 +80,7 @@ class Absensi_model extends CI_Model
     function getAllBy($limit, $start, $search, $col, $dir, $where = array())
     {
         $this->db->select("absensi.*, users.first_name as nama_user")->from("absensi");
-        $this->db->join("users","users.id = absensi.id_user","left"); 
+        $this->db->join("users", "users.id = absensi.id_user", "left");
         $this->db->limit($limit, $start)->order_by($col, $dir);
         if (!empty($search)) {
             foreach ($search as $key => $value) {
@@ -95,7 +105,7 @@ class Absensi_model extends CI_Model
         $result = $this->db->get();
         return $result->num_rows();
     }
-    
+
     public function getCountAllById($where)
     {
         $this->db->select("COUNT(*) as total_rows")->from("absensi");
@@ -119,7 +129,7 @@ class Absensi_model extends CI_Model
         $this->db->like('tanggal_absen', $date);
         $this->db->where('is_deleted', 0);
         $this->db->limit(2);
-        
+
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -127,5 +137,4 @@ class Absensi_model extends CI_Model
             return false;
         }
     }
-
 }
