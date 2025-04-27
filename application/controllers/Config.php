@@ -2,18 +2,19 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once APPPATH . 'core/Admin_Controller.php';
 
-class Config extends Admin_Controller {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->load->model('config_model');
-    }
+class Config extends Admin_Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('config_model');
+	}
 
-    public function index()
-    {
+	public function index()
+	{
 		$this->load->helper('url');
-        $data['longitude'] = $this->config_model->get_setting('longitude');
-        $data['latitude'] = $this->config_model->get_setting('latitude');
+		$data['longitude'] = $this->config_model->get_setting('longitude');
+		$data['latitude'] = $this->config_model->get_setting('latitude');
 
 		if ($this->data['is_can_read']) {
 			$this->data['content'] = 'admin/config/locate_v';
@@ -22,25 +23,25 @@ class Config extends Admin_Controller {
 		}
 
 		$this->data['longitude'] = $data['longitude'];
-    	$this->data['latitude'] = $data['latitude'];
+		$this->data['latitude'] = $data['latitude'];
 
 		$this->load->view('admin/layouts/page', $this->data);
-    }
+	}
 
-    public function save()
-    {
-        $longitude = $this->input->post('longitude');
-        $latitude = $this->input->post('latitude');
+	public function save()
+	{
+		$longitude = $this->input->post('longitude');
+		$latitude = $this->input->post('latitude');
 
-        if (is_numeric($longitude) && is_numeric($latitude)) {
-            $this->config_model->set_setting('longitude', $longitude);
-            $this->config_model->set_setting('latitude', $latitude);
-            echo json_encode(array('status' => 'success', 'message' => 'Data berhasil diupdate!'));
-        } else {
-            echo json_encode(array('status' => 'error', 'message' => 'Data gagala diupdate!'));
-        }
-    }
-    public function dataList()
+		if (is_numeric($longitude) && is_numeric($latitude)) {
+			$this->config_model->set_setting('longitude', $longitude);
+			$this->config_model->set_setting('latitude', $latitude);
+			echo json_encode(array('status' => 'success', 'message' => 'Data berhasil diupdate!'));
+		} else {
+			echo json_encode(array('status' => 'error', 'message' => 'Data gagala diupdate!'));
+		}
+	}
+	public function dataList()
 	{
 
 		$columns = array(
@@ -59,25 +60,32 @@ class Config extends Admin_Controller {
 		$start = 0;
 		$totalData = $this->config_model->getCountAllBy($limit, $start, $search, $order, $dir);
 
-        
+
 		if (!empty($this->input->post('search')['value'])) {
 			// $isSearchColumn = true;
 			$search_value = $this->input->post('search')['value'];
 			$search = array(
-                "name" => $search_value,
+				"name" => $search_value,
 			);
 			//    	 }
 			// if($isSearchColumn){
-                $totalFiltered = $this->config_model->getCountAllBy($limit, $start, $search, $order, $dir);
-            } else {
+			$totalFiltered = $this->config_model->getCountAllBy($limit, $start, $search, $order, $dir);
+		} else {
 			$totalFiltered = $totalData;
 		}
-        
+
 		$limit = $this->input->post('length');
 		$start = $this->input->post('start');
 		$datas = $this->config_model->getAllBy($limit, $start, $search, $order, $dir);
-        // var_dump($datas);die;
-
+		// var_dump($datas);die;
+		// echo "<pre>";
+		// print_r($datas);
+		// die;
+		// foreach ($datas  as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		$new_data = array();
 		if (!empty($datas)) {
 
@@ -86,9 +94,9 @@ class Config extends Admin_Controller {
 				$delete_url = "";
 				$delete_url_hard = "";
 
-                if($this->data['is_can_edit'] && $data->is_deleted == 0){
-					$edit_url = "<button class='btn btn-sm btn-info white edit-button' data-id='".$data->id."' ><i class='fas fa-edit'></i> Ubah</button>";
-            	}  
+				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
+					$edit_url = "<button class='btn btn-sm btn-info white edit-button' data-id='" . $data->id . "' ><i class='fas fa-edit'></i> Ubah</button>";
+				}
 
 
 				$nestedData['id'] = $start + $key + 1;
@@ -109,74 +117,70 @@ class Config extends Admin_Controller {
 
 		echo json_encode($json_data);
 	}
-    public function getRoleById()
+	public function getRoleById()
 	{
 		$id = $this->input->post('id');
-		$config_check = $this->config_model->getAllById(array("config_check.id" => $id));
-		
-		//   echo "<pre>";
-    	// print_r($id);
-    	// die;
-    	// foreach ($id as $value) {
-    	// 	echo "<pre>";
-    	// 	print_r($value);
-    	// }
-    	// die;
+		$config_check = $this->config_model->getAllById(array("config_check.roles_id" => $id));
+		// echo "<pre>";
+		// print_r($id);
+		// die;
+		// foreach ($id as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
+
 		$response = array(
 			'id_check'   => isset($config_check[0]->id) ? $config_check[0]->id : null,
 			'roles_id'   => $id,
 			'check_in'   => isset($config_check[0]->check_in) ? $config_check[0]->check_in : null,
 			'check_out'  => isset($config_check[0]->check_out) ? $config_check[0]->check_out : null,
 		);
-		
+
 		echo json_encode($response);
-		
 	}
 
-    public function save_check()
-    {
-        $id_check = $this->input->post('id_check');
-        $roles_id = $this->input->post('roles_id');
-        $check_in = $this->input->post('check_in');
-        $check_out = $this->input->post('check_out');
-    
-        $data = [
-            'roles_id' => $roles_id,
-            'check_in' => $check_in,
-            'check_out' => $check_out,
-        ];
-    
-		// echo "<pre>";
-    	// print_r($data);
-    	// die;
-    	// foreach ($data as $value) {
-    	// 	echo "<pre>";
-    	// 	print_r($value);
-    	// }
-    	// die;
-        if (!empty($id_check)) {
-            // Jika ID tersedia, coba update data
-            $this->db->where('id', $id_check);
-            $update = $this->db->update('config_check', $data);
-    
-            if ($update) {
-                $this->session->set_flashdata('message', 'Data berhasil diupdate!');
-            } else {
-                $this->session->set_flashdata('error', 'Gagal mengupdate data!');
-            }
-        } else {
-            // Jika ID kosong, lakukan insert
-            $insert = $this->db->insert('config_check', $data);
-    
-            if ($insert) {
-                $this->session->set_flashdata('message', 'Data berhasil ditambahkan!');
-            } else {
-                $this->session->set_flashdata('error', 'Gagal menambahkan data!');
-            }
-        }
-    
-        redirect('config');
-    }
-    
+	public function save_check()
+	{
+		$id_check = $this->input->post('id_check');
+		$roles_id = $this->input->post('roles_id');
+		$check_in = $this->input->post('check_in');
+		$check_out = $this->input->post('check_out');
 
+		$data = [
+			'roles_id' => $roles_id,
+			'check_in' => $check_in,
+			'check_out' => $check_out,
+		];
+
+		// echo "<pre>";
+		// print_r($data);
+		// die;
+		// foreach ($data as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
+		if (!empty($id_check)) {
+			$this->db->where('id', $id_check);
+			$update = $this->db->update('config_check', $data);
+
+			if ($update) {
+				$this->session->set_flashdata('message', 'Data berhasil diupdate!');
+			} else {
+				$this->session->set_flashdata('error', 'Gagal mengupdate data!');
+			}
+		} else {
+			// Jika ID kosong, lakukan insert
+			$insert = $this->db->insert('config_check', $data);
+
+			if ($insert) {
+				$this->session->set_flashdata('message', 'Data berhasil ditambahkan!');
+			} else {
+				$this->session->set_flashdata('error', 'Gagal menambahkan data!');
+			}
+		}
+
+		redirect('config');
+	}
 }

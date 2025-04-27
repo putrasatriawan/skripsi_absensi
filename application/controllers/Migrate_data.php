@@ -37,7 +37,7 @@ class Migrate_data extends CI_Controller
 			array('id' => 8, 'module_id' => 1, 'name' => 'Absensi', 'url' => 'absensi', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 12, 'description' => '', "show_at" => 0),
 			array('id' => 9, 'module_id' => 1, 'name' => 'Config Lat Lon', 'url' => 'config', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 13, 'description' => '', "show_at" => 0),
 			array('id' => 10, 'module_id' => 1, 'name' => 'Data Absen', 'url' => 'data_absen', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 14, 'description' => '', "show_at" => 0),
-			array('id' => 12, 'module_id' => 1, 'name' => 'Config Jam Masuk', 'url' => 'config_jam', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 15, 'description' => '', "show_at" => 0),
+			// array('id' => 12, 'module_id' => 1, 'name' => 'Config Jam Masuk', 'url' => 'config_jam', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 15, 'description' => '', "show_at" => 0),
 
 		);
 		$this->db->insert_batch($table, $data);

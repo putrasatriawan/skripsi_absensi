@@ -8,14 +8,14 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
     table: null,
     userLatitude: null,
     userLongitude: null,
-    definedLatitude : null,
-    definedLongitude : null,
+    // definedLatitude : null,
+    // definedLongitude : null,
     maxRadius: 100,
 
     // Initialize the application
     init: function () {
-      console.log("Defined Latitude: ", this.definedLatitude);
-      console.log("Defined Longitude: ", this.definedLongitude);
+      // console.log("Defined Latitude: ", this.definedLatitude);
+      // console.log("Defined Longitude: ", this.definedLongitude);
       $(document).on("click", "#open-camera", function () {
         App.triggerCamera();
       });
@@ -80,28 +80,29 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
           navigator.geolocation.watchPosition(
               (position) => {
                   App.hideLoading();
-                
+                  const definedLatitudeNumber = parseFloat(definedLatitude);
+                  const definedLongitudeNumber = parseFloat(definedLongitude);
                   
                   const distance = App.calculateDistance(
                     App.userLatitude = (position.coords.latitude),
                     App.userLongitude = (position.coords.longitude),
-                    // '-6.9178',
-                    // '107.6604',
-                    '-6.9564297',
-                    '107.7719317',
-                    // App.definedLatitude = App.definedLatitude,
-                    // App.definedLongitude = App.definedLongitude,
+            
+                    //Rumah
+                    // '-6.9564297',
+                    // '107.7719317',
+                    definedLatitudeNumber,
+                    definedLongitudeNumber
                     
                   );
 
-                  // console.log("User Lat:", App.userLatitude, "User Lon:", App.userLongitude);
-                  // console.log("Defined Lat:", App.definedLatitude, "Defined Lon:", App.definedLongitude);
+                  console.log("User Lat:", App.userLatitude, "User Lon:", App.userLongitude);
+                  console.log("Defined Lat:", definedLatitudeNumber, "Defined Lon:", definedLongitudeNumber);
                   console.log("Calculated Distance:", distance);
 
                   document.getElementById("geo-location").innerText = `📍 Latitude: ${App.userLatitude}, Longitude: ${App.userLongitude}`;
                   
                   var jarak = Math.round(distance);
-                  let formattedDistance = jarak.toLocaleString() + " m"; // Semua dalam meter
+                  let formattedDistance = jarak.toLocaleString() + " m"; 
                   
                   document.getElementById("distance-info").innerText = formattedDistance;
                   

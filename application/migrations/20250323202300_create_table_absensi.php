@@ -24,7 +24,7 @@ class Migration_create_table_absensi extends CI_Migration
                 'constraint' => 11,
             ],
             'tanggal_absen' => [
-                'type' => 'DATETIME',
+                'type' => 'DATE',
             ],
             'photo' => [
                 'type' => 'LONGTEXT',

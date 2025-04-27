@@ -11,14 +11,14 @@
                 <div id="alert-container"></div>
                 <form id="configForm" class="mb-5">
                     <div class="form-group">
+                        <label for="latitude">Latitude:</label>
+                        <input type="text" name="latitude" id="latitude" value="<?= isset($latitude) ? $latitude : '' ?>" class="form-control" placeholder="Enter latitude">
+                    </div>
+                    <div class="form-group">
                         <label for="longitude">Longitude:</label>
                         <input type="text" name="longitude" id="longitude" value="<?= isset($longitude) ? $longitude : '' ?>" class="form-control" placeholder="Enter longitude">
                     </div>
 
-                    <div class="form-group">
-                        <label for="latitude">Latitude:</label>
-                        <input type="text" name="latitude" id="latitude" value="<?= isset($latitude) ? $latitude : '' ?>" class="form-control" placeholder="Enter latitude">
-                    </div>
 
                     <button type="submit" id="save-btn" class="btn btn-primary">Update LAN & LAT</button>
                 </form>
