@@ -860,7 +860,8 @@ class Ion_auth_model extends CI_Model
 	 */
 	public function register($identity, $password, $email, $additional_data = array(), $groups = array())
 	{
-		// var_dump($identity);die;
+		// var_dump($identity);
+		// die;
 		$this->trigger_events('pre_register');
 
 		$manual_activation = $this->config->item('manual_activation', 'ion_auth');

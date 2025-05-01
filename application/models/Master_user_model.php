@@ -33,6 +33,16 @@ class Master_user_model extends CI_Model
 		}
 		return FALSE;
 	}
+	public function get_mapel_detail_with_user()
+	{
+		$this->db->select("mapel_detail.*, master_user.*")->from("mapel_detail");
+		$this->db->join("master_user", "mapel_detail.id_user = master_user.users_id");
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		}
+		return FALSE;
+	}
 	public function insert($data)
 	{
 		$this->db->insert('master_user', $data);
@@ -147,25 +157,23 @@ class Master_user_model extends CI_Model
 
 		return true;
 	}
-	
+
 	public function delete_existing_config($where)
 	{
 		// You can use delete or soft delete
 		$this->db->where($where);
 		$this->db->delete('config_waktu_detail');
 	}
-	
+
 	public function insert_config($data)
 	{
 		$this->db->insert('config_waktu_detail', $data);
 	}
-	
+
 	public function get_existing_configs($id_config_master)
 	{
 		$this->db->where('id_config_master', $id_config_master);
 		$this->db->where('is_deleted', 0);
 		return $this->db->get('config_waktu_detail')->result();
 	}
-	
-
 }

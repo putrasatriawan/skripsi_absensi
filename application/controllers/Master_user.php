@@ -324,10 +324,12 @@ class Master_user extends Admin_Controller
 		}
 
 		// Load available pengampu
-		$mapel_raw = $this->db->get('mapel_detail')->result();
+		$mapel_raw = $this->master_user_model->get_mapel_detail_with_user();
+
 		$mapel_by_hari = [];
 		foreach ($mapel_raw as $row) {
 			$mapel_by_hari[$row->hari][] = [
+				'name' => $row->name,
 				'id_user' => $row->id_user,
 				'id_mapel' => $row->id,
 				'nama_mapel' => $row->nama_mapel,
@@ -343,10 +345,20 @@ class Master_user extends Admin_Controller
 		// Store selected as 'id_user|id_mapel'
 		$selected = [];
 		foreach ($saved_pengampu as $s) {
-			$key = $s->id_user . '|' . $s->id_mapel;
+			$key =  $s->id_user . '|' . $s->id_mapel;
 			$selected[$s->tanggal][] = $key;
 		}
 
+
+
+		// echo "<pre>";
+		// print_r($mapel_by_hari);
+		// die;
+		// foreach ($mapel_by_hari as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		$this->data['selected_pengampu'] = $selected;
 		$this->data['mapel_by_hari'] = $mapel_by_hari;
 		$this->data['content'] = 'admin/master_user/waktu_v';

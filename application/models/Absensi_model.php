@@ -41,6 +41,36 @@ class Absensi_model extends CI_Model
         return FALSE;
     }
 
+    public function getMapelTerdekat($id_user)
+    {
+        $now = date('H:i:s');
+        $hari_ini = date('l');
+
+        $hari_indonesia = [
+            'Sunday' => 'Minggu',
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+        ];
+        $hari_db = $hari_indonesia[$hari_ini];
+
+        $this->db->select('*')
+            ->from('mapel_detail')
+            ->where('id_user', $id_user)
+            ->where('is_deleted', 0)
+            ->where('hari', $hari_db)
+            ->where("TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(jam_mulai, '%H:%i'), '{$now}')) <=", 3600)
+            ->where("TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(jam_mulai, '%H:%i'), '{$now}')) >", 0)
+            ->order_by("STR_TO_DATE(jam_mulai, '%H:%i') ASC", false)
+            ->limit(1);
+
+        return $this->db->get()->row();
+    }
+
+
     public function getById($id)
     {
         $this->db->where('id', $id);

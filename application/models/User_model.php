@@ -98,7 +98,7 @@ class User_model extends CI_Model
 		$this->db->select("users.*, roles.id as role_id, roles.name as role_name")->from("users");
 		$this->db->join("users_roles", "users.id = users_roles.user_id", 'LEFT');
 		$this->db->join("roles", "roles.id = users_roles.role_id", 'LEFT');
-		$this->db->join("master_user", "users.id = master_user.users_id", 'LEFT');
+		// $this->db->join("master_user", "users.id = master_user.users_id", 'LEFT');
 
 		// $roles_default = array('1', '2');
 		// $this->db->where_not_in('roles.id', $roles_default);
@@ -151,7 +151,7 @@ class User_model extends CI_Model
 
 	public function getAllBy($limit, $start, $search, $col, $dir, $where = [])
 	{
-		$this->db->select("users.id, users.first_name, users.last_name, users.nik, users.username, users.email, users.phone, users.is_deleted, roles.name as role_name
+		$this->db->select("users.id, users.first_name, users.last_name, users.username, users.username, users.email, users.phone, users.is_deleted, roles.name as role_name
 						   ")->from("users");
 		$this->db->join("users_roles", "users.id = users_roles.user_id", 'LEFT');
 		$this->db->join("roles", "roles.id = users_roles.role_id", 'LEFT');
@@ -179,7 +179,7 @@ class User_model extends CI_Model
 
 	public function getCountAllBy($limit, $start, $search, $order, $dir, $where = [])
 	{
-		$this->db->select("users.id, users.first_name, users.last_name, users.nik, users.username, users.email, users.phone, users.is_deleted, roles.name as role_name
+		$this->db->select("users.id, users.first_name, users.last_name, users.username, users.username, users.email, users.phone, users.is_deleted, roles.name as role_name
 						   ")->from("users");
 		$this->db->join("users_roles", "users.id = users_roles.user_id", 'LEFT');
 		$this->db->join("roles", "roles.id = users_roles.role_id", 'LEFT');
@@ -201,11 +201,11 @@ class User_model extends CI_Model
 		return $result->num_rows();
 	}
 
-	// check data guru & siswa berdasarkan nik
-	public function get_by_nik($nik)
+	// check data guru & siswa berdasarkan username
+	public function get_by_username($username)
 	{
 		$this->db->select('id');
-		$this->db->where('nik', $nik);
+		$this->db->where('username', $username);
 		$query = $this->db->get('users');
 
 		if ($query->num_rows() > 0) {

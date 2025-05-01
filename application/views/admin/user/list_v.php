@@ -3,7 +3,7 @@
         <div class="app-page-title">
             <div class="page-title-wrapper">
                 <div class="page-title-heading">
-                    <div>Pengguna <div class="page-title-subheading">Pengguna User</div>
+                    <div>Pengguna <div class="page-title-subheading">Data Pengguna</div>
                     </div>
                 </div>
 
@@ -102,7 +102,7 @@
                         <th>No Urut</th>
                         <th>Jabatan</th>
                         <th>Nama</th>
-                        <th>NIK</th>
+                        <th>Username</th>
                         <th>Aksi</th>
                     </thead>
                 </table>

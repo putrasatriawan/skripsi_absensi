@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Name:    Ion Auth
  * Author:  Ben Edmunds
@@ -77,8 +78,8 @@ $config['join']['groups'] = 'role_id';
  | salt_prefix: Used for bcrypt. Versions of PHP before 5.3.7 only support "$2a$" as the salt prefix
  | Versions 5.3.7 or greater should use the default of "$2y$".
  */
-$config['hash_method'] = 'bcrypt';	// sha1 or bcrypt, bcrypt is STRONGLY recommended
-$config['default_rounds'] = 8;			// This does not apply if random_rounds is set to true
+$config['hash_method'] = 'bcrypt';    // sha1 or bcrypt, bcrypt is STRONGLY recommended
+$config['default_rounds'] = 8;            // This does not apply if random_rounds is set to true
 $config['random_rounds'] = FALSE;
 $config['min_rounds'] = 5;
 $config['max_rounds'] = 9;
@@ -97,7 +98,7 @@ $config['site_title'] = "Example.com";       // Site Title, example.com
 $config['admin_email'] = "admin@example.com"; // Admin Email, admin@example.com
 $config['default_group'] = 'members';           // Default group, use name
 $config['admin_group'] = 'admin';             // Default administrators group, use name
-$config['identity'] = 'nik';             // You can use any unique column in your table as identity column. The values in this column, alongside password, will be used for login purposes
+$config['identity'] = 'username';             // You can use any unique column in your table as identity column. The values in this column, alongside password, will be used for login purposes
 $config['min_password_length'] = 8;                   // Minimum Required Length of Password
 $config['max_password_length'] = 20;                  // Maximum Allowed Length of Password
 $config['email_activation'] = FALSE;               // Email Activation for registration
@@ -200,8 +201,8 @@ $config['store_salt'] = FALSE;
  | Message Delimiters.
  | -------------------------------------------------------------------------
  */
-$config['delimiters_source'] = 'config'; 	// "config" = use the settings defined here, "form_validation" = use the settings defined in CI's form validation library
-$config['message_start_delimiter'] = '<p>'; 	// Message start delimiter
-$config['message_end_delimiter'] = '</p>'; 	// Message end delimiter
-$config['error_start_delimiter'] = '<p>';		// Error message start delimiter
+$config['delimiters_source'] = 'config';     // "config" = use the settings defined here, "form_validation" = use the settings defined in CI's form validation library
+$config['message_start_delimiter'] = '<p>';     // Message start delimiter
+$config['message_end_delimiter'] = '</p>';     // Message end delimiter
+$config['error_start_delimiter'] = '<p>';        // Error message start delimiter
 $config['error_end_delimiter'] = '</p>';	// Error message end delimiter

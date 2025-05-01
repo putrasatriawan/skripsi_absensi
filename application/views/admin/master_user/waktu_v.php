@@ -34,12 +34,12 @@
           </thead>
           <tbody>
             <?php foreach ($tanggal_list as $row): ?>
-            <tr>
-              <td><?= $row['hari'] ?></td>
-              <td><?= date('d-m-Y', strtotime($row['tanggal'])) ?></td>
-              <td>
-                <?php if (isset($mapel_by_hari[$row['hari']])): ?>
-                  <?php
+              <tr>
+                <td><?= $row['hari'] ?></td>
+                <td><?= date('d-m-Y', strtotime($row['tanggal'])) ?></td>
+                <td>
+                  <?php if (isset($mapel_by_hari[$row['hari']])): ?>
+                    <?php
                     $tanggal = $row['tanggal'];
                     $tanggalKey = date('j', strtotime($tanggal));
                     $hari = $row['hari'];
@@ -47,18 +47,18 @@
                     ?>
                     <select name="pengampu[<?= $tanggal ?>][]" multiple class="form-control select2" data-placeholder="Pilih pengampu">
                       <?php foreach ($mapel_by_hari[$hari] ?? [] as $m): ?>
-                        <?php $value = $m['id_user'] . '|' . $m['id_mapel']; ?>
+                        <?php $value =  $m['id_user'] . '|' . $m['id_mapel']; ?>
                         <option value="<?= $value ?>"
                           <?= in_array($value, $selected) ? 'selected' : '' ?>>
-                          <?= $m['id_user'] ?> / <?= $m['nama_mapel'] ?>
+                          <?= $m['name'] ?> / <?= $m['id_user'] ?> / <?= $m['nama_mapel'] ?>
                         </option>
                       <?php endforeach; ?>
                     </select>
-                <?php else: ?>
-                  <span class="text-muted">-</span>
-                <?php endif; ?>
-              </td>
-            </tr>
+                  <?php else: ?>
+                    <span class="text-muted">-</span>
+                  <?php endif; ?>
+                </td>
+              </tr>
             <?php endforeach; ?>
           </tbody>
         </table>
@@ -70,10 +70,10 @@
           <span class="btn-icon-wrapper pr-2 opacity-7">
             <!-- <i class="fa fa-back fa-w-20"></i> -->
           </span>Kembali </a>
-          <button id="btn-save-config"
+        <button id="btn-save-config"
           class="btn btn-primary">
           <span class="btn-icon-wrapper pr-2 opacity-7">
-          <i class="fa fa-save fa-w-20"></i></span>Simpan</button>
+            <i class="fa fa-save fa-w-20"></i></span>Simpan</button>
 
       </div>
     </div>

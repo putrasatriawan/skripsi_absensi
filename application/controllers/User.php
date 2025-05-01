@@ -62,7 +62,7 @@ class User extends Admin_Controller
 			}
 
 			$data = array(
-				'nik' => $this->input->post('nik'),
+				'username' => $this->input->post('username'),
 				'first_name' => $this->input->post('name'),
 				'address' => $this->input->post('address'),
 				'active' => 1,
@@ -72,12 +72,20 @@ class User extends Admin_Controller
 				'is_deleted' => 0
 			);
 
-			$nik = $this->input->post('nik');
+			$username = $this->input->post('username');
 			$role_id = $this->input->post('role_id');
 			$password = $this->input->post('password');
 			$email = $this->input->post('email');
 
-			$user_id = $this->ion_auth->register($nik, $password, $email, $data, $role_id);
+			// echo "<pre>";
+			// print_r($username);
+			// die;
+			// foreach ($username  as $value) {
+			// 	echo "<pre>";
+			// 	print_r($value);
+			// }
+			// die;
+			$user_id = $this->ion_auth->register($username, $password, $email, $data, $role_id);
 
 			if ($user_id) {
 				$user_role_data = array(
@@ -86,16 +94,16 @@ class User extends Admin_Controller
 				);
 				$this->user_model->insert_users_roles($user_role_data);
 
-		
-					$parsing_guru = array(
-						'name' => $this->input->post('name'),
-						'users_id' => $user_id,
-						'nip' => $this->input->post('nik'),
-						'alamat' => $this->input->post('address'),
-						'is_deleted' => 0,
-					);
-					$this->master_user_model->insert($parsing_guru);
-			
+
+				$parsing_guru = array(
+					'name' => $this->input->post('name'),
+					'users_id' => $user_id,
+					'nip' => $this->input->post('username'),
+					'alamat' => $this->input->post('address'),
+					'is_deleted' => 0,
+				);
+				$this->master_user_model->insert($parsing_guru);
+
 
 				$response = array('status' => 'success', 'message' => 'User Berhasil Disimpan!');
 				header('Content-Type: application/json');
@@ -125,7 +133,7 @@ class User extends Admin_Controller
 			$data = array(
 				'first_name' => $this->input->post('name'),
 				'address' => $this->input->post('address'),
-				'nik' => $this->input->post('nik'),
+				'username' => $this->input->post('username'),
 				'email' => $this->input->post('email'),
 				'phone' => $this->input->post('phone'),
 			);
@@ -142,7 +150,7 @@ class User extends Admin_Controller
 					'name' => $this->input->post('name'),
 					'name' => $this->input->post('name'),
 					'users_id' => $user_id,
-					'nip' => $this->input->post('nik'),
+					'nip' => $this->input->post('username'),
 				);
 				$update = $this->master_user_model->update($parsing_guru, array("users_id" => $id));
 			}
@@ -213,7 +221,7 @@ class User extends Admin_Controller
 				$this->data['username'] = $data->username;
 				$this->data['address'] = $data->address;
 				$this->data['email'] = $data->email;
-				$this->data['nik'] = $data->nik;
+				$this->data['username'] = $data->username;
 				$this->data['phone'] = $data->phone;
 				$this->data['role_id'] = $data->role_id;
 
@@ -231,7 +239,7 @@ class User extends Admin_Controller
 			0 => 'id',
 			1 => 'role_name',
 			2 => 'users.first_name',
-			3 => 'users.nik',
+			3 => 'users.username',
 			4 => 'action'
 		);
 
@@ -257,7 +265,7 @@ class User extends Admin_Controller
 			$search_value = $this->input->post('search')['value'];
 			$search = array(
 				"users.first_name" => $search_value,
-				"users.nik" => $search_value
+				"users.username" => $search_value
 			);
 		}
 		if ($isSearchColumn) {
@@ -305,7 +313,7 @@ class User extends Admin_Controller
 				$nestedData['id'] = $start + $key + 1;
 				$nestedData['role_name'] = $data->role_name;
 				$nestedData['name'] = $data->first_name . ' ' . $data->last_name;
-				$nestedData['nik'] = $data->nik;
+				$nestedData['username'] = $data->username;
 				$nestedData['action'] = $edit_url . " " . $delete_url . " " . $delete_url_hard . " " . $reset_p_url;
 				$new_data[] = $nestedData;
 			}
@@ -520,11 +528,11 @@ class User extends Admin_Controller
 			foreach ($data as $key => $row) {
 				if ($key < 6) continue;
 				if (!empty($row['B']) && !empty($row['C']) && !empty($row['E']) && !empty($row['G']) && !empty($row['H']) && !empty($row['I']) && !empty($row['J']) && !empty($row['K']) && !empty($row['L'])) {
-					$existing_data = $this->user_model->get_by_nik($row['B']);
+					$existing_data = $this->user_model->get_by_username($row['B']);
 					$password_hash = $this->bcrypt->hash($row['E']);
 					if (!$existing_data) {
 						$insert_user_data_guru = [
-							'nik' => $row['B'],
+							'username' => $row['B'],
 							'username' => $row['D'],
 							'password' => $password_hash,
 							'first_name' => $row['C'],
@@ -575,11 +583,11 @@ class User extends Admin_Controller
 			foreach ($data as $key => $row) {
 				if ($key < 6 || empty($row['B'])) continue;
 				if (!empty($row['B']) && !empty($row['C']) && !empty($row['E']) && !empty($row['G']) && !empty($row['H'])) {
-					$existing_data = $this->user_model->get_by_nik($row['B']);
+					$existing_data = $this->user_model->get_by_username($row['B']);
 					$password_hash = $this->bcrypt->hash($row['E']);
 					if (!$existing_data) {
 						$insert_user_data_siswa = [
-							'nik' => $row['B'],
+							'username' => $row['B'],
 							'username' => $row['D'],
 							'password' => $password_hash,
 							'first_name' => $row['C'],

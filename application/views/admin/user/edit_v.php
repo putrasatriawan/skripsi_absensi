@@ -18,9 +18,9 @@
                             <div class="box-body">
                                 <!-- Error Message Display -->
                                 <?php if (!empty($this->session->flashdata('message_error'))) { ?>
-                                <div class="alert alert-danger">
-                                    <?php echo $this->session->flashdata('message_error'); ?>
-                                </div>
+                                    <div class="alert alert-danger">
+                                        <?php echo $this->session->flashdata('message_error'); ?>
+                                    </div>
                                 <?php } ?>
 
                                 <!-- Hidden Inputs -->
@@ -29,30 +29,30 @@
 
                                 <!-- Profile Image Display -->
                                 <?php if (!empty($foto)) { ?>
-                                <div class="form-group row">
-                                    <label class="col-sm-3 control-label"></label>
-                                    <div class="col-sm-9">
-                                        <img width="100px"
-                                            src="<?php echo base_url() . "assets/images/foto/" . $foto; ?>">
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 control-label"></label>
+                                        <div class="col-sm-9">
+                                            <img width="100px"
+                                                src="<?php echo base_url() . "assets/images/foto/" . $foto; ?>">
+                                        </div>
                                     </div>
-                                </div>
                                 <?php } ?>
 
                                 <!-- Name Field -->
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-3 control-label">Nama</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="name" placeholder="Name" name="name"
+                                        <input type="text" class="form-control" id="name" placeholder="Masukan Nama" name="name"
                                             value="<?php echo $first_name; ?>">
                                     </div>
                                 </div>
 
-                                <!-- NIK Field -->
+                                <!-- Username Field -->
                                 <div class="form-group row">
-                                    <label for="nik" class="col-sm-3 control-label">NIK</label>
+                                    <label for="username" class="col-sm-3 control-label">Username</label>
                                     <div class="col-sm-9">
-                                        <input type="number" class="form-control" id="nik" placeholder="NIK" name="nik"
-                                            value="<?php echo $nik; ?>">
+                                        <input type="text" class="form-control" id="username" placeholder="Masukan Username" name="nik"
+                                            value="<?php echo $username; ?>">
                                     </div>
                                 </div>
 
@@ -60,7 +60,7 @@
                                 <div class="form-group row">
                                     <label for="email" class="col-sm-3 control-label">Email</label>
                                     <div class="col-sm-9">
-                                        <input type="email" class="form-control" id="email" placeholder="Email"
+                                        <input type="email" class="form-control" id="email" placeholder="Masukan Email"
                                             name="email" value="<?php echo $email; ?>">
                                     </div>
                                 </div>
@@ -74,10 +74,10 @@
                                         <select id="role_id" name="role_id" class="form-control">
                                             <option value="">Pilih Role</option>
                                             <?php foreach ($roles as $key => $role) { ?>
-                                            <option value="<?php echo $role->id; ?>"
-                                                <?php echo $role->id == $role_id ? 'selected' : '' ?>>
-                                                <?php echo $role->name; ?>
-                                            </option>
+                                                <option value="<?php echo $role->id; ?>"
+                                                    <?php echo $role->id == $role_id ? 'selected' : '' ?>>
+                                                    <?php echo $role->name; ?>
+                                                </option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -92,10 +92,10 @@
 
                                         <!-- Display current photo if available -->
                                         <?php if (!empty($photo)): ?>
-                                        <div class="mt-2">
-                                            <img src="<?php echo base_url('uploads/photo_profile/' . $photo); ?>"
-                                                alt="Current Photo" class="img-thumbnail" style="max-width: 150px;">
-                                        </div>
+                                            <div class="mt-2">
+                                                <img src="<?php echo base_url('uploads/photo_profile/' . $photo); ?>"
+                                                    alt="Current Photo" class="img-thumbnail" style="max-width: 150px;">
+                                            </div>
                                         <?php endif; ?>
                                     </div>
                                 </div>

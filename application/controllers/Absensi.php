@@ -18,27 +18,37 @@ class Absensi extends Admin_Controller
         $role_id = $this->data['users_groups']->id;
         $today = date('Y-m-d');
 
-        // var_dump($today);die; 
         $show_view = false;
         $label_check = '';
 
         $attendances = $this->absensi_model->getAttendanceByDate($id_user, $today);
         $config = $this->absensi_model->getOneConfig(array('config_check.roles_id' => $role_id));
+        $config_mapel = $this->absensi_model->getMapelTerdekat($id_user);
 
         // echo "<pre>";
-        // print_r($config);
+        // print_r($config_mapel);
         // die;
-        // foreach ($config  as $value) {
+        // foreach ($config_mapel  as $value) {
         //     echo "<pre>";
         //     print_r($value);
         // }
         // die;
+        if (empty($config)) {
+            $this->data['content'] = 'admin/absensi/error_absen_v';
+            $this->load->view('admin/layouts/page', $this->data);
+            return;
+        }
+        if (empty($config_mapel)) {
+            $this->data['content'] = 'admin/absensi/error_absen_v';
+            $this->load->view('admin/layouts/page', $this->data);
+            return;
+        }
         $has_check_in = false;
         $has_check_out = false;
         $has_check_out_with_const = false;
 
-        $check_in_const = $config->check_in;
-        $check_out_const = $config->check_out;
+        $check_in_const = $config->check_in ?? $config_mapel->jam_mulai;
+        $check_out_const = $config->check_out ?? $config_mapel->jam_selesai;
         $current_time = date('H:i');
         // echo "<pre>";
         if ($attendances) {
@@ -70,6 +80,8 @@ class Absensi extends Admin_Controller
             // }
             // die;
             if ($has_check_in && !$has_check_out && !$has_check_out_with_const) {
+                $id_user = $this->data['users']->id;
+                $role_id = $this->data['users_groups']->id;
                 $show_view = true;
                 $label_check = 'Check In, Jangan Lupa Check Out!';
                 $last_attendance = end($attendances);
@@ -90,10 +102,13 @@ class Absensi extends Admin_Controller
                     $this->data['content'] = 'errors/html/restrict';
                 }
 
+                // die;
                 $this->load->view('admin/layouts/page', $this->data);
                 return;
             }
             if ($has_check_in && !$has_check_out && $has_check_out_with_const) {
+                $id_user = $this->data['users']->id;
+                $role_id = $this->data['users_groups']->id;
                 $show_view = false;
                 $label_check = 'Check In, Jangan Lupa Check Out!';
                 $last_attendance = end($attendances);
@@ -108,6 +123,7 @@ class Absensi extends Admin_Controller
                 $this->data['status_work'] = $last_attendance->status_work ?? null;
                 $this->data['status'] = $last_attendance->status ?? null;
                 $this->data['label_check'] = $label_check;
+                // die;
                 if ($this->data['is_can_read']) {
                     $this->data['content'] = 'admin/absensi/list_v';
                 } else {
@@ -157,11 +173,21 @@ class Absensi extends Admin_Controller
             $this->data['show_view'] = false;
             $this->data['label_check'] = 'Belum Ada Data Absensi';
         }
+        $id_user = $this->data['users']->id;
+        $role_id = $this->data['users_groups']->id;
         $this->data['user_master'] = $this->user_model->getAndMaster(["users.id" => $id_user]);
+        // echo "<pre>";
+        // print_r($this->data['user_master']);
+        // die;
+        // foreach ($this->data['user_master']  as $value) {
+        //     echo "<pre>";
+        //     print_r($value);
+        // }
+        // die;
+        // die;
         $this->data['longitude'] = $this->config_model->get_setting('longitude');
         $this->data['latitude'] = $this->config_model->get_setting('latitude');
         $this->data['config_check'] = $this->config_model->get_config_chcek($role_id);
-
 
         if ($this->data['is_can_read']) {
             $this->data['content'] = 'admin/absensi/list_v';
@@ -235,8 +261,9 @@ class Absensi extends Admin_Controller
 
         // Konversi waktu menjadi timestamp
         $initTimestamp = strtotime($init_time);
-        $checkInTimestamp = strtotime($config->check_in);
-        $checkOutTimestamp = strtotime($config->check_out);
+        $config_mapel = $this->absensi_model->getMapelTerdekat($id_user);
+        $checkInTimestamp = strtotime($config->check_in ?? $config_mapel->jam_mulai);
+        $checkOutTimestamp = strtotime($config->check_out ?? $config_mapel->jam_selesai);
 
         // Logika Status dan Check-In
         $check_absen = $this->absensi_model->getOneBy(array('absensi.id_user' => $id_user, 'absensi.tanggal_absen' => date('Y-m-d'), 'absensi.is_check_in' => 'check_in'));
