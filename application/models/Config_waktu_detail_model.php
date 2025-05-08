@@ -81,7 +81,7 @@ class Config_waktu_detail_model extends CI_Model
 			->join("absensi", "absensi.id_user = config_waktu_detail.id_user AND DAY(absensi.tanggal_absen) = config_waktu_detail.tanggal", "left")
 			->join("mapel_detail", "mapel_detail.id_user = config_waktu_detail.id_user", "left")
 			->where($where)
-			->order_by("config_waktu_detail.tanggal", "asc"); // 👈 Urutkan berdasarkan tanggal naik
+			->order_by("config_waktu_detail.tanggal", "asc"); 
 
 		$result = $this->db->get();
 		return $result->num_rows() > 0 ? $result->result() : null;

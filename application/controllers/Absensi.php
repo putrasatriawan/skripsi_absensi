@@ -33,22 +33,25 @@ class Absensi extends Admin_Controller
         //     print_r($value);
         // }
         // die;
-        if (empty($config)) {
-            $this->data['content'] = 'admin/absensi/error_absen_v';
-            $this->load->view('admin/layouts/page', $this->data);
-            return;
-        }
-        if (empty($config_mapel)) {
-            $this->data['content'] = 'admin/absensi/error_absen_v';
-            $this->load->view('admin/layouts/page', $this->data);
-            return;
-        }
+        // if (empty($config)) {
+        //     $this->data['content'] = 'admin/absensi/error_absen_v';
+        //     $this->load->view('admin/layouts/page', $this->data);
+        //     return;
+        // }
+        // if (empty($config_mapel)) {
+        //     $this->data['content'] = 'admin/absensi/error_absen_v';
+        //     $this->load->view('admin/layouts/page', $this->data);
+        //     return;
+        // }
         $has_check_in = false;
         $has_check_out = false;
         $has_check_out_with_const = false;
 
-        $check_in_const = $config->check_in ?? $config_mapel->jam_mulai;
-        $check_out_const = $config->check_out ?? $config_mapel->jam_selesai;
+        // $check_in_const = $config->check_in ?? $config_mapel->jam_mulai;
+        // $check_out_const = $config->check_out ?? $config_mapel->jam_selesai;
+        
+        $check_in_const = $config->check_in;
+        $check_out_const = $config->check_out;
         $current_time = date('H:i');
         // echo "<pre>";
         if ($attendances) {

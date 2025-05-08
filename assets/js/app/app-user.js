@@ -13,7 +13,6 @@ define(["toastr", "datatablesBS4", "jqvalidate","dropzone"], function (
       // App.initSave();
       App.searchTable();
       App.resetSearch();
-      App.roleIdChangeSiswa();
       App.disableFunction();
       App.FormImport();
 
@@ -47,30 +46,20 @@ define(["toastr", "datatablesBS4", "jqvalidate","dropzone"], function (
           { data: "id" },
           { data: "role_name" },
           { data: "name" },
-          { data: "nik" },
+          { data: "username" },
           { data: "action", orderable: false },
         ],
       });
 
       if ($("#form").length > 0) {
         $("#save-btn").removeAttr("disabled");
-    
-        // Handle role selection and field visibility
-        $("#role_id").on('change', function () {
-            var selectedRole = $(this).val();
-            if (selectedRole == "4") {
-                $("#kelas_siswa, #jk_siswa, #ttl_siswa, #no_hp_siswa").show();
-            } else {
-                $("#kelas_siswa, #jk_siswa, #ttl_siswa, #no_hp_siswa").hide();
-            }
-        });
-    
+  
         // Form validation
         $("#form").validate({
             rules: {
                 name: { required: true },
                 email: { required: true },
-                nik: { required: true },
+                username: { required: true },
                 password: {
                     required: $("#user_id").length <= 0,
                     minlength: 8,
@@ -131,26 +120,6 @@ define(["toastr", "datatablesBS4", "jqvalidate","dropzone"], function (
     
     
       
-    },
-
-    roleIdChangeSiswa: function () {
-      $("#role_id").change(function () {
-        var selectedRoleName = $(this).find(":selected").attr("data-role-name");
-
-        if (selectedRoleName.toLowerCase() === "siswa") {
-          $("#kelas_siswa").show();
-          $("#angkatan_siswa").show();
-          $("#jk_siswa").show();
-          $("#ttl_siswa").show();
-          $("#no_hp_siswa").show();
-        } else {
-          $("#kelas_siswa").hide();
-          $("#angkatan_siswa").hide();
-          $("#jk_siswa").hide();
-          $("#ttl_siswa").hide();
-          $("#no_hp_siswa").hide();
-        }
-      });
     },
     searchTable: function () {
       $("#search").on("click", function () {
@@ -299,50 +268,5 @@ define(["toastr", "datatablesBS4", "jqvalidate","dropzone"], function (
           });
       });
   },
-
-
-      FormImport: function() {
-        $('#importForm').on('submit', function(e) {
-            e.preventDefault();
-    
-            const formData = new FormData(this);
-    
-            $.ajax({
-                url: App.baseUrl + "user/import_data",
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false, 
-                success: function(response) {
-                    console.log("Response:", response);
-                    try {
-                        const result = JSON.parse(response);
-    
-                        if (result && result.status === 'success') {
-                            toastr.success(result.message);
-
-                            document.getElementById('download-template').classList.add('disabled');
-                            document.getElementById('userfile').disabled = true;
-                            document.getElementById('upload-button').disabled = true;
-                            document.getElementById('filter-roles').disabled = true;
-    
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 2000);
-                        } else {
-                            toastr.error(result.message || "Unexpected error.");
-                        }
-                    } catch (error) {
-                        console.error("JSON Parse Error:", error);
-                        toastr.error("Failed to parse server response.");
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error("AJAX Error:", textStatus, errorThrown);
-                    toastr.error("An error occurred while importing data: " + textStatus);
-                }
-            });
-        });
-    },
   };
 });

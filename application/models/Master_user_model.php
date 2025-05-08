@@ -35,7 +35,7 @@ class Master_user_model extends CI_Model
 	}
 	public function get_mapel_detail_with_user()
 	{
-		$this->db->select("mapel_detail.*, master_user.*")->from("mapel_detail");
+		$this->db->select("mapel_detail.*, master_user.*, mapel_detail.id as id_mapel")->from("mapel_detail");
 		$this->db->join("master_user", "mapel_detail.id_user = master_user.users_id");
 		$query = $this->db->get();
 		if ($query->num_rows() > 0) {

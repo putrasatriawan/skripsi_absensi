@@ -149,6 +149,14 @@ class Penggajian extends Admin_Controller
 		];
 		$users = $this->config_waktu_detail_model->getAllById($where);
 
+		// echo "<pre>";
+		// print_r($users);
+		// die;
+		// foreach ($users  as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		if (empty($users)) {
 			$this->data['summary'] = [];
 			$this->load->view('admin/layouts/page', $this->data);
@@ -171,6 +179,8 @@ class Penggajian extends Admin_Controller
 		$total_gaji = 0;
 		$total_pemotongan = 0;
 		$keterangan_pemotongan_per_hari = [];
+
+	
 
 		foreach ($grouped_users as $tanggal => $items) {
 			$hadir = false;
@@ -211,6 +221,15 @@ class Penggajian extends Admin_Controller
 		}
 
 		$gaji_akhir = $total_gaji - $total_pemotongan;
+
+			// echo "<pre>";
+	// print_r($this->data['users_list']);
+	// die;
+	// foreach ($this->data['users_list']  as $value) {
+		// echo "<pre>";
+		// print_r($value);
+	// }
+	// die;
 
 		$this->data['summary'] = [
 			'total_jam_valid' => $total_jam_valid,

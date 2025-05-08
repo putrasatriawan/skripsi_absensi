@@ -326,12 +326,20 @@ class Master_user extends Admin_Controller
 		// Load available pengampu
 		$mapel_raw = $this->master_user_model->get_mapel_detail_with_user();
 
+		// echo "<pre>";
+		// print_r($mapel_raw);
+		// die;
+		// foreach ($mapel_raw as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		$mapel_by_hari = [];
 		foreach ($mapel_raw as $row) {
 			$mapel_by_hari[$row->hari][] = [
 				'name' => $row->name,
 				'id_user' => $row->id_user,
-				'id_mapel' => $row->id,
+				'id_mapel' => $row->id_mapel,
 				'nama_mapel' => $row->nama_mapel,
 			];
 		}
@@ -351,14 +359,7 @@ class Master_user extends Admin_Controller
 
 
 
-		// echo "<pre>";
-		// print_r($mapel_by_hari);
-		// die;
-		// foreach ($mapel_by_hari as $value) {
-		// 	echo "<pre>";
-		// 	print_r($value);
-		// }
-		// die;
+	
 		$this->data['selected_pengampu'] = $selected;
 		$this->data['mapel_by_hari'] = $mapel_by_hari;
 		$this->data['content'] = 'admin/master_user/waktu_v';
@@ -366,39 +367,47 @@ class Master_user extends Admin_Controller
 	}
 
 	public function save_config_detail()
-	{
-		$json = file_get_contents('php://input');
-		$decoded = json_decode($json, true);
+{
+    $json = file_get_contents('php://input');
+    $decoded = json_decode($json, true);
+	// echo "<pre>";
+	// 	print_r($decoded);
+	// 	die;
+	// 	foreach ($decoded as $value) {
+	// 		echo "<pre>";
+	// 		print_r($value);
+	// 	}
+	// 	die;
 
-		if (!empty($decoded['data'])) {
-			foreach ($decoded['data'] as $row) {
-				// Delete existing entry with matching keys
-				$this->master_user_model->delete_existing_config([
-					'hari' => $row['hari'],
-					'tanggal' => $row['tanggal'],
-					'id_mapel' => $row['id_mapel'],
-					'id_config_master' => $row['id_config_master'],
-					'id_user' => $row['id_user'] // optional if needed for more precision
-				]);
+    if (!empty($decoded['data'])) {
+        // Ambil id_user dan id_config_master dari baris pertama
+        $first = $decoded['data'][0];
 
-				// Prepare item to insert
-				$item = [
-					'hari' => $row['hari'],
-					'tanggal' => $row['tanggal'],
-					'id_user' => $row['id_user'],
-					'id_mapel' => $row['id_mapel'] ?? null,
-					'id_config_master' => $row['id_config_master'],
-					'is_deleted' => 0
-				];
+        // Hapus semua entri lama dengan kombinasi ini
+        $this->master_user_model->delete_existing_config([
+            'id_user' => $first['id_user'],
+            'id_config_master' => $first['id_config_master']
+        ]);
 
-				$this->master_user_model->insert_config($item);
-			}
+        // Insert semua data baru
+        foreach ($decoded['data'] as $row) {
+            $item = [
+                'hari' => $row['hari'],
+                'tanggal' => $row['tanggal'],
+                'id_user' => $row['id_user'],
+                'id_mapel' => $row['id_mapel'] ?? null,
+                'id_config_master' => $row['id_config_master'],
+                'is_deleted' => 0
+            ];
+            $this->master_user_model->insert_config($item);
+        }
 
-			echo json_encode(['status' => 'success']);
-		} else {
-			echo json_encode(['status' => 'empty']);
-		}
-	}
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'empty']);
+    }
+}
+
 
 	private function getHariIndo($dayNumber)
 	{
