@@ -6,6 +6,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
       App.initEvent();
       App.initConfirm();
       App.editAbsen();
+      App.createAbsen();
       App.detailAbsen();
       $(".loadingpage").hide();
     },
@@ -146,7 +147,11 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
         $('#edit-status_work').val(status_work);
         $('#edit-status').val(status);
         $('#edit-is_check_in').val(is_check_in);
-        $('#edit-photo').attr('src', 'data:image/jpeg;base64,' + photo);
+        if (photo) {
+          $('#edit-photo').attr('src', 'data:image/jpeg;base64,' + photo);
+        } else {
+          $('#edit-photo').attr('src', App.baseUrl + 'assets/images/default.png');
+        }
 
         if (init_time) {
           const timeParts = init_time.split(":");
@@ -167,6 +172,11 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
 
         // Tampilkan modal
         $('#editModal').modal('show');
+      });
+    },
+    createAbsen: function () {
+      $(document).on('click', '.create-button', function () {
+        $('#createModal').modal('show');
       });
     },
     detailAbsen: function () {

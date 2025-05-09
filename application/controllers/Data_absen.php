@@ -12,6 +12,7 @@ class Data_absen extends Admin_Controller
 		parent::__construct();
 		$this->load->library('upload');
 		$this->load->model('absensi_model');
+		$this->load->model('user_model');
 	}
 
 	public function index()
@@ -23,6 +24,7 @@ class Data_absen extends Admin_Controller
 			$this->data['content'] = 'errors/html/restrict';
 		}
 
+		$this->data['user'] = $this->user_model->getAllById(array('users.is_deleted' => 0));		
 		$this->load->view('admin/layouts/page', $this->data);
 	}
 
@@ -210,7 +212,7 @@ class Data_absen extends Admin_Controller
 				if (!empty($data->photo)) {
 					$photo = '<img src="data:image/jpeg;base64,' . $data->photo . '" alt="Foto" width="150" height="auto">';
 				} else {
-					$photo = '<img src="' . base_url('assets/img/default.png') . '" alt="Foto" width="200" height="200">';
+					$photo = '<img src="' . base_url('assets/images/default.png') . '" alt="Foto" width="200" height="200">';
 				}
 				
 				$status = $data->status;
@@ -284,6 +286,37 @@ class Data_absen extends Admin_Controller
     redirect('data_absen');
 }
 
+	public function create()
+	{
+		$nama_user = $this->input->post('nama_user');
+		$tgl_absen = $this->input->post('tgl_absen');
+		$init_time = $this->input->post('init_time');
+		$status_work = $this->input->post('status_work');
+		$status = $this->input->post('status');
+
+		if (!empty($nama_user)) {
+			list($id_user, $id_role) = explode('|', $nama_user);
+		} else {
+			$id_user = null;
+			$id_role = null;
+		}
+
+		$data = array(
+			'id_user' => $id_user,
+			'id_role' => $id_role,
+			'tanggal_absen' => $tgl_absen,
+			'init_time' => $init_time . ':00',
+			'tanggal_insert' => date('Y-m-d H:i:s'),
+			'status_work' => $status_work,
+			'status' => $status,
+			'is_deleted' => 0
+		);
+
+
+		$this->absensi_model->insert($data);
+		$this->session->set_flashdata('message', 'Data berhasil ditambahkan.');
+		redirect('data_absen');
+	}
 	
 	// public function destroy()
 	// {

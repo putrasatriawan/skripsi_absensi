@@ -6,11 +6,11 @@
                     <div>Data Absen</div>
                 </div>
                 <div class="page-title-actions">
-                    <a href="<?php echo base_url() ?>data_absen/create" class="btn-shadow mr-3 btn btn-success">
+                    <button class="btn-shadow mr-3 btn btn-success create-button">
                         <span class="btn-icon-wrapper pr-2 opacity-7">
                             <i class="fa fa-plus fa-w-20"></i>
                         </span> Tambah
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -79,6 +79,8 @@
                             <option value="Tepat Waktu">Tepat Waktu</option>
                             <option value="Terlambat">Terlambat</option>
                             <option value="Pulang">Pulang</option>
+                            <option value="Izin">Izin</option>
+                            <option value="Sakit">Sakit</option>
                         </select>
                     </div>
 
@@ -95,6 +97,75 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Create -->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Tambah Data Absen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="createForm" method="post" action="<?php echo base_url('data_absen/create'); ?>">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="create-id">
+                    
+                    <div class="form-group">
+                        <label>Nama User</label>
+                        <!-- <input type="text" class="form-control" name="nama_user" id="create-nama_user"> -->
+                        <select name="nama_user" class="form-control" required>
+                            <option value="">Pilih User</option>
+                            <?php foreach ($user as $row): ?>
+                            <option value="<?php echo $row->id . '|' . $row->role_id;?>"><?php echo $row->first_name; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tanggal Absen</label>
+                        <input type="date" class="form-control" name="tgl_absen" id="create-tgl_absen" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label id="label-init-time">Check In</label>
+                        <input type="time" class="form-control" name="init_time" id="create-init_time">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status_work">Status Kerja</label>
+                        <select class="form-control" name="status_work" id="create-status_work">
+                            <option value="Work From Home">Work From Home</option>
+                            <option value="Work From Office">Work From Office</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" name="status" id="create-status" required>
+                            <option value="Tepat Waktu">Tepat Waktu</option>
+                            <option value="Terlambat">Terlambat</option>
+                            <option value="Pulang">Pulang</option>
+                            <option value="Izin">Izin</option>
+                            <option value="Sakit">Sakit</option>
+                        </select>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <label>Foto</label><br>
+                        <img id="create-photo" src="" alt="Foto" style="width: 150px; height: auto;">
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Detail Modal -->
 <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
