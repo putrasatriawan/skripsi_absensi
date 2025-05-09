@@ -193,7 +193,11 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
         $('#detail-status_work').text(status_work);
         $('#detail-is_check_in').text(is_check_in);
         $('#detail-status').text(status);
-        $('#detail-photo').attr('src', 'data:image/jpeg;base64,' + photo);
+        if (photo) {
+          $('#detail-photo').attr('src', 'data:image/jpeg;base64,' + photo);
+        } else {
+          $('#detail-photo').attr('src', App.baseUrl + 'assets/images/default.png');
+        }
 
         $('#detailModal').modal('show');
       });
