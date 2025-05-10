@@ -58,9 +58,9 @@
                                         <?php echo (isset($user_master->first_name) ? $user_master->first_name : '') . ' ' . (isset($user_master->last_name) ? $user_master->last_name : ''); ?>
                                     </div>
 
-                                    <div class="col-6 font-weight-bold py-2 border-bottom">NIP</div>
+                                    <div class="col-6 font-weight-bold py-2 border-bottom">Username</div>
                                     <div class="col-6 py-2 border-bottom">
-                                        <?php echo isset($user_master->nik) ? $user_master->nik : '-'; ?>
+                                        <?php echo isset($user_master->username) ? $user_master->username : '-'; ?>
                                     </div>
 
                                     <div class="col-6 font-weight-bold py-2 border-bottom">Jabatan</div>

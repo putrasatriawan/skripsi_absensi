@@ -222,12 +222,12 @@ class Penggajian extends Admin_Controller
 
 		$gaji_akhir = $total_gaji - $total_pemotongan;
 
-			// echo "<pre>";
+	// 		echo "<pre>";
 	// print_r($this->data['users_list']);
 	// die;
 	// foreach ($this->data['users_list']  as $value) {
-		// echo "<pre>";
-		// print_r($value);
+	// 	echo "<pre>";
+	// 	print_r($value);
 	// }
 	// die;
 

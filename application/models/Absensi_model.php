@@ -19,9 +19,12 @@ class Absensi_model extends CI_Model
 
     public function getOneBy($where = array())
     {
-        $this->db->select("absensi.*")->from("absensi");
-        $this->db->where("absensi.is_deleted", 0);
-        $this->db->where($where);
+        $this->db->select("absensi.*")
+                 ->from("absensi")
+                 ->where("absensi.is_deleted", 0)
+                 ->where($where)
+                 ->order_by("absensi.id", "DESC") 
+                 ->limit(1); 
 
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
@@ -29,6 +32,7 @@ class Absensi_model extends CI_Model
         }
         return FALSE;
     }
+    
     public function getOneConfig($where = array())
     {
         $this->db->select("config_check.*")->from("config_check");
@@ -57,17 +61,40 @@ class Absensi_model extends CI_Model
         ];
         $hari_db = $hari_indonesia[$hari_ini];
 
+        // var_dump($id_user);die;
         $this->db->select('*')
             ->from('mapel_detail')
             ->where('id_user', $id_user)
             ->where('is_deleted', 0)
             ->where('hari', $hari_db)
-            ->where("TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(jam_mulai, '%H:%i'), '{$now}')) <=", 3600)
-            ->where("TIME_TO_SEC(TIMEDIFF(STR_TO_DATE(jam_mulai, '%H:%i'), '{$now}')) >", 0)
-            ->order_by("STR_TO_DATE(jam_mulai, '%H:%i') ASC", false)
             ->limit(1);
 
         return $this->db->get()->row();
+    }
+    public function getMapelTerdekatNotOne($id_user)
+    {
+        $now = date('H:i:s');
+        $hari_ini = date('l');
+
+        $hari_indonesia = [
+            'Sunday' => 'Minggu',
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+        ];
+        $hari_db = $hari_indonesia[$hari_ini];
+
+        // var_dump($id_user);die;
+        $this->db->select('*')
+            ->from('mapel_detail')
+            ->where('id_user', $id_user)
+            ->where('is_deleted', 0)
+            ->where('hari', $hari_db);
+
+        return $this->db->get()->result();
     }
 
 

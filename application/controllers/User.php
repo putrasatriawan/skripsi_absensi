@@ -130,6 +130,15 @@ class User extends Admin_Controller
 		$this->form_validation->set_rules('role_id', "Role", 'trim|required');
 
 		if ($this->form_validation->run() === TRUE) {
+			// echo "<pre>";
+			// print_r($_POST);
+			// die;
+			// foreach ($_POST as $value) {
+			// 	echo "<pre>";
+			// 	print_r($value);
+			// }
+			// die;
+
 			$data = array(
 				'first_name' => $this->input->post('name'),
 				'address' => $this->input->post('address'),
@@ -155,15 +164,7 @@ class User extends Admin_Controller
 				$update = $this->master_user_model->update($parsing_guru, array("users_id" => $id));
 			}
 
-			// echo "<pre>";
-			// print_r($parsing_guru);
-			// die;
-			// foreach ($parsing_guru as $value) {
-			// 	echo "<pre>";
-			// 	print_r($value);
-			// }
-			// die;
-
+			
 			if (!empty($_FILES['photo']['name'])) {
 				$config['upload_path'] = './uploads/photo_profile/';
 				$config['allowed_types'] = 'jpg|jpeg|png|gif';

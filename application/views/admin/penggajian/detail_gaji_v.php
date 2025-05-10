@@ -68,28 +68,42 @@ $grouped_users = $summary['grouped_users'];
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <h5>Detail Gaji</h5>
-                            <table class="table table-bordered">
-                                <tr>
-                                    <th>Total Jam Mengajar (Valid)</th>
-                                    <td><?= number_format($total_jam_valid, 2) ?> Jam</td>
-                                </tr>
-                                <tr>
-                                    <th>Gaji per Jam</th>
-                                    <td>Rp <?= number_format($user->gaji_master_user, 0, ',', '.') ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Pemotongan</th>
-                                    <td>Rp <?= number_format($total_pemotongan, 0, ',', '.') ?></td>
-                                </tr>
-                                <tr>
-                                    <th>Akumulasi Gaji</th>
-                                    <td>Rp <?= number_format($total_gaji, 0, ',', '.') ?></td>
-                                </tr>
-                                <tr>
-                                    <th><strong>Gaji Akhir</strong></th>
-                                    <td><strong class="text-success">Rp <?= number_format($gaji_akhir, 0, ',', '.') ?></strong></td>
-                                </tr>
-                            </table>
+                          <table class="table table-bordered">
+                            <tr>
+                                <th>Total Jam Mengajar (Valid)</th>
+                                <td>
+                                    <?= is_numeric($total_jam_valid) ? number_format($total_jam_valid, 2) . ' Jam' : '-' ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Gaji per Jam</th>
+                                <td>
+                                    Rp <?= is_numeric($user->gaji_master_user ?? null) ? number_format($user->gaji_master_user, 0, ',', '.') : '-' ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Pemotongan</th>
+                                <td>
+                                    Rp <?= is_numeric($total_pemotongan) ? number_format($total_pemotongan, 0, ',', '.') : '-' ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Akumulasi Gaji</th>
+                                <td>
+                                    Rp <?= is_numeric($total_gaji) ? number_format($total_gaji, 0, ',', '.') : '-' ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><strong>Gaji Akhir</strong></th>
+                                <td>
+                                    <strong class="text-success">
+                                        Rp <?= is_numeric($gaji_akhir) ? number_format($gaji_akhir, 0, ',', '.') : '-' ?>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+
+
                         </div>
 
                         <div class="col-md-6">
@@ -116,25 +130,35 @@ $grouped_users = $summary['grouped_users'];
                                         $totalGaji = 0;
                                         ?>
                                         <?php foreach ($items as $index => $u): ?>
-                                            <?php $durasi = $u->durasi_jam; ?>
+                                            <?php $durasi = is_numeric($u->durasi_jam) ? $u->durasi_jam : 0; ?>
                                             <tr>
                                                 <?php if ($index === 0): ?>
-                                                    <td rowspan="<?= count($items) ?>"><?= $u->tanggal ?></td>
-                                                    <td rowspan="<?= count($items) ?>"><?= $u->hari ?></td>
+                                                    <td rowspan="<?= count($items) ?>"><?= $u->tanggal ?? '-' ?></td>
+                                                    <td rowspan="<?= count($items) ?>"><?= $u->hari ?? '-' ?></td>
                                                 <?php endif; ?>
-                                                <td><?= $u->jam_mulai ?> - <?= $u->jam_selesai ?></td>
-                                                <td><?= $durasi ?> jam</td>
-                                                <td><?= $u->nama_mapel ?></td>
+                                                
+                                                <td>
+                                                    <?= ($u->jam_mulai ?? '-') . ' - ' . ($u->jam_selesai ?? '-') ?>
+                                                </td>
+                                                
+                                                <td><?= is_numeric($durasi) ? $durasi . ' jam' : '-' ?></td>
+                                                <td><?= $u->nama_mapel ?? '-' ?></td>
+                                                
                                                 <?php
+                                                $gaji_per_jam = is_numeric($u->gaji_master_user) ? $u->gaji_master_user : 0;
                                                 $totalDurasi += $durasi;
-                                                $totalGaji += $durasi * $u->gaji_master_user;
+                                                $totalGaji += $durasi * $gaji_per_jam;
                                                 ?>
+                                                
                                                 <?php if ($index === 0): ?>
-                                                    <td rowspan="<?= count($items) ?>">Rp <?= number_format($totalGaji, 0, ',', '.') ?></td>
+                                                    <td rowspan="<?= count($items) ?>">
+                                                        Rp <?= number_format($totalGaji, 0, ',', '.') ?>
+                                                    </td>
                                                 <?php endif; ?>
-                                                <td><?= $u->roles_check_in ?: '-' ?></td>
-                                                <td><?= $u->roles_check_out ?: '-' ?></td>
-                                                <td><?= $u->is_check_in ?: '-' ?></td>
+                                                
+                                                <td><?= $u->roles_check_in ?? '-' ?></td>
+                                                <td><?= $u->roles_check_out ?? '-' ?></td>
+                                                <td><?= $u->is_check_in ?? '-' ?></td>
                                                 <td>
                                                     <?php
                                                     if (empty($u->tanggal_absen)) {
@@ -142,7 +166,7 @@ $grouped_users = $summary['grouped_users'];
                                                     } elseif ($u->status == 'hadir') {
                                                         echo '<span class="text-success">Tepat</span>';
                                                     } else {
-                                                        echo ucfirst($u->status);
+                                                        echo ucfirst($u->status ?? '-');
                                                     }
                                                     ?>
                                                 </td>
@@ -150,6 +174,7 @@ $grouped_users = $summary['grouped_users'];
                                         <?php endforeach; ?>
                                     <?php endforeach; ?>
                                 </tbody>
+
                                 <tfoot>
                                     <tr>
                                         <th colspan="3">Total Jam Mengajar Valid</th>

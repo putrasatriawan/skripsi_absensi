@@ -51,7 +51,7 @@
                                 <div class="form-group row">
                                     <label for="username" class="col-sm-3 control-label">Username</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="username" placeholder="Masukan Username" name="nik"
+                                        <input type="text" class="form-control" id="username" placeholder="Masukan Username" name="username"
                                             value="<?php echo $username; ?>">
                                     </div>
                                 </div>

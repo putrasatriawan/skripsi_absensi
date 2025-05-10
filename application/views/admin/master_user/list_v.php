@@ -128,7 +128,7 @@
             <div class="col-md-6">
               <!-- Informasi Pribadi -->
               <div class="form-group">
-                <label for="nip">NIP</label>
+                <label for="nip">Username</label>
                 <input type="text" class="form-control" id="nip" name="nip" readonly />
               </div>
               <div class="form-group">
