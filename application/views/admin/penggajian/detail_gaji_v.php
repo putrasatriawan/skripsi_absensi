@@ -1,199 +1,142 @@
-<?php
-$grouped_users = [];
-$total_jam_valid = $summary['total_jam_valid'];
-$total_gaji = $summary['total_gaji'];
-$total_pemotongan = $summary['total_pemotongan'];
-$gaji_akhir = $summary['gaji_akhir'];
-$user = $summary['user'];
-$grouped_users = $summary['grouped_users'];
-?>
-
 <div class="app-main__outer">
-    <div class="app-main__inner">
-        <div class="app-page-title">
-            <div class="page-title-wrapper">
-                <div class="page-title-heading">
-                    <div>Detail Gaji</div>
-                </div>
-            </div>
+  <div class="app-main__inner">
+    <div class="app-page-title">
+      <div class="page-title-wrapper">
+        <div class="page-title-heading">
+          <div>Detail Gaji</div>
         </div>
-        <div class="main-card mb-3 card shadow-sm border-0">
-            <div class="card-body">
-                <?php if (!empty($summary)): ?>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h5>Informasi Penggajian</h5>
-                            <table class="table table-borderless">
-                                <tr>
-                                    <th>Kode Waktu</th>
-                                    <td>: <strong><?= $user->kode_config_master ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <th>Bulan & Tahun</th>
-                                    <td>: <strong><?= date('F Y', strtotime($user->created_at)) ?></strong></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-md-6">
-                            <h5>Biodata User</h5>
-                            <table class="table table-borderless">
-                                <tr>
-                                    <th>Nama</th>
-                                    <td>: <strong><?= $user->name_user ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <th>NIP</th>
-                                    <td>: <strong><?= $user->nip_master_user ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <th>Jenis Kelamin</th>
-                                    <td>: <strong><?= $user->jenis_kelamin_master_user ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <th>No HP</th>
-                                    <td>: <strong><?= $user->no_hp_master_user ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <th>Agama</th>
-                                    <td>: <strong><?= $user->agama_master_user ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <th>Alamat</th>
-                                    <td>: <strong><?= $user->alamat_master_user ?></strong></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h5>Detail Gaji</h5>
-                          <table class="table table-bordered">
-                            <tr>
-                                <th>Total Jam Mengajar (Valid)</th>
-                                <td>
-                                    <?= is_numeric($total_jam_valid) ? number_format($total_jam_valid, 2) . ' Jam' : '-' ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Gaji per Jam</th>
-                                <td>
-                                    Rp <?= is_numeric($user->gaji_master_user ?? null) ? number_format($user->gaji_master_user, 0, ',', '.') : '-' ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Pemotongan</th>
-                                <td>
-                                    Rp <?= is_numeric($total_pemotongan) ? number_format($total_pemotongan, 0, ',', '.') : '-' ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Akumulasi Gaji</th>
-                                <td>
-                                    Rp <?= is_numeric($total_gaji) ? number_format($total_gaji, 0, ',', '.') : '-' ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th><strong>Gaji Akhir</strong></th>
-                                <td>
-                                    <strong class="text-success">
-                                        Rp <?= is_numeric($gaji_akhir) ? number_format($gaji_akhir, 0, ',', '.') : '-' ?>
-                                    </strong>
-                                </td>
-                            </tr>
-                        </table>
-
-
-                        </div>
-
-                        <div class="col-md-6">
-                            <h5>Jadwal Mengajar</h5>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Tanggal</th>
-                                        <th>Hari</th>
-                                        <th>Jam</th>
-                                        <th>Durasi</th>
-                                        <th>Mapel</th>
-                                        <th>Gaji</th>
-                                        <th>Masuk</th>
-                                        <th>Keluar</th>
-                                        <th>Action</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($grouped_users as $tanggal => $items): ?>
-                                        <?php
-                                        $totalDurasi = 0;
-                                        $totalGaji = 0;
-                                        ?>
-                                        <?php foreach ($items as $index => $u): ?>
-                                            <?php $durasi = is_numeric($u->durasi_jam) ? $u->durasi_jam : 0; ?>
-                                            <tr>
-                                                <?php if ($index === 0): ?>
-                                                    <td rowspan="<?= count($items) ?>"><?= $u->tanggal ?? '-' ?></td>
-                                                    <td rowspan="<?= count($items) ?>"><?= $u->hari ?? '-' ?></td>
-                                                <?php endif; ?>
-                                                
-                                                <td>
-                                                    <?= ($u->jam_mulai ?? '-') . ' - ' . ($u->jam_selesai ?? '-') ?>
-                                                </td>
-                                                
-                                                <td><?= is_numeric($durasi) ? $durasi . ' jam' : '-' ?></td>
-                                                <td><?= $u->nama_mapel ?? '-' ?></td>
-                                                
-                                                <?php
-                                                $gaji_per_jam = is_numeric($u->gaji_master_user) ? $u->gaji_master_user : 0;
-                                                $totalDurasi += $durasi;
-                                                $totalGaji += $durasi * $gaji_per_jam;
-                                                ?>
-                                                
-                                                <?php if ($index === 0): ?>
-                                                    <td rowspan="<?= count($items) ?>">
-                                                        Rp <?= number_format($totalGaji, 0, ',', '.') ?>
-                                                    </td>
-                                                <?php endif; ?>
-                                                
-                                                <td><?= $u->roles_check_in ?? '-' ?></td>
-                                                <td><?= $u->roles_check_out ?? '-' ?></td>
-                                                <td><?= $u->is_check_in ?? '-' ?></td>
-                                                <td>
-                                                    <?php
-                                                    if (empty($u->tanggal_absen)) {
-                                                        echo '<span class="text-danger">Tidak Hadir</span>';
-                                                    } elseif ($u->status == 'hadir') {
-                                                        echo '<span class="text-success">Tepat</span>';
-                                                    } else {
-                                                        echo ucfirst($u->status ?? '-');
-                                                    }
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php endforeach; ?>
-                                </tbody>
-
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="3">Total Jam Mengajar Valid</th>
-                                        <th colspan="7"><?= number_format($total_jam_valid, 2) ?> Jam</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 text-end">
-                            <h5>Gaji Akhir: <span class="text-success">Rp <?= number_format($gaji_akhir, 0, ',', '.') ?></span></h5>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <p class="text-danger">Data tidak ditemukan.</p>
-                <?php endif; ?>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <div class="main-card mb-3 card shadow-lg border-0">
+      <div class="card-body">
+      <div class="main-card mb-3 card shadow-sm border-0">
+  <div class="card-body">
+    <h5 class="card-title text-primary">Informasi Guru</h5>
+    <div class="row">
+      <div class="col-md-6">
+        <table class="table table-sm table-borderless">
+          <tr>
+            <th>Nama</th>
+            <td>: <?= $master_user[0]->name ?></td>
+          </tr>
+          <tr>
+            <th>NIP</th>
+            <td>: <?= $master_user[0]->nip ?></td>
+          </tr>
+          <tr>
+            <th>Jenis Kelamin</th>
+            <td>: <?= $master_user[0]->jenis_kelamin ?></td>
+          </tr>
+          <tr>
+            <th>Agama</th>
+            <td>: <?= $master_user[0]->agama ?></td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-6">
+        <table class="table table-sm table-borderless">
+          <tr>
+            <th>No. HP</th>
+            <td>: <?= $master_user[0]->no_hp ?></td>
+          </tr>
+          <tr>
+            <th>Alamat</th>
+            <td>: <?= $master_user[0]->alamat ?></td>
+          </tr>
+          <tr>
+            <th>Gaji Per Jam</th>
+            <td>: Rp <?= number_format($master_user[0]->gaji, 0, ',', '.') ?></td>
+          </tr>
+          <tr>
+            <th>Pemotongan</th>
+            <td>: Rp <?= number_format($master_user[0]->pemotongan ?? 0, 0, ',', '.') ?> / <?= $master_user[0]->type_pemotongan ?></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <h5 class="card-title text-primary">Jadwal Mapel dan Rekap Absensi</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover text-center">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Hari</th>
+                <th>Tanggal</th>
+                <th>Nama Mapel</th>
+                <th>Jam Mulai</th>
+                <th>Jam Selesai</th>
+                <th>Durasi</th>
+                <th>Status Mapel</th>
+                <th>Log Absensi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($merged_detail_absen as $index => $detail): ?>
+                <tr>
+                  <td><?= $index + 1 ?></td>
+                  <td><?= $detail->hari ?></td>
+                  <td><?= $detail->tanggal ?></td>
+                  <td><?= $detail->name_mapel ?></td>
+                  <td><?= $detail->jam_mulai ?></td>
+                  <td><?= $detail->jam_selesai ?></td>
+                  <td><?= $detail->durasi ?></td>
+                  <td>
+                    <?php
+                      if (!empty($detail->absen_list)) {
+                        echo ucfirst($detail->absen_list[0]->status_mapel ?? '-');
+                      } else {
+                        echo '<span class="text-muted">Belum Absen</span>';
+                      }
+                    ?>
+                  </td>
+                  <td class="text-start">
+                    <?php if (!empty($detail->absen_list)): ?>
+                      <ul class="list-unstyled mb-0 ps-3">
+                        <?php foreach ($detail->absen_list as $absen): ?>
+                          <li>
+                            <?= date('H:i', strtotime($absen->init_time)) ?> -
+                            <?= ucfirst($absen->is_check_in) ?> |
+                            <strong><?= $absen->status ?></strong>
+                            (<?= $absen->status_work ?>)
+                          </li>
+                        <?php endforeach; ?>
+                      </ul>
+                    <?php else: ?>
+                      <span class="text-danger">Tidak Ada Absensi</span>
+                    <?php endif; ?>
+                  </td>
+                </tr>
+              <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+              <tr class="bg-light">
+                <th colspan="6" class="text-end">Total Durasi</th>
+                <th colspan="3"><?= number_format($total_durasi, 2) ?> Jam</th>
+              </tr>
+              <tr class="table-success">
+                <th colspan="6" class="text-end">Total Durasi Hadir</th>
+                <th colspan="3"><?= number_format($total_durasi_hadir, 2) ?> Jam</th>
+              </tr>
+              <tr class="table-info">
+                <th colspan="6" class="text-end">Gaji Tanpa Pemotongan</th>
+                <th colspan="3">Rp <?= number_format($total_gaji, 0, ',', '.') ?></th>
+              </tr>
+              <tr class="table-warning">
+                <th colspan="6" class="text-end">Total Pemotongan</th>
+                <th colspan="3">Rp <?= number_format($total_pemotongan, 0, ',', '.') ?></th>
+              </tr>
+              <tr class="table-primary">
+                <th colspan="6" class="text-end"><strong>Total Gaji Setelah Pemotongan</strong></th>
+                <th colspan="3"><strong>Rp <?= number_format($total_gaji_pemotongan, 0, ',', '.') ?></strong></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

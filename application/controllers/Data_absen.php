@@ -74,7 +74,21 @@ class Data_absen extends Admin_Controller
 			foreach ($datas as $key => $data) {
 
 				$mapel = $this->absensi_model->getMapelTerdekatNotOne($data->id_user);
-				
+				$absen = $this->absensi_model->getStatusMapelByAbsenId($data->id);
+			
+				foreach ($mapel as &$item) {
+					$item->status = '-';
+					foreach ($absen as $status_item) {
+						if ($item->id == $status_item->id_mapel) {
+							$item->status = $status_item->status;
+							break;
+						}
+					}
+				}
+			
+				$data_mapel_json = htmlspecialchars(json_encode($mapel), ENT_QUOTES, 'UTF-8');
+
+
 				$edit_url = "";
 				$absen_mapel_url = "";
 
@@ -107,15 +121,11 @@ class Data_absen extends Admin_Controller
 				
 				if ($this->data['is_can_read'] && $data->is_deleted == 0 && $data->is_check_in != 'check_out') {
 					$absen_mapel_url = "<button class='btn btn-sm btn-warning white absen-mapel-button' 
-									data-id='{$data->id}' 
-									data-nama_user='{$data->nama_user}' 
-									data-init_time='{$data->init_time}' 
-									data-status_work='{$data->status_work}' 
-									data-is_check_in='{$data->is_check_in}' 
-									data-status='{$data->status}' 
-									data-photo='{$data->photo}'>
-									<i class='fas fa-eye'></i> Absen Mapel
-								</button>";
+										data-id-absen='{$data->id}' 
+										data-mapel='{$data_mapel_json}'>
+										<i class='fas fa-eye'></i> Absen Mapel
+									</button>";
+
 				}
 				
 
@@ -165,14 +175,14 @@ class Data_absen extends Admin_Controller
 			}
 		}
 
-	echo "<pre>";
-				print_r($mapel);
-				die;
-				foreach ($mapel as $value) {
-					echo "<pre>";
-					print_r($value);
-				}
-				die;
+				// echo "<pre>";
+				// print_r($absen);
+				// die;
+				// foreach ($absen as $value) {
+				// 	echo "<pre>";
+				// 	print_r($value);
+				// }
+				// die;
 		
 		$json_data = array(
 			"draw" => intval($this->input->post('draw')),
@@ -236,6 +246,30 @@ class Data_absen extends Admin_Controller
 		$this->session->set_flashdata('message', 'Data berhasil ditambahkan.');
 		redirect('data_absen');
 	}
+	public function update_status_mapel()
+	{
+		$id_mapel = $this->input->post('id');         
+		$id_absen = $this->input->post('id_absen');   
+		$status = $this->input->post('status');       
+		$created_by = $this->data['users']->id; 
+	
+		if ($id_mapel && $id_absen && $status) {
+			$data = [
+				'id_mapel'   => $id_mapel,
+				'absen_id'   => $id_absen,
+				'status'     => $status,
+				'created_by' => $created_by,
+				'created_at' => date('Y-m-d H:i:s')
+			];
+	
+			$this->absensi_model->insert_or_update_status_mapel($data);
+	
+			echo json_encode(['status' => 'success']);
+		} else {
+			echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap']);
+		}
+	}
+	
 	
 	// public function destroy()
 	// {

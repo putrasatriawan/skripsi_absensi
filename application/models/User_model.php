@@ -26,6 +26,26 @@ class User_model extends CI_Model
 		}
 		return FALSE;
 	}
+	public function getAllByIdWithMasterUser($where = array())
+	{
+		$this->db->select("users.*, roles.id as role_id, roles.name as role_name, master_user.*, config_check.*")->from("users");
+		$this->db->join("users_roles", "users.id = users_roles.user_id", 'LEFT');
+		$this->db->join("roles", "roles.id = users_roles.role_id", 'LEFT');
+		$this->db->join("master_user", "users.id = master_user.users_id", 'LEFT');
+		$this->db->join("config_check", "config_check.roles_id = roles.id", 'LEFT');
+		$this->db->where("users.is_deleted", 0);
+		$this->db->where("roles.is_deleted", 0);
+
+		$roles_default = array('1');
+		// $this->db->where_not_in('roles.id', $roles_default);
+		$this->db->where($where);
+
+		$query = $this->db->get();
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		}
+		return FALSE;
+	}
 	public function insert($data)
 	{
 		$this->db->insert('users', $data);

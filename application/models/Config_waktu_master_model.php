@@ -12,7 +12,6 @@ class Config_waktu_master_model extends CI_Model
 	public function getAllById($where = array())
 	{
 		$this->db->select("config_waktu_master.*")->from("config_waktu_master");
-		$this->db->where("config_waktu_master.is_deleted", 0);
 		$this->db->where($where);
 
 		$query = $this->db->get();

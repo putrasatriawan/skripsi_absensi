@@ -8,6 +8,8 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
       App.editAbsen();
       App.createAbsen();
       App.detailAbsen();
+      App.dataAbsenMapel();
+      App.initAbsenMapel();
       $(".loadingpage").hide();
     },
     initEvent: function () {
@@ -201,6 +203,58 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
 
         $('#detailModal').modal('show');
       });
-    }
+    },
+    dataAbsenMapel: function () {
+      $(document).on('click', '.absen-mapel-button', function () {
+        const mapelData = JSON.parse($(this).attr('data-mapel'));
+        const id_absen = $(this).data('id-absen');
+        let htmlRows = '';
+    
+        mapelData.forEach(function (mapel) {
+          htmlRows += `
+            <tr>
+              <td>${mapel.nama_mapel}</td>
+              <td>${mapel.jam_mulai}</td>
+              <td>${mapel.jam_selesai}</td>
+              <td>${mapel.hari}</td>
+              <td>${mapel.status}</td>
+              <td>
+                <button class="btn btn-success btn-sm btn-hadir" data-id="${mapel.id}" data-id-absen="${id_absen}">Hadir</button>
+                <button class="btn btn-danger btn-sm btn-tidak-hadir" data-id="${mapel.id}" data-id-absen="${id_absen}">Tidak Hadir</button>
+              </td>
+            </tr>
+          `;
+        });
+    
+        $('#detailMapelModal #mapel_list').html(htmlRows);
+        $('#detailMapelModal').modal('show');
+      });
+    },
+    initAbsenMapel: function () {
+      $(document).on('click', '.btn-hadir, .btn-tidak-hadir', function () {
+        const id_mapel = $(this).data('id');
+        const id_absen = $(this).data('id-absen');
+        const status = $(this).hasClass('btn-hadir') ? 'hadir' : 'tidak_hadir';
+      
+        $.ajax({
+          url: App.baseUrl + 'data_absen/update_status_mapel',
+          method: 'POST',
+          data: {
+            id: id_mapel,
+            status: status,
+            id_absen: id_absen
+          },
+          success: function (res) {
+            alert('Status berhasil diperbarui!');
+            $('#detailMapelModal').modal('hide');
+          },
+          error: function () {
+            alert('Gagal memperbarui status.');
+          }
+        });
+      });
+      
+    }    
+    
   };
 });

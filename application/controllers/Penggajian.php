@@ -18,6 +18,7 @@ class Penggajian extends Admin_Controller
 		$this->load->model('master_user_jadwal_model');
 		$this->load->model('config_waktu_detail_model');
 		$this->load->model('config_waktu_master_model');
+		$this->load->model('absensi_model');
 		$this->load->model('user_model');
 	}
 
@@ -142,119 +143,118 @@ class Penggajian extends Admin_Controller
 	}
 
 	public function detail_gaji($id, $id_config_master)
-	{
-		$where = [
-			'config_waktu_detail.id_config_master' => $id_config_master,
-			'config_waktu_detail.id_user' => $id
-		];
-		$users = $this->config_waktu_detail_model->getAllById($where);
+{
+    $config_detail_where = [
+        'config_waktu_detail.id_config_master' => $id_config_master,
+        'config_waktu_detail.id_user' => $id
+    ];
+    $config_detail = $this->config_waktu_detail_model->getAllById($config_detail_where);
 
-		// echo "<pre>";
-		// print_r($users);
+    $config_master_where = [
+        'config_waktu_master.id' => $id_config_master
+    ];
+    $config_master = $this->config_waktu_master_model->getAllById($config_master_where);
+
+    $bulanTahun = $config_master[0]->bulan_tahun;
+
+    $absensi_where = [
+        'absensi.id_user' => $id,
+        "absensi.tanggal_absen LIKE '{$bulanTahun}%'" => null
+    ];
+    $absensi = $this->absensi_model->getAllByIdMapelDetail($absensi_where);
+
+    $master_user = $this->user_model->getAllByIdWithMasterUser(['users.id' => $id]);
+    $check_in_jadwal = new DateTime($master_user[0]->check_in);
+    $type_pemotongan = $master_user[0]->type_pemotongan;
+    $pemotongan_nominal = (int) $master_user[0]->pemotongan;
+
+    $merged_detail_absen = [];
+    $total_durasi = 0;
+    $total_durasi_hadir = 0;
+    $total_pemotongan = 0;
+
+    foreach ($config_detail as $detail) {
+        $tanggal_detail = (int) $detail->tanggal;
+
+        $absen_hari_ini = array_filter($absensi, function($absen) use ($tanggal_detail, $detail) {
+            return (int) date('d', strtotime($absen->tanggal_absen)) === $tanggal_detail
+                && isset($absen->id_mapel) && $absen->id_mapel == $detail->id_mapel;
+        });
+
+        if (!empty($absen_hari_ini)) {
+            $first_absen = reset($absen_hari_ini);
+            $detail->id_absen = $first_absen->id;
+        } else {
+            $detail->id_absen = null;
+        }
+
+        $detail->absen_list = array_values($absen_hari_ini);
+        $merged_detail_absen[] = $detail;
+
+        // Hitung durasi
+        $dur = $this->parseDurasi($detail->durasi);
+        $total_durasi += $dur;
+
+        if (!empty($detail->absen_list) && strtolower($detail->absen_list[0]->status_mapel ?? '') === 'hadir') {
+            $total_durasi_hadir += $dur;
+
+            // Cek keterlambatan
+            if (strtolower($detail->absen_list[0]->status) === 'terlambat') {
+                $init_time = new DateTime($detail->absen_list[0]->init_time);
+                $diff = $check_in_jadwal->diff($init_time);
+                $diff_menit = ($diff->h * 60) + $diff->i;
+
+                if ($type_pemotongan === 'per_menit') {
+                    $total_pemotongan += $diff_menit * $pemotongan_nominal;
+                } elseif ($type_pemotongan === 'per_jam') {
+                    $total_pemotongan += ceil($diff_menit / 60) * $pemotongan_nominal;
+                }
+            }
+        }
+    }
+
+    $gaji_raw = $master_user[0]->gaji;
+    $total_gaji = $gaji_raw * $total_durasi_hadir;
+    $total_gaji_pemotongan = $total_gaji - $total_pemotongan;
+
+    // Kirim ke view
+    $this->data['total_gaji'] = $total_gaji;
+    $this->data['total_gaji_pemotongan'] = $total_gaji_pemotongan;
+    $this->data['total_pemotongan'] = $total_pemotongan;
+
+	// var_dump( $this->data['total_gaji_pemotongan']);die;
+    $this->data['total_durasi'] = $total_durasi;
+    $this->data['total_durasi_hadir'] = $total_durasi_hadir;
+    $this->data['merged_detail_absen'] = $merged_detail_absen;
+    $this->data['master_user'] = $master_user;
+    $this->data['content'] = 'admin/penggajian/detail_gaji_v';
+    $this->load->view('admin/layouts/page', $this->data);
+}
+
+
+			// echo "<pre>";
+		// print_r($this->data['users_list']);
 		// die;
-		// foreach ($users  as $value) {
+		// foreach ($this->data['users_list']  as $value) {
 		// 	echo "<pre>";
 		// 	print_r($value);
 		// }
 		// die;
-		if (empty($users)) {
-			$this->data['summary'] = [];
-			$this->load->view('admin/layouts/page', $this->data);
-			return;
+	private function parseDurasi($durasiStr) {
+		if (strpos($durasiStr, 'Menit') !== false) {
+			preg_match('/(\d+) Jam(?: (\d+) Menit)?/', $durasiStr, $matches);
+			$jam = isset($matches[1]) ? (int)$matches[1] : 0;
+			$menit = isset($matches[2]) ? (int)$matches[2] : 0;
+			return $jam + ($menit / 60);
+		} else {
+			return (float) $durasiStr;
 		}
-
-		$grouped_users = [];
-		foreach ($users as $item) {
-			$tanggal = $item->tanggal;
-			if (!isset($grouped_users[$tanggal])) {
-				$grouped_users[$tanggal] = [];
-			}
-
-			$item->durasi_jam = $this->hitungDurasiJam($item->jam_mulai, $item->jam_selesai);
-			$grouped_users[$tanggal][] = $item;
-		}
-
-		$user = $users[0];
-		$total_jam_valid = 0;
-		$total_gaji = 0;
-		$total_pemotongan = 0;
-		$keterangan_pemotongan_per_hari = [];
-
-	
-
-		foreach ($grouped_users as $tanggal => $items) {
-			$hadir = false;
-			$check_in_tercepat = null;
-			$jam_mulai_terawal = null;
-			$durasi_terpanjang = 0;
-
-			foreach ($items as $item) {
-				if (!empty($item->tanggal_absen)) {
-					$hadir = true;
-					if (!$check_in_tercepat || strtotime($item->check_in_const) < strtotime($check_in_tercepat)) {
-						$check_in_tercepat = $item->check_in_const;
-					}
-					if (!$jam_mulai_terawal || strtotime($item->jam_mulai) < strtotime($jam_mulai_terawal)) {
-						$jam_mulai_terawal = $item->jam_mulai;
-					}
-
-					if ($item->durasi_jam > $durasi_terpanjang) {
-						$durasi_terpanjang = $item->durasi_jam;
-					}
-				}
-			}
-
-			if ($hadir) {
-				$total_jam_valid += $durasi_terpanjang;
-				$total_gaji += $durasi_terpanjang * $user->gaji_master_user;
-				$potongan = $this->hitungPemotongan(
-					$user->type_pemotongan_master_user,
-					$user->pemotongan_master_user,
-					$jam_mulai_terawal,
-					$check_in_tercepat
-				);
-				$total_pemotongan += $potongan;
-				$keterangan_pemotongan_per_hari[$tanggal] = $potongan;
-			} else {
-				$keterangan_pemotongan_per_hari[$tanggal] = 0;
-			}
-		}
-
-		$gaji_akhir = $total_gaji - $total_pemotongan;
-
-	// 		echo "<pre>";
-	// print_r($this->data['users_list']);
-	// die;
-	// foreach ($this->data['users_list']  as $value) {
-	// 	echo "<pre>";
-	// 	print_r($value);
-	// }
-	// die;
-
-		$this->data['summary'] = [
-			'total_jam_valid' => $total_jam_valid,
-			'total_gaji' => $total_gaji,
-			'total_pemotongan' => $total_pemotongan,
-			'gaji_akhir' => $gaji_akhir,
-			'user' => $user,
-			'grouped_users' => $grouped_users,
-			'keterangan_pemotongan_per_hari' => $keterangan_pemotongan_per_hari
-		];
-		$this->data['content'] = 'admin/penggajian/detail_gaji_v';
-		$this->load->view('admin/layouts/page', $this->data);
 	}
 
 
 
 
-	// echo "<pre>";
-	// print_r($this->data['users_list']);
-	// die;
-	// foreach ($this->data['users_list']  as $value) {
-	// 	echo "<pre>";
-	// 	print_r($value);
-	// }
-	// die;
+
 	public function dataListDetail($id)
 	{
 		$columns = array(

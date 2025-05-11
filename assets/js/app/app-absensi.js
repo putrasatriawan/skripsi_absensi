@@ -253,16 +253,23 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
         processData: false,
         contentType: false,
         success: function (response) {
-          document.getElementById("submit-status").innerText = "Absen Berhasil!";
-          toastr.success("Absen berhasil!");
-          // location.reload();
+          let res = typeof response === "string" ? JSON.parse(response) : response;
+      
+          if (res.status === "success") {
+            document.getElementById("submit-status").innerText = res.message;
+            toastr.success(res.message);
+            // location.reload(); // aktifkan jika perlu reload
+          } else {
+            document.getElementById("submit-status").innerText = res.message;
+            toastr.warning(res.message); // gunakan warning untuk 'tidak diizinkan'
+          }
         },
         error: function () {
-          document.getElementById("submit-status").innerText = "Terjadi kesalahan saat mengirim foto!";
-          toastr.error("Terjadi kesalahan saat mengirim foto!");
-          // location.reload();
-        },
+          document.getElementById("submit-status").innerText = "Terjadi kesalahan saat mengirim data!";
+          toastr.error("Terjadi kesalahan saat mengirim data!");
+        }
       });
+      
   },
   
   };

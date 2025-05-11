@@ -14,7 +14,7 @@ define(["toastr", "datatablesBS4", "jqvalidate","dropzone"], function (
       App.searchTable();
       App.resetSearch();
       App.disableFunction();
-      App.FormImport();
+      // App.FormImport();
 
       // $(".dataTables_filter").hide();
       $(".loadingpage").hide();
@@ -98,6 +98,7 @@ define(["toastr", "datatablesBS4", "jqvalidate","dropzone"], function (
             },
             submitHandler: function (form) {
                 var formData = new FormData(form); // FormData for file upload
+                console.log("formData", formData);
                 $.ajax({
                     method: "POST",
                     url: form.action,

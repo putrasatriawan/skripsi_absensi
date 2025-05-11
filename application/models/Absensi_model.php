@@ -16,6 +16,28 @@ class Absensi_model extends CI_Model
         }
         return FALSE;
     }
+    public function getAllByIdMapelDetail($where = array())
+    {
+        $this->db->select("
+            absensi.*, 
+            absensi_mapel.id_mapel, 
+            absensi_mapel.status as status_mapel, 
+            absensi_mapel.created_by as created_by_mapel,
+            absensi_mapel.created_at as created_at_mapel
+        ");
+        $this->db->from("absensi");
+        $this->db->join("absensi_mapel", "absensi.id = absensi_mapel.absen_id", "left");
+        $this->db->where($where);
+        
+        $query = $this->db->get();
+    
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+    
+        return FALSE;
+    }
+    
 
     public function getOneBy($where = array())
     {
@@ -95,6 +117,14 @@ class Absensi_model extends CI_Model
             ->where('hari', $hari_db);
 
         return $this->db->get()->result();
+    }
+
+    public function getStatusMapelByAbsenId($absen_id)
+    {
+        $absen =  $this->db->get_where('absensi_mapel', [
+            'absen_id' => $absen_id
+        ])->result();
+       return $absen;
     }
 
 
@@ -194,4 +224,26 @@ class Absensi_model extends CI_Model
             return false;
         }
     }
+    public function insert_or_update_status_mapel($data)
+    {
+        $exists = $this->db->get_where('absensi_mapel', [
+            'id_mapel' => $data['id_mapel'],
+            'absen_id' => $data['absen_id']
+        ])->row();
+    
+        if ($exists) {
+            $this->db->where([
+                'id_mapel' => $data['id_mapel'],
+                'absen_id' => $data['absen_id']
+            ]);
+            return $this->db->update('absensi_mapel', [
+                'status' => $data['status'],
+                'updated_by' => $data['created_by'],
+                'updated_at' => $data['created_at']
+            ]);
+        } else {
+            return $this->db->insert('absensi_mapel', $data);
+        }
+    }
+    
 }
