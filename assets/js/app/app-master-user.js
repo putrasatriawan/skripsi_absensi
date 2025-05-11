@@ -197,7 +197,10 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
           url: App.baseUrl + 'master_user/save_config_detail',
           type: 'POST',
           contentType: 'application/json',
-          data: JSON.stringify({ data: dataToSave }),
+          data: JSON.stringify({ 
+            data:dataToSave,
+            id_config_master: id_config_master,
+           }),
           success: function (res) {
             toastr.success('Berhasil disimpan');
           },

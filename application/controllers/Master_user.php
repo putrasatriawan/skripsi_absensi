@@ -370,24 +370,20 @@ class Master_user extends Admin_Controller
 {
     $json = file_get_contents('php://input');
     $decoded = json_decode($json, true);
-	// echo "<pre>";
-	// 	print_r($decoded);
-	// 	die;
-	// 	foreach ($decoded as $value) {
-	// 		echo "<pre>";
-	// 		print_r($value);
-	// 	}
-	// 	die;
+		// echo "<pre>";
+		// print_r($decoded);
+		// die;
+		// foreach ($decoded as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 
+		$this->master_user_model->delete_existing_config([
+			'id_config_master' => $decoded['id_config_master'],
+		]);
     if (!empty($decoded['data'])) {
-        // Ambil id_user dan id_config_master dari baris pertama
-        $first = $decoded['data'][0];
-
-        // Hapus semua entri lama dengan kombinasi ini
-        $this->master_user_model->delete_existing_config([
-            'id_user' => $first['id_user'],
-            'id_config_master' => $first['id_config_master']
-        ]);
+      
 
         // Insert semua data baru
         foreach ($decoded['data'] as $row) {

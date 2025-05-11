@@ -21,7 +21,7 @@
             <td>: <?= $master_user[0]->name ?></td>
           </tr>
           <tr>
-            <th>NIP</th>
+            <th>Username</th>
             <td>: <?= $master_user[0]->nip ?></td>
           </tr>
           <tr>
