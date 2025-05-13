@@ -28,25 +28,25 @@ class Absensi_model extends CI_Model
         $this->db->from("absensi");
         $this->db->join("absensi_mapel", "absensi.id = absensi_mapel.absen_id", "left");
         $this->db->where($where);
-        
+
         $query = $this->db->get();
-    
+
         if ($query->num_rows() > 0) {
             return $query->result();
         }
-    
+
         return FALSE;
     }
-    
+
 
     public function getOneBy($where = array())
     {
         $this->db->select("absensi.*")
-                 ->from("absensi")
-                 ->where("absensi.is_deleted", 0)
-                 ->where($where)
-                 ->order_by("absensi.id", "DESC") 
-                 ->limit(1); 
+            ->from("absensi")
+            ->where("absensi.is_deleted", 0)
+            ->where($where)
+            ->order_by("absensi.id", "DESC")
+            ->limit(1);
 
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
@@ -54,7 +54,7 @@ class Absensi_model extends CI_Model
         }
         return FALSE;
     }
-    
+
     public function getOneConfig($where = array())
     {
         $this->db->select("config_check.*")->from("config_check");
@@ -124,7 +124,7 @@ class Absensi_model extends CI_Model
         $absen =  $this->db->get_where('absensi_mapel', [
             'absen_id' => $absen_id
         ])->result();
-       return $absen;
+        return $absen;
     }
 
 
@@ -164,9 +164,10 @@ class Absensi_model extends CI_Model
         return $this->db->insert_id();
     }
 
-    function getAllBy($limit, $start, $search, $col, $dir, $where = array())
+    function getAllBy($limit, $start, $search, $col, $dir, $where)
     {
         $this->db->select("absensi.*, users.first_name as nama_user")->from("absensi");
+        $this->db->where($where);
         $this->db->join("users", "users.id = absensi.id_user", "left");
         $this->db->limit($limit, $start)->order_by($col, $dir);
         if (!empty($search)) {
@@ -184,6 +185,7 @@ class Absensi_model extends CI_Model
     function getCountAllBy($limit, $start, $search, $order, $dir, $where)
     {
         $this->db->select("absensi.*")->from("absensi");
+        $this->db->where($where);
         if (!empty($search)) {
             foreach ($search as $key => $value) {
                 $this->db->or_like($key, $value);
@@ -230,7 +232,7 @@ class Absensi_model extends CI_Model
             'id_mapel' => $data['id_mapel'],
             'absen_id' => $data['absen_id']
         ])->row();
-    
+
         if ($exists) {
             $this->db->where([
                 'id_mapel' => $data['id_mapel'],
@@ -245,5 +247,4 @@ class Absensi_model extends CI_Model
             return $this->db->insert('absensi_mapel', $data);
         }
     }
-    
 }

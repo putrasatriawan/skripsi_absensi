@@ -459,7 +459,7 @@ class User extends Admin_Controller
 		$password = 0;
 		$this->load->library('Bcrypt');
 
-		$password = "AkhlakPTSI01";
+		$password = "password";
 		$hash_password = $this->bcrypt->hash($password);
 		$data = array(
 			"password" => $password,

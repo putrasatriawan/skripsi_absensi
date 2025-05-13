@@ -34,9 +34,23 @@ class Auth extends CI_Controller
 
 		if ($this->form_validation->run() === TRUE)
 		{
+			$username = $this->input->post('username');
 			// check to see if the user is logging in
 			// check for "remember me"
 			$remember = (bool)$this->input->post('remember');
+
+			$user = $this->db
+					->select('id, is_deleted')
+					->from('users')
+					->where('username', $username)
+					->get()
+					->row();
+
+        if ($user && $user->is_deleted != 0) {
+            $this->session->set_flashdata('message_error', 'Akun Anda sudah dinonaktifkan. Silakan hubungi admin.');
+            redirect(base_url().'login');
+        }
+
 			
 			if ($this->ion_auth->login($this->input->post('username'), $this->input->post('password'), $remember))
 			{

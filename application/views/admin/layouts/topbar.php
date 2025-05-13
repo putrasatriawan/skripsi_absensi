@@ -94,10 +94,14 @@
                               <div class="btn-group">
                                   <a id="notifDropdown" data-toggle="dropdown" aria-haspopup="true"
                                       aria-expanded="false" class="p-0 btn">
-                                      <img width="42" class="rounded-circle"
-                                          src="<?php echo !empty($this->data['users']->photo) ? base_url('uploads/photo_profile/' . $this->data['users']->photo) : base_url('assets/images/avatars/default-user.png'); ?>"
-                                          alt="User Profile Picture">
-                                      <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                                      <?php
+                                        $profilePhoto = !empty($this->data['users']->photo)
+                                            ? base_url('uploads/photo_profile/' . $this->data['users']->photo)
+                                            : base_url('assets/images/avatars/default-user.png');
+                                        ?>
+                                        <img width="42" class="rounded-circle" src="<?= $profilePhoto ?>" alt="User Profile Picture">
+                                        <i class="fa fa-angle-down ml-2 opacity-8"></i>
+
                                   </a>
 
                                   <div tabindex="-1" role="menu" aria-hidden="true"
@@ -111,9 +115,13 @@
                                                   <div class="widget-content p-0">
                                                       <div class="widget-content-wrapper">
                                                           <div class="widget-content-left mr-3">
-                                                              <img width="42" class="rounded-circle"
-                                                                  src="<?php echo !empty($this->data['users']->photo) ? base_url('uploads/photo_profile/' . $this->data['users']->photo) : base_url('assets/images/avatars/default-user.png'); ?>"
-                                                                  alt="User Photo">
+                                                          <?php
+                                                                $foto = !empty($this->data['users']->photo) 
+                                                                    ? base_url('uploads/photo_profile/' . $this->data['users']->photo)
+                                                                    : base_url('assets\images\avatars\default-user.png');
+                                                                ?>
+                                                                <img width="42" class="rounded-circle" src="<?= $foto ?>" alt="User Photo">
+
                                                           </div>
 
 

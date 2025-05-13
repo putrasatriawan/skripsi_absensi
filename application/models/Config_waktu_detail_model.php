@@ -15,7 +15,7 @@ class Config_waktu_detail_model extends CI_Model
 			->from("config_waktu_detail")
 			->join("users", "users.id = config_waktu_detail.id_user", "left")
 			->where("config_waktu_detail.id_config_master", $id)
-			->group_by("config_waktu_detail.id_user") // Tambahan group by
+			->group_by("config_waktu_detail.id_user") 
 			->limit($limit, $start)
 			->order_by($col, $dir);
 

@@ -3,7 +3,7 @@
     <div class="app-page-title">
       <div class="page-title-wrapper">
         <div class="page-title-heading">
-          <div>Master User</div>
+          <div>Data Pengguna</div>
         </div>
         <div class="page-title-actions">
 
@@ -42,7 +42,7 @@
     <div class="app-page-title">
       <div class="page-title-wrapper">
         <div class="page-title-heading">
-          <div>Konfigurasi Waktu</div>
+          <div>Data Konfigurasi Waktu</div>
         </div>
         <div class="page-title-actions">
           <div class="page-title-actions">
@@ -116,7 +116,7 @@
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editGuruModalLabel">Edit Master</h5>
+        <h5 class="modal-title" id="editGuruModalLabel">Edit Data User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -191,7 +191,11 @@
             </div>
           </div>
           <div class="text-right">
-            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+          <button type="submit" class="btn btn-primary">
+                  <span class="btn-icon-wrapper pr-2 opacity-7">
+                        <i class="fa fa-save fa-w-20"></i>
+                  </span>Simpan </button>
+        
           </div>
         </form>
       </div>

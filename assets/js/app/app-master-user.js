@@ -110,7 +110,7 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
       });
     },
     initEventKonfigurasiWaktu: function () {
-      App.table = $("#table_waktu").DataTable({
+      App.tableWaktu = $("#table_waktu").DataTable({
         language: {
           search: "Cari",
           lengthMenu: "Tampilkan _MENU_ baris per halaman",
@@ -251,21 +251,22 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
     },
     
     initConfirm: function () {
-      $("#table tbody").on("click", ".delete", function () {
+      $("#table_waktu").on("click", ".delete-config", function () {
         var url = $(this).attr("url");
         App.confirm("Apakah Anda yakin ingin menghapus data ini?", function () {
           $.ajax({
             method: "GET",
             url: url,
-          }).done(function (msg) {
+          }).done(function () {
             toastr.success("Data berhasil dihapus/ubah status!");
-            App.table.ajax.reload(null, true);
+            App.tableWaktu.ajax.reload(null, false); // <- ini penting
           }).fail(function () {
             toastr.error("Gagal menghapus/ubah status data!");
           });
         });
       });
     },
+    
     initSend: function () {
       $.ajax({
         type: "POST",

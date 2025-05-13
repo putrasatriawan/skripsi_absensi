@@ -4,7 +4,7 @@ require_once APPPATH . 'core/Admin_Controller.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
-	
+
 class Data_absen extends Admin_Controller
 {
 	public function __construct()
@@ -24,7 +24,7 @@ class Data_absen extends Admin_Controller
 			$this->data['content'] = 'errors/html/restrict';
 		}
 
-		$this->data['user'] = $this->user_model->getAllById(array('users.is_deleted' => 0));		
+		$this->data['user'] = $this->user_model->getAllById(array('users.is_deleted' => 0));
 		$this->load->view('admin/layouts/page', $this->data);
 	}
 
@@ -41,22 +41,28 @@ class Data_absen extends Admin_Controller
 			7 => 'foto',
 			8 => '',
 		);
-		$where = [
-			'absensi.id_users' => $this->data['users']->id, 
-		];
+		$where = [];
+		if ($this->data['users']->id != 1) {
+			$where = array(
+				"absensi.id_user" => $this->data['users']->id,
+			);
+		}
+
 		$order = $columns[$this->input->post('order')[0]['column']];
 		$dir = $this->input->post('order')[0]['dir'];
 		$search = array();
 		$limit = 0;
 		$start = 0;
+		// var_dump($where);
+		// die;
 		$totalData = $this->absensi_model->getCountAllBy($limit, $start, $search, $order, $dir, $where);
 		if (!empty($this->input->post('search')['value'])) {
 			// $isSearchColumn = true;
 			$search_value = $this->input->post('search')['value'];
-			// $search = array(
-			// 	"kelompok_kelas.kode_kelas" => $search_value,
-			// );
-			//    	 }
+			$search = array(
+				"absensi.tanggal" => $search_value,
+			);
+			//  }
 			// if($isSearchColumn){
 			$totalFiltered = $this->absensi_model->getCountAllBy($limit, $start, $search, $order, $dir, $where);
 		} else {
@@ -65,8 +71,9 @@ class Data_absen extends Admin_Controller
 
 		$limit = $this->input->post('length');
 		$start = $this->input->post('start');
-		$datas = $this->absensi_model->getAllBy($limit, $start, $search, $order, $dir);
-	
+		$datas = $this->absensi_model->getAllBy($limit, $start, $search, $order, $dir,  $where);
+
+
 		$mapel = array();
 		$new_data = array();
 		if (!empty($datas)) {
@@ -75,7 +82,7 @@ class Data_absen extends Admin_Controller
 
 				$mapel = $this->absensi_model->getMapelTerdekatNotOne($data->id_user);
 				$absen = $this->absensi_model->getStatusMapelByAbsenId($data->id);
-			
+
 				foreach ($mapel as &$item) {
 					$item->status = '-';
 					foreach ($absen as $status_item) {
@@ -85,7 +92,7 @@ class Data_absen extends Admin_Controller
 						}
 					}
 				}
-			
+
 				$data_mapel_json = htmlspecialchars(json_encode($mapel), ENT_QUOTES, 'UTF-8');
 
 
@@ -104,8 +111,8 @@ class Data_absen extends Admin_Controller
 									<i class='fas fa-edit'></i> Ubah
 								</button>";
 				}
-				
-				
+
+
 				if ($this->data['is_can_read'] && $data->is_deleted == 0) {
 					$detail_url = "<button class='btn btn-sm btn-warning white detail-button' 
 									data-id='{$data->id}' 
@@ -118,23 +125,22 @@ class Data_absen extends Admin_Controller
 									<i class='fas fa-eye'></i> Detail
 								</button>";
 				}
-				
+
 				if ($this->data['is_can_read'] && $data->is_deleted == 0 && $data->is_check_in != 'check_out') {
 					$absen_mapel_url = "<button class='btn btn-sm btn-warning white absen-mapel-button' 
 										data-id-absen='{$data->id}' 
 										data-mapel='{$data_mapel_json}'>
 										<i class='fas fa-eye'></i> Absen Mapel
 									</button>";
-
 				}
-				
+
 
 				if (!empty($data->photo)) {
 					$photo = '<img src="data:image/jpeg;base64,' . $data->photo . '" alt="Foto" width="150" height="auto">';
 				} else {
 					$photo = '<img src="' . base_url('assets/images/default.png') . '" alt="Foto" width="200" height="200">';
 				}
-				
+
 				$status = $data->status;
 				$statusButton = '';
 
@@ -156,34 +162,26 @@ class Data_absen extends Admin_Controller
 				$nestedData['id'] = $start + $key + 1;
 				$nestedData['tanggal_absen'] = formatTanggal($data->tanggal_absen);
 				$nestedData['users_name'] = $data->nama_user;
-				
+
 				if ($data->is_check_in == 'check_in') {
 					$nestedData['check_in'] = $data->init_time;
-					$nestedData['check_out'] = '-'; 
+					$nestedData['check_out'] = '-';
 				} else {
-					$nestedData['check_in'] = '-'; 
+					$nestedData['check_in'] = '-';
 					$nestedData['check_out'] = $data->init_time;
 				}
-				
+
 				$nestedData['jarak'] = $data->distance;
 				$nestedData['status_kerja'] = $data->status_work;
 				$nestedData['status'] = $statusButton;
 				$nestedData['foto'] = $photo;
-				$nestedData['action'] = $edit_url . " " . $detail_url . " " . $absen_mapel_url ;
+				$nestedData['action'] = $edit_url . " " . $detail_url . " " . $absen_mapel_url;
 				$new_data[] = $nestedData;
-				
 			}
 		}
 
-				// echo "<pre>";
-				// print_r($absen);
-				// die;
-				// foreach ($absen as $value) {
-				// 	echo "<pre>";
-				// 	print_r($value);
-				// }
-				// die;
-		
+
+
 		$json_data = array(
 			"draw" => intval($this->input->post('draw')),
 			"recordsTotal" => intval($totalData),
@@ -248,11 +246,11 @@ class Data_absen extends Admin_Controller
 	}
 	public function update_status_mapel()
 	{
-		$id_mapel = $this->input->post('id');         
-		$id_absen = $this->input->post('id_absen');   
-		$status = $this->input->post('status');       
-		$created_by = $this->data['users']->id; 
-	
+		$id_mapel = $this->input->post('id');
+		$id_absen = $this->input->post('id_absen');
+		$status = $this->input->post('status');
+		$created_by = $this->data['users']->id;
+
 		if ($id_mapel && $id_absen && $status) {
 			$data = [
 				'id_mapel'   => $id_mapel,
@@ -261,16 +259,16 @@ class Data_absen extends Admin_Controller
 				'created_by' => $created_by,
 				'created_at' => date('Y-m-d H:i:s')
 			];
-	
+
 			$this->absensi_model->insert_or_update_status_mapel($data);
-	
+
 			echo json_encode(['status' => 'success']);
 		} else {
 			echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap']);
 		}
 	}
-	
-	
+
+
 	// public function destroy()
 	// {
 	// 	$response_data = array();

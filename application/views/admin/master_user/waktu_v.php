@@ -3,7 +3,8 @@
     <div class="app-page-title">
       <div class="page-title-wrapper">
         <div class="page-title-heading">
-          <div>Master User</div>
+          <div>Master Pengguna <div class="page-title-subheading">Edir Konfigurasi Waktu</div>
+          </div>
         </div>
         <div class="page-title-actions">
 

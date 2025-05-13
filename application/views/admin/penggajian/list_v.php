@@ -3,22 +3,17 @@
             <div class="app-page-title">
                 <div class="page-title-wrapper">
                     <div class="page-title-heading">
-                        <div>Penggajian</div>
+                        <div>Penggajian <div class="page-title-subheading">Data Penggajian</div>
+                        </div>
                     </div>
                     <div class="page-title-actions">
-                        <div class="page-title-actions">
-                            <a href="<?php echo base_url() ?>master_user/config_waktu"
-                                class="btn-shadow mr-3 btn btn-success">
-                                <span class="btn-icon-wrapper pr-2 opacity-7">
-                                    <i class="fa fa-plus fa-w-20"></i>
-                                </span> Tambah </a>
-                        </div>
+
                     </div>
                 </div>
             </div>
             <div class="main-card mb-3 card">
                 <div class="card-body">
-                    <p class="title">Filter</p>
+                    <!-- <p class="title">Filter</p>
                     <div class="row">
 
                         <div class="col-lg-3">
@@ -28,8 +23,8 @@
                             <button id="btn-apply-filter" class="btn btn-primary mr-2">Terapkan</button>
                             <button id="btn-reset-filter" class="btn btn-outline-danger">Reset</button>
                         </div>
-                    </div>
-                    <hr>
+                    </div> -->
+                    <!-- <hr> -->
                     <?php if (!empty($this->session->flashdata('message'))) { ?>
                         <div class="alert alert-info">
                             <?php echo $this->session->flashdata('message'); ?>

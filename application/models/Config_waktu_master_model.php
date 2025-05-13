@@ -12,6 +12,7 @@ class Config_waktu_master_model extends CI_Model
 	public function getAllById($where = array())
 	{
 		$this->db->select("config_waktu_master.*")->from("config_waktu_master");
+		$this->db->where("config_waktu_master.is_deleted", 0);
 		$this->db->where($where);
 
 		$query = $this->db->get();
@@ -57,7 +58,6 @@ class Config_waktu_master_model extends CI_Model
 	function getAllBy($limit, $start, $search, $col, $dir)
 	{
 		$this->db->select("config_waktu_master.*")->from("config_waktu_master");
-
 		$this->db->limit($limit, $start)->order_by($col, $dir);
 		if (!empty($search)) {
 			foreach ($search as $key => $value) {
@@ -71,6 +71,30 @@ class Config_waktu_master_model extends CI_Model
 			return null;
 		}
 	}
+	function getAllByPenggajian($limit, $start, $search, $col, $dir)
+	{
+		$this->db->select("config_waktu_master.*")
+			->from("config_waktu_master")
+			->where('config_waktu_master.is_deleted', 0);
+
+		if (!empty($search)) {
+			$this->db->group_start(); // group OR LIKEs
+			foreach ($search as $key => $value) {
+				$this->db->or_like($key, $value);
+			}
+			$this->db->group_end();
+		}
+
+		$this->db->limit($limit, $start)->order_by($col, $dir);
+
+		$result = $this->db->get();
+		if ($result->num_rows() > 0) {
+			return $result->result();
+		} else {
+			return null;
+		}
+	}
+
 
 	public function getById($id)
 	{
@@ -82,11 +106,29 @@ class Config_waktu_master_model extends CI_Model
 	public function getCountAllBy($limit, $start, $search, $order, $dir)
 	{
 		$this->db->select("config_waktu_master.*")->from("config_waktu_master");
+
 		if (!empty($search)) {
 			foreach ($search as $key => $value) {
 				$this->db->or_like($key, $value);
 			}
 		}
+		$result = $this->db->get();
+		return $result->num_rows();
+	}
+	public function getCountAllByPenggajian($limit, $start, $search, $order, $dir)
+	{
+		$this->db->select("config_waktu_master.*")
+			->from("config_waktu_master")
+			->where('config_waktu_master.is_deleted', 0);
+
+		if (!empty($search)) {
+			$this->db->group_start(); // grouping LIKE kondisi
+			foreach ($search as $key => $value) {
+				$this->db->or_like($key, $value);
+			}
+			$this->db->group_end();
+		}
+
 		$result = $this->db->get();
 		return $result->num_rows();
 	}

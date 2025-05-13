@@ -173,7 +173,18 @@ class Master_user extends Admin_Controller
 		}
 	}
 
-	public function getAdjacentRecords()
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * Fetches the adjacent records for a given user ID.
+ *
+ * This function retrieves the previous and next records based on the current user ID
+ * submitted via POST request. It queries the database for the closest previous and next
+ * records in terms of IDs and returns their IDs, if available, in JSON format.
+ *
+ * @return void Outputs a JSON response with the previous and next record IDs.
+ */
+
+/*******  4a71ed38-0048-42d7-9ca1-de92acb9d1a6  *******/	public function getAdjacentRecords()
 	{
 		$id = $this->input->post('id');
 
@@ -251,7 +262,7 @@ class Master_user extends Admin_Controller
 				$nestedData['name'] = $data->name;
 				$nestedData['nip'] = substr(strip_tags($data->nip), 0, 50);
 				$nestedData['jenis_kelamin'] = $data->jenis_kelamin;
-				$nestedData['action'] = $edit_url . " " . $mapel_url . " " . $delete_url_hard;
+				$nestedData['action'] = $edit_url . " " . $mapel_url . " " .  $delete_url . " ". $delete_url_hard;
 				$new_data[] = $nestedData;
 			}
 		}
@@ -534,54 +545,7 @@ class Master_user extends Admin_Controller
 		$response = array('status' => 'success');
 		echo json_encode($response);
 	}
-	public function destroy()
-	{
-		$response_data = array();
-		$response_data['status'] = false;
-		$response_data['msg'] = "";
-		$response_data['data'] = array();
 
-		$id = $this->uri->segment(3);
-		$is_deleted = $this->uri->segment(4);
-		if (!empty($id)) {
-			$this->load->model("master_user_model");
-			$data = array(
-				'is_deleted' => ($is_deleted == 1) ? 0 : 1
-			);
-			$update = $this->master_user_model->update($data, array("id" => $id));
-
-			$response_data['data'] = $data;
-			$response_data['status'] = true;
-		} else {
-			$response_data['msg'] = "ID Harus Diisi";
-		}
-
-		echo json_encode($response_data);
-	}
-	public function destroy_hard()
-	{
-		$response_data = array();
-		$response_data['status'] = false;
-		$response_data['msg'] = "";
-		$response_data['data'] = array();
-
-		$id = $this->uri->segment(3);
-		$is_deleted = $this->uri->segment(4);
-		if (!empty($id)) {
-			$this->load->model("master_user_model");
-			$data = array(
-				'is_deleted' => ($is_deleted == 1) ? 0 : 1
-			);
-			$update = $this->master_user_model->delete(array("id" => $id));
-
-			$response_data['data'] = $data;
-			$response_data['status'] = true;
-		} else {
-			$response_data['msg'] = "ID Harus Diisi";
-		}
-
-		echo json_encode($response_data);
-	}
 	public function import_data()
 	{
 		$this->load->library('upload');
@@ -667,11 +631,9 @@ class Master_user extends Admin_Controller
 
 		if (!empty($this->input->post('search')['value'])) {
 			$search_value = $this->input->post('search')['value'];
-			// $search = array(
-			// 	"master_user.name" => $search_value,
-			// 	"master_user.nip" => $search_value,
-			// 	"master_user.jenis_kelamin" => $search_value
-			// );
+			$search = array(
+				"config_waktu_master.kode" => $search_value,
+			);
 
 			$totalFiltered = $this->config_waktu_master_model->getCountAllBy($limit, $start, $search, $order, $dir);
 		} else {
@@ -694,20 +656,40 @@ class Master_user extends Admin_Controller
 		if (!empty($datas)) {
 			foreach ($datas as $key => $data) {
 				$edit_url = "";
-				$mapel_url = "";
+				$config_url = "";
 				$delete_url = "";
 				$delete_url_hard = "";
 
 
 				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
-					$mapel_url = "<a href='" . base_url() . "master_user/waktu/" . $data->id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Config</a>";
+					$config_url = "<a href='" . base_url() . "master_user/waktu/" . $data->id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Config</a>";
 				}
+				if ($this->data['is_can_delete']) {
+					if ($data->is_deleted == 0) {
+						$delete_url = "<a href='#' 
+	        				url='" . base_url() . "master_user/destroy_waktu/" . $data->id . "/" . $data->is_deleted . "'
+	        				class='btn btn-sm white btn-danger delete-config'><i class='fas fa-times'></i> NonAktifkan
+	        				</a>";
+					} else {
+						$delete_url = "<a href='#' 
+	        				url='" . base_url() . "master_user/destroy_waktu/" . $data->id . "/" . $data->is_deleted . "'
+	        				class='btn btn-sm btn-primary white delete-config' 
+	        				 ><i class='fas fa-check'></i> Aktifkan
+	        				</a>";
+						$delete_url_hard = "<a href='#' 
+	        				url='" . base_url() . "master_user/destroy_hard_waktu/" . $data->id . "/" . $data->is_deleted . "'
+	        				class='btn btn-sm btn-danger white delete-config' 
+	        				 ><i class='fas fa-trash'></i> Delete 
+	        				</a>";
+					}
+				}
+
 
 				$nestedData['id'] = $start + $key + 1;
 				$nestedData['kode'] = $data->kode;
 				$nestedData['bulan_tahun'] = $data->bulan_tahun;
 				$nestedData['keterangan'] = $data->keterangan;
-				$nestedData['action'] = $edit_url . " " . $mapel_url . " " . $delete_url_hard;
+				$nestedData['action'] =  $config_url . " " . $delete_url . " " . $delete_url_hard ;
 				$new_data[] = $nestedData;
 			}
 		}
@@ -719,6 +701,53 @@ class Master_user extends Admin_Controller
 			"data"            => $new_data
 		);
 		echo json_encode($json_data);
+	}
+	public function destroy_waktu()
+	{
+		$response_data = array();
+		$response_data['status'] = false;
+		$response_data['msg'] = "";
+		$response_data['data'] = array();
+
+		$id = $this->uri->segment(3);
+		$is_deleted = $this->uri->segment(4);
+		if (!empty($id)) {
+			$data = array(
+				'is_deleted' => ($is_deleted == 1) ? 0 : 1
+			);
+			$update = $this->config_waktu_master_model->update($data, array("id" => $id));
+
+			$response_data['data'] = $data;
+			$response_data['status'] = true;
+		} else {
+			$response_data['msg'] = "ID Harus Diisi";
+		}
+
+		echo json_encode($response_data);
+	}
+	public function destroy_hard_waktu()
+	{
+		$response_data = array();
+		$response_data['status'] = false;
+		$response_data['msg'] = "";
+		$response_data['data'] = array();
+
+		$id = $this->uri->segment(3);
+		$is_deleted = $this->uri->segment(4);
+		if (!empty($id)) {
+			$this->load->model("master_user_model");
+			$data = array(
+				'is_deleted' => ($is_deleted == 1) ? 0 : 1
+			);
+			$update = $this->config_waktu_master_model->delete(array("id" => $id));
+
+			$response_data['data'] = $data;
+			$response_data['status'] = true;
+		} else {
+			$response_data['msg'] = "ID Harus Diisi";
+		}
+
+		echo json_encode($response_data);
 	}
 	public function save_config_waktu()
 	{

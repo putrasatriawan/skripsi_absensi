@@ -1,13 +1,21 @@
 <div class="app-main__outer">
     <div class="app-main__inner">
+        <div class="app-page-title">
+            <div class="page-title-wrapper">
+                <div class="page-title-heading">
+                    <div>Config <div class="page-title-subheading">Data Konfig Posisi</div>
+                    </div>
+                </div>
+                <div class="page-title-actions">
+
+                </div>
+            </div>
+        </div>
         <div class="main-card mb-3 card">
             <div class="card-body"> <?php if (!empty($this->session->flashdata('message'))) { ?>
                     <div class="alert alert-info">
                         <?php print_r($this->session->flashdata('message')); ?>
                     </div> <?php } ?>
-                <div id="alert-container"></div>
-                <h4 class="title">Config</h4>
-                <hr>
                 <div id="alert-container"></div>
                 <form id="configForm" class="mb-5">
                     <div class="form-group">
@@ -63,8 +71,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-icon-wrapper pr-2 opacity-7">
+                            <i class="fa fa-save fa-w-20"></i>
+                        </span>Simpan </button>
+
                 </div>
             </form>
         </div>

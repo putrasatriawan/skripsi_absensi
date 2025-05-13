@@ -107,9 +107,9 @@ define(["toastr", "datatablesBS4", "jqvalidate","dropzone"], function (
                     processData: false, // Prevent jQuery from processing the data
                     success: function (response) {
                         toastr.success(response.message);
-                        // setTimeout(function () {
-                        //     window.location.href = App.baseUrl + "user/";
-                        // }, 1000);
+                        setTimeout(function () {
+                            window.location.href = App.baseUrl + "user/";
+                        }, 1000);
                     },
                     error: function (xhr, status, error) {
                         toastr.error("Gagal menyimpan data!");
@@ -155,7 +155,7 @@ define(["toastr", "datatablesBS4", "jqvalidate","dropzone"], function (
           })
             .done(function (msg) {
               toastr.success("Data berhasil dihapus!");
-              App.table.ajax.reload(null, true);
+              // App.table.ajax.reload(null, true);
             })
             .fail(function () {
               toastr.error("Gagal menghapus data!");
