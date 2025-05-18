@@ -8,11 +8,13 @@
                     </div>
                 </div>
                 <div class="page-title-actions">
-                    <button class="btn-shadow mr-3 btn btn-success create-button">
-                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                            <i class="fa fa-plus fa-w-20"></i>
-                        </span> Tambah
-                    </button>
+                    <?php if ($this->data['is_can_create']) { ?>
+                        <button class="btn-shadow mr-3 btn btn-success create-button">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="fa fa-plus fa-w-20"></i>
+                            </span> Tambah
+                        </button>
+                    <?php } ?>
                 </div>
             </div>
         </div>

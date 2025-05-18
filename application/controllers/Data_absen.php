@@ -126,7 +126,7 @@ class Data_absen extends Admin_Controller
 								</button>";
 				}
 
-				if ($this->data['is_can_read'] && $data->is_deleted == 0 && $data->is_check_in != 'check_out') {
+				if ($this->data['is_can_create'] && $data->is_deleted == 0 && $data->is_check_in != 'check_out') {
 					$absen_mapel_url = "<button class='btn btn-sm btn-warning white absen-mapel-button' 
 										data-id-absen='{$data->id}' 
 										data-mapel='{$data_mapel_json}'>
