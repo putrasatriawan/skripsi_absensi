@@ -1,6 +1,6 @@
 {
     "require": {
-        "dompdf/dompdf": "^3.0",
+        "dompdf/dompdf": "^3.1",
         "phpoffice/phpspreadsheet": "^1.17",
         "workerman/mqtt": "^1.6",
         "firebase/php-jwt": "^6.10",

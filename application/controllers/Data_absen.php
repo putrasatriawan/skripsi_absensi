@@ -220,6 +220,7 @@ class Data_absen extends Admin_Controller
 		$init_time = $this->input->post('init_time');
 		$status_work = $this->input->post('status_work');
 		$status = $this->input->post('status');
+		$is_check_in = $this->input->post('is_check_in');
 
 		if (!empty($nama_user)) {
 			list($id_user, $id_role) = explode('|', $nama_user);
@@ -230,6 +231,7 @@ class Data_absen extends Admin_Controller
 
 		$data = array(
 			'id_user' => $id_user,
+			'is_check_in' => $is_check_in,
 			'id_role' => $id_role,
 			'tanggal_absen' => $tgl_absen,
 			'init_time' => $init_time . ':00',

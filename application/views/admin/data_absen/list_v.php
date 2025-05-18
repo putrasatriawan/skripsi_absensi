@@ -144,6 +144,14 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="status_work">Is Check In?</label>
+                        <select class="form-control" name="is_check_in" id="create-is_check_in">
+                            <option value="check_in">Check In</option>
+                            <option value="check_out">Check Out</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label>Status</label>
                         <select class="form-control" name="status" id="create-status" required>
                             <option value="Tepat Waktu">Tepat Waktu</option>

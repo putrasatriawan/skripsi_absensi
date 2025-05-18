@@ -1,13 +1,17 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 require_once APPPATH . 'core/Admin_Controller.php';
+require 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 // use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Dompdf\Dompdf;
+
 
 class Penggajian extends Admin_Controller
+
 {
 	public function __construct()
 	{
@@ -215,6 +219,8 @@ class Penggajian extends Admin_Controller
 		$this->data['total_gaji'] = $total_gaji;
 		$this->data['total_gaji_pemotongan'] = $total_gaji_pemotongan;
 		$this->data['total_pemotongan'] = $total_pemotongan;
+		$this->data['id'] = $id;
+		$this->data['id_config_master'] = $id_config_master;
 
 		// var_dump( $this->data['total_gaji_pemotongan']);die;
 		$this->data['total_durasi'] = $total_durasi;
@@ -317,5 +323,110 @@ class Penggajian extends Admin_Controller
 			"data"            => $new_data
 		);
 		echo json_encode($json_data);
+	}
+	public function report($id, $id_config_master)
+	{
+		$config_detail_where = [
+			'config_waktu_detail.id_config_master' => $id_config_master,
+			'config_waktu_detail.id_user' => $id
+		];
+		$config_detail = $this->config_waktu_detail_model->getAllById($config_detail_where);
+
+		$config_master_where = [
+			'config_waktu_master.id' => $id_config_master
+		];
+		$config_master = $this->config_waktu_master_model->getAllById($config_master_where);
+
+		$bulanTahun = $config_master[0]->bulan_tahun;
+
+		$absensi_where = [
+			'absensi.id_user' => $id,
+			"absensi.tanggal_absen LIKE '{$bulanTahun}%'" => null
+		];
+		$absensi = $this->absensi_model->getAllByIdMapelDetail($absensi_where);
+
+		if ($absensi == null) {
+			$absensi = [];
+		}
+		$master_user = $this->user_model->getAllByIdWithMasterUser(['users.id' => $id]);
+		$check_in_jadwal = new DateTime($master_user[0]->check_in);
+		$type_pemotongan = $master_user[0]->type_pemotongan;
+		$pemotongan_nominal = (int) $master_user[0]->pemotongan;
+
+		$merged_detail_absen = [];
+		$total_durasi = 0;
+		$total_durasi_hadir = 0;
+		$total_pemotongan = 0;
+
+
+		foreach ($config_detail as $detail) {
+			$tanggal_detail = (int) $detail->tanggal;
+
+			$absen_hari_ini = array_filter($absensi, function ($absen) use ($tanggal_detail, $detail) {
+				return (int) date('d', strtotime($absen->tanggal_absen)) === $tanggal_detail
+					&& isset($absen->id_mapel) && $absen->id_mapel == $detail->id_mapel;
+			});
+
+			if (!empty($absen_hari_ini)) {
+				$first_absen = reset($absen_hari_ini);
+				$detail->id_absen = $first_absen->id;
+			} else {
+				$detail->id_absen = null;
+			}
+
+			$detail->absen_list = array_values($absen_hari_ini);
+			$merged_detail_absen[] = $detail;
+
+			// Hitung durasi
+			$dur = $this->parseDurasi($detail->durasi);
+			$total_durasi += $dur;
+
+			if (!empty($detail->absen_list) && strtolower($detail->absen_list[0]->status_mapel ?? '') === 'hadir') {
+				$total_durasi_hadir += $dur;
+
+				// Cek keterlambatan
+				if (strtolower($detail->absen_list[0]->status) === 'terlambat') {
+					$init_time = new DateTime($detail->absen_list[0]->init_time);
+					$diff = $check_in_jadwal->diff($init_time);
+					$diff_menit = ($diff->h * 60) + $diff->i;
+
+					if ($type_pemotongan === 'per_menit') {
+						$total_pemotongan += $diff_menit * $pemotongan_nominal;
+					} elseif ($type_pemotongan === 'per_jam') {
+						$total_pemotongan += ceil($diff_menit / 60) * $pemotongan_nominal;
+					}
+				}
+			}
+		}
+
+		$gaji_raw = $master_user[0]->gaji;
+		$total_gaji = $gaji_raw * $total_durasi_hadir;
+		$total_gaji_pemotongan = $total_gaji - $total_pemotongan;
+
+		// Kirim ke view
+		$this->data['total_gaji'] = $total_gaji;
+		$this->data['total_gaji_pemotongan'] = $total_gaji_pemotongan;
+		$this->data['total_pemotongan'] = $total_pemotongan;
+		$this->data['id'] = $id;
+		$this->data['id_config_master'] = $id_config_master;
+
+		// var_dump( $this->data['total_gaji_pemotongan']);die;
+		$this->data['total_durasi'] = $total_durasi;
+		$this->data['total_durasi_hadir'] = $total_durasi_hadir;
+		$this->data['merged_detail_absen'] = $merged_detail_absen;
+		$this->data['master_user'] = $master_user;
+
+
+		$html = $this->load->view('admin/penggajian/report_penggajian', $this->data, true);
+
+		// Generate PDF dengan Dompdf
+		$dompdf = new Dompdf();
+		$dompdf->loadHtml($html);
+		$dompdf->setPaper('A4', 'portrait');
+		$dompdf->render();
+
+		// Nama file
+		$filename = 'Laporan_Gaji_' . $master_user[0]->name;
+		$dompdf->stream($filename . ".pdf", array("Attachment" => 0));
 	}
 }
