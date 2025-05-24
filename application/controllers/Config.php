@@ -77,15 +77,7 @@ class Config extends Admin_Controller
 		$limit = $this->input->post('length');
 		$start = $this->input->post('start');
 		$datas = $this->config_model->getAllBy($limit, $start, $search, $order, $dir);
-		// var_dump($datas);die;
-		// echo "<pre>";
-		// print_r($datas);
-		// die;
-		// foreach ($datas  as $value) {
-		// 	echo "<pre>";
-		// 	print_r($value);
-		// }
-		// die;
+
 		$new_data = array();
 		if (!empty($datas)) {
 
@@ -121,14 +113,6 @@ class Config extends Admin_Controller
 	{
 		$id = $this->input->post('id');
 		$config_check = $this->config_model->getAllById(array("config_check.roles_id" => $id));
-		// echo "<pre>";
-		// print_r($id);
-		// die;
-		// foreach ($id as $value) {
-		// 	echo "<pre>";
-		// 	print_r($value);
-		// }
-		// die;
 
 		$response = array(
 			'id_check'   => isset($config_check[0]->id) ? $config_check[0]->id : null,
@@ -153,14 +137,7 @@ class Config extends Admin_Controller
 			'check_out' => $check_out,
 		];
 
-		// echo "<pre>";
-		// print_r($data);
-		// die;
-		// foreach ($data as $value) {
-		// 	echo "<pre>";
-		// 	print_r($value);
-		// }
-		// die;
+
 		if (!empty($id_check)) {
 			$this->db->where('id', $id_check);
 			$update = $this->db->update('config_check', $data);

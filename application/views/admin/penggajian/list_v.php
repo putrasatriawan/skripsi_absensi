@@ -3,7 +3,8 @@
             <div class="app-page-title">
                 <div class="page-title-wrapper">
                     <div class="page-title-heading">
-                        <div>Penggajian <div class="page-title-subheading">Data Penggajian</div>
+                        <div>Penggajian
+                            <div class="page-title-subheading">Data Penggajian</div>
                         </div>
                     </div>
                     <div class="page-title-actions">

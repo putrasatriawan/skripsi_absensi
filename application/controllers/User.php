@@ -164,7 +164,7 @@ class User extends Admin_Controller
 				$update = $this->master_user_model->update($parsing_guru, array("users_id" => $id));
 			}
 
-			
+
 			if (!empty($_FILES['photo']['name'])) {
 				$config['upload_path'] = './uploads/photo_profile/';
 				$config['allowed_types'] = 'jpg|jpeg|png|gif';
@@ -277,7 +277,14 @@ class User extends Admin_Controller
 		$limit = $this->input->post('length');
 		$start = $this->input->post('start');
 		$datas = $this->user_model->getAllBy($limit, $start, $search, $order, $dir, $where);
-
+		// echo "<pre>";
+		// print_r($datas);
+		// die;
+		// foreach ($datas as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		$new_data = array();
 		if (!empty($datas)) {
 			foreach ($datas as $key => $data) {
@@ -350,6 +357,7 @@ class User extends Admin_Controller
 
 			$response_data['data'] = $data;
 			$response_data['status'] = true;
+			$response_data['msg'] = "Status Berhasil Diubah";
 		} else {
 			$response_data['msg'] = "ID Harus Diisi";
 		}
@@ -375,6 +383,7 @@ class User extends Admin_Controller
 
 			$response_data['data'] = $data;
 			$response_data['status'] = true;
+			$response_data['msg'] = "Data Berhasil Dihapus";
 		} else {
 			$response_data['msg'] = "ID Harus Diisi";
 		}
@@ -383,10 +392,6 @@ class User extends Admin_Controller
 
 	public function destroy_master($id)
 	{
-		$response_data = array();
-		$response_data['status'] = false;
-		$response_data['msg'] = "";
-		$response_data['data'] = array();
 
 		$is_deleted = $this->uri->segment(4);
 		if (!empty($id)) {
@@ -395,22 +400,14 @@ class User extends Admin_Controller
 				'is_deleted' => ($is_deleted == 1) ? 0 : 1
 			);
 			$update = $this->master_user_model->update($data, array("users_id" => $id));
-
-			$response_data['data'] = $data;
-			$response_data['status'] = true;
+			return true;
 		} else {
-			$response_data['msg'] = "ID Harus Diisi";
+			return false;
 		}
-
-		echo json_encode($response_data);
 	}
 
 	public function destroy_hard_master()
 	{
-		$response_data = array();
-		$response_data['status'] = false;
-		$response_data['msg'] = "";
-		$response_data['data'] = array();
 
 		$id = $this->uri->segment(3);
 		$is_deleted = $this->uri->segment(4);
@@ -421,13 +418,10 @@ class User extends Admin_Controller
 			);
 			$update = $this->master_user_model->delete(array("users_id" => $id));
 
-			$response_data['data'] = $data;
-			$response_data['status'] = true;
+			return true;
 		} else {
-			$response_data['msg'] = "ID Harus Diisi";
+			return false;
 		}
-
-		echo json_encode($response_data);
 	}
 
 

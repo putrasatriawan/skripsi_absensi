@@ -57,7 +57,7 @@
     </div>
     <div class="main-card mb-3 card">
       <div class="card-body">
-        <?php if (!empty($this->session->flashdata('message'))) { ?>
+        <!-- <?php if (!empty($this->session->flashdata('message'))) { ?>
           <div class="alert alert-info">
             <?php echo $this->session->flashdata('message'); ?>
           </div>
@@ -67,7 +67,7 @@
           <div class="alert alert-info">
             <?php echo $this->session->flashdata('message_error'); ?>
           </div>
-        <?php } ?>
+        <?php } ?> -->
 
         <table class="table table-striped dt-responsive" id="table_waktu" style="width:100%; text-align: center;">
           <thead>
@@ -191,11 +191,11 @@
             </div>
           </div>
           <div class="text-right">
-          <button type="submit" class="btn btn-primary">
-                  <span class="btn-icon-wrapper pr-2 opacity-7">
-                        <i class="fa fa-save fa-w-20"></i>
-                  </span>Simpan </button>
-        
+            <button type="submit" class="btn btn-primary">
+              <span class="btn-icon-wrapper pr-2 opacity-7">
+                <i class="fa fa-save fa-w-20"></i>
+              </span>Simpan </button>
+
           </div>
         </form>
       </div>

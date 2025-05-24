@@ -144,11 +144,23 @@ class Penggajian extends Admin_Controller
 		];
 		$config_detail = $this->config_waktu_detail_model->getAllById($config_detail_where);
 
+		if ($config_detail == null || empty($config_detail)) {
+			$this->data['why'] = 'config detail tidak ditemukan, hubungi admin';
+			$this->data['content'] = 'admin/penggajian/detail_gaji_gagal_v';
+			$this->load->view('admin/layouts/page', $this->data);
+			return;
+		}
 		$config_master_where = [
 			'config_waktu_master.id' => $id_config_master
 		];
 		$config_master = $this->config_waktu_master_model->getAllById($config_master_where);
 
+		if ($config_master == null || empty($config_master)) {
+			$this->data['why'] = 'config master tidak ditemukan, hubungi admin';
+			$this->data['content'] = 'admin/penggajian/detail_gaji_gagal_v';
+			$this->load->view('admin/layouts/page', $this->data);
+			return;
+		}
 		$bulanTahun = $config_master[0]->bulan_tahun;
 
 		$absensi_where = [
@@ -156,11 +168,23 @@ class Penggajian extends Admin_Controller
 			"absensi.tanggal_absen LIKE '{$bulanTahun}%'" => null
 		];
 		$absensi = $this->absensi_model->getAllByIdMapelDetail($absensi_where);
+		if ($absensi == null || empty($absensi)) {
+			$this->data['why'] = 'absensi tidak ditemukan, hubungi admin';
+			$this->data['content'] = 'admin/penggajian/detail_gaji_gagal_v';
+			$this->load->view('admin/layouts/page', $this->data);
+			return;
+		}
 
 		if ($absensi == null) {
 			$absensi = [];
 		}
 		$master_user = $this->user_model->getAllByIdWithMasterUser(['users.id' => $id]);
+		if ($master_user == null || empty($master_user)) {
+			$this->data['why'] = 'absensi tidak ditemukan, hubungi admin';
+			$this->data['content'] = 'admin/penggajian/detail_gaji_gagal_v';
+			$this->load->view('admin/layouts/page', $this->data);
+			return;
+		}
 		$check_in_jadwal = new DateTime($master_user[0]->check_in);
 		$type_pemotongan = $master_user[0]->type_pemotongan;
 		$pemotongan_nominal = (int) $master_user[0]->pemotongan;
@@ -169,6 +193,7 @@ class Penggajian extends Admin_Controller
 		$total_durasi = 0;
 		$total_durasi_hadir = 0;
 		$total_pemotongan = 0;
+
 
 
 		foreach ($config_detail as $detail) {
@@ -211,9 +236,10 @@ class Penggajian extends Admin_Controller
 			}
 		}
 
-		$gaji_raw = $master_user[0]->gaji;
+		$gaji_raw = isset($master_user[0]->gaji) && is_numeric($master_user[0]->gaji) ? (float) $master_user[0]->gaji : 0;
 		$total_gaji = $gaji_raw * $total_durasi_hadir;
 		$total_gaji_pemotongan = $total_gaji - $total_pemotongan;
+
 
 		// Kirim ke view
 		$this->data['total_gaji'] = $total_gaji;
@@ -226,6 +252,14 @@ class Penggajian extends Admin_Controller
 		$this->data['total_durasi'] = $total_durasi;
 		$this->data['total_durasi_hadir'] = $total_durasi_hadir;
 		$this->data['merged_detail_absen'] = $merged_detail_absen;
+		// echo "<pre>";
+		// print_r($merged_detail_absen);
+		// die;
+		// foreach ($merged_detail_absen as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		$this->data['master_user'] = $master_user;
 		$this->data['content'] = 'admin/penggajian/detail_gaji_v';
 		$this->load->view('admin/layouts/page', $this->data);
@@ -349,6 +383,14 @@ class Penggajian extends Admin_Controller
 			$absensi = [];
 		}
 		$master_user = $this->user_model->getAllByIdWithMasterUser(['users.id' => $id]);
+		// echo "<pre>";
+		// print_r($datas);
+		// die;
+		// foreach ($datas as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		$check_in_jadwal = new DateTime($master_user[0]->check_in);
 		$type_pemotongan = $master_user[0]->type_pemotongan;
 		$pemotongan_nominal = (int) $master_user[0]->pemotongan;

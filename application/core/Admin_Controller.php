@@ -35,18 +35,7 @@ class Admin_Controller extends CI_Controller
 		$this->data['is_can_edit'] = false;
 		$this->data['is_can_delete'] = false;
 		$this->data['is_can_download'] = false;
-		$this->data['is_can_disetujui'] = false;
-		$this->data['is_can_diverifikasi'] = false;
-		$this->data['is_can_ditinjau'] = false;
-		$this->data['is_can_dievaluasi'] = false;
-		$this->data['is_can_exportexcel'] = false;
-		$this->data['is_can_review'] = false;
-		$this->data['is_can_diajukan'] = false;
-		$this->data['is_can_diperiksa'] = false;
-		$this->data['is_can_diketahui'] = false;
-		$this->data['is_can_disusun'] = false;
-		$this->data['is_can_disiapkan'] = false;
-		$this->data['is_can_disahkan'] = false;
+		$this->data['is_can_absen_mapel'] = false;
 		$this->load->model("menu_model");
 
 		if ($this->ion_auth->in_group(1)) {
@@ -68,18 +57,7 @@ class Admin_Controller extends CI_Controller
 			$this->data['is_can_delete'] = true;
 			$this->data['is_can_approval'] = true;
 			$this->data['is_can_download'] = true;
-			$this->data['is_can_disetujui'] = true;
-			$this->data['is_can_diverifikasi'] = true;
-			$this->data['is_can_ditinjau'] = true;
-			$this->data['is_can_dievaluasi'] = true;
-			$this->data['is_can_exportexcel'] = true;
-			$this->data['is_can_review'] = true;
-			$this->data['is_can_diajukan'] = true;
-			$this->data['is_can_diperiksa'] = true;
-			$this->data['is_can_diketahui'] = true;
-			$this->data['is_can_disusun'] = true;
-			$this->data['is_can_disiapkan'] = true;
-			$this->data['is_can_disahkan'] = true;
+			$this->data['is_can_absen_mapel'] = true;
 		} else {
 			$this->load->model("privilleges_model");
 			$dataPrivilleges = $this->privilleges_model->getOneBy(
@@ -95,21 +73,7 @@ class Admin_Controller extends CI_Controller
 			$this->data['is_can_active'] = ($this->isInPrivilleges($dataPrivilleges, 5));
 			$this->data['is_can_access'] = ($this->isInPrivilleges($dataPrivilleges, 6));
 			$this->data['is_can_download'] = ($this->isInPrivilleges($dataPrivilleges, 7));
-			$this->data['is_can_upload'] = ($this->isInPrivilleges($dataPrivilleges, 8));
-			$this->data['is_can_approval'] = ($this->isInPrivilleges($dataPrivilleges, 9));
-			$this->data['is_can_disetujui'] = ($this->isInPrivilleges($dataPrivilleges, 10));
-			$this->data['is_can_diverifikasi'] = ($this->isInPrivilleges($dataPrivilleges, 11));
-			$this->data['is_can_ditinjau'] = ($this->isInPrivilleges($dataPrivilleges, 12));
-			$this->data['is_can_dievaluasi'] = ($this->isInPrivilleges($dataPrivilleges, 13));
-			$this->data['is_can_exportexcel'] = ($this->isInPrivilleges($dataPrivilleges, 14));
-			$this->data['is_can_review'] = ($this->isInPrivilleges($dataPrivilleges, 15));
-			$this->data['is_can_diajukan'] = ($this->isInPrivilleges($dataPrivilleges, 16));
-			$this->data['is_can_diperiksa'] = ($this->isInPrivilleges($dataPrivilleges, 17));
-			$this->data['is_can_diketahui'] = ($this->isInPrivilleges($dataPrivilleges, 18));
-			$this->data['is_can_disusun'] = ($this->isInPrivilleges($dataPrivilleges, 19));
-			$this->data['is_can_disiapkan'] = ($this->isInPrivilleges($dataPrivilleges, 20));
-			$this->data['is_can_disahkan'] = ($this->isInPrivilleges($dataPrivilleges, 21));
-
+			$this->data['is_can_absen_mapel'] = ($this->isInPrivilleges($dataPrivilleges, 8));
 		}
 	}
 	private function isInPrivilleges($data, $id)
@@ -183,9 +147,7 @@ class Admin_Controller extends CI_Controller
 					$html .= $this->createTree($itemId, $menu, $parent_id, $path_active_name);
 					$html .= '</ul>';
 					$html .= "</li>";
-
 				}
-
 			}
 			// $html .= "</ul>";
 		}
@@ -258,4 +220,3 @@ class Admin_Controller extends CI_Controller
 		return $this->createTree(1, $tree_menu, $parent_id, $path_active_name);
 	}
 }
-

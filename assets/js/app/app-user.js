@@ -152,14 +152,17 @@ define(["toastr", "datatablesBS4", "jqvalidate","dropzone"], function (
           $.ajax({
             method: "GET",
             url: url,
-          })
-            .done(function (msg) {
-              toastr.success("Data berhasil dihapus!");
-              // App.table.ajax.reload(null, true);
-            })
-            .fail(function () {
-              toastr.error("Gagal menghapus data!");
-            });
+          }).done(function (response) {
+            var res = JSON.parse(response);
+            if (res.status) {
+                toastr.success(res.msg);
+            } else {
+                toastr.error(res.msg || "Terjadi kesalahan!");
+            }
+            App.table.ajax.reload(null, true);
+            }).fail(function () {
+                toastr.error("Gagal menghapus data!");
+          });
         });
       });
 

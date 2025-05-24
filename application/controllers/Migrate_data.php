@@ -56,8 +56,7 @@ class Migrate_data extends CI_Controller
 			array('name' => 'Active', 'description' => 'Can Active'), //5
 			array('name' => 'Access', 'description' => 'Can Access'), //6
 			array('name' => 'Download', 'description' => 'Can Download'), //7
-			array('name' => 'Upload', 'description' => 'Can Upload'), //8 
-			array('name' => 'Approval', 'description' => 'Can Approval'), //9
+			array('name' => 'Absen Mapel', 'description' => 'Can Absen Mapel'), //8
 
 		);
 		$this->db->insert_batch($table, $data);
@@ -83,7 +82,7 @@ class Migrate_data extends CI_Controller
 			"7" => [1, 2, 3, 4, 5],
 			"8" => [1, 2, 3, 4, 5],
 			"9" => [1, 2, 3, 4, 5],
-			"10" => [1, 2, 3, 4, 5],
+			"10" => [1, 2, 3, 5, 8],
 			"11" => [1, 2, 3, 4, 5],
 		];
 

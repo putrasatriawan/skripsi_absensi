@@ -126,11 +126,11 @@ class Data_absen extends Admin_Controller
 								</button>";
 				}
 
-				if ($this->data['is_can_create'] && $data->is_deleted == 0 && $data->is_check_in != 'check_out') {
-					$absen_mapel_url = "<button class='btn btn-sm btn-warning white absen-mapel-button' 
+				if ($this->data['is_can_absen_mapel'] && $data->is_deleted == 0 && $data->is_check_in != 'check_out') {
+					$absen_mapel_url = "<button class='btn btn-sm btn-success white absen-mapel-button' 
 										data-id-absen='{$data->id}' 
 										data-mapel='{$data_mapel_json}'>
-										<i class='fas fa-eye'></i> Absen Mapel
+										<i class='fas fa-check'></i> Absen Mapel
 									</button>";
 				}
 

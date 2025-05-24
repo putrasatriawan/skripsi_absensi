@@ -219,8 +219,8 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
               <td>${mapel.hari}</td>
               <td>${mapel.status}</td>
               <td>
-                <button class="btn btn-success btn-sm btn-hadir" data-id="${mapel.id}" data-id-absen="${id_absen}">Hadir</button>
-                <button class="btn btn-danger btn-sm btn-tidak-hadir" data-id="${mapel.id}" data-id-absen="${id_absen}">Tidak Hadir</button>
+                <button class="btn btn-success btn-sm btn-hadir" data-id="${mapel.id}" data-id-absen="${id_absen}"><i class="fas fa-check"></i> Hadir</button>
+                <button class="btn btn-danger btn-sm btn-tidak-hadir" data-id="${mapel.id}" data-id-absen="${id_absen}"><i class="fas fa-times"></i> Tidak Hadir</button>
               </td>
             </tr>
           `;
@@ -245,11 +245,18 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
             id_absen: id_absen
           },
           success: function (res) {
-            alert('Status berhasil diperbarui!');
+            toastr.success("Status Berhasil Diperbaharui")
             $('#detailMapelModal').modal('hide');
+                  setTimeout(function () {
+                 window.location.href = App.baseUrl + "data_absen/";
+                }, 1000);   
+
           },
           error: function () {
-            alert('Gagal memperbarui status.');
+            toastr.success("Status Gagal Diperbaharui")
+                  setTimeout(function () {
+                 window.location.href = App.baseUrl + "data_absen/";
+                }, 1000);   
           }
         });
       });

@@ -13,21 +13,26 @@ class Config_waktu_detail_model extends CI_Model
 	{
 		$this->db->select("config_waktu_detail.*, users.first_name as name_user")
 			->from("config_waktu_detail")
+			->join("users_roles", "users_roles.user_id = config_waktu_detail.id_user", "inner")
+			->join("roles", "roles.id = users_roles.role_id", "inner") // <-- diperbaiki di sini
 			->join("users", "users.id = config_waktu_detail.id_user", "left")
 			->where("config_waktu_detail.id_config_master", $id)
-			->group_by("config_waktu_detail.id_user") 
+			->group_by("config_waktu_detail.id_user")
 			->limit($limit, $start)
 			->order_by($col, $dir);
 
 		if (!empty($search)) {
+			$this->db->group_start(); // <-- untuk menghindari or_like konflik
 			foreach ($search as $key => $value) {
 				$this->db->or_like($key, $value);
 			}
+			$this->db->group_end();
 		}
 
 		$result = $this->db->get();
 		return $result->num_rows() > 0 ? $result->result() : null;
 	}
+
 
 	function getAllById($where)
 	{
@@ -46,7 +51,7 @@ class Config_waktu_detail_model extends CI_Model
 			->join("config_waktu_master", "config_waktu_master.id = config_waktu_detail.id_config_master", "left")
 			->join("mapel_detail", "mapel_detail.id = config_waktu_detail.id_mapel", "left")
 			->where($where)
-			->order_by("config_waktu_detail.tanggal", "asc"); 
+			->order_by("config_waktu_detail.tanggal", "asc");
 
 		$result = $this->db->get();
 		return $result->num_rows() > 0 ? $result->result() : null;
@@ -56,7 +61,7 @@ class Config_waktu_detail_model extends CI_Model
 	// 	$this->db->select("
 	// 		config_waktu_detail.*,
 	// 		users.first_name as name_user,
-	
+
 	// 		master_user.nip as nip_master_user,
 	// 		master_user.jenis_kelamin as jenis_kelamin_master_user,
 	// 		master_user.no_hp as no_hp_master_user,
@@ -67,7 +72,7 @@ class Config_waktu_detail_model extends CI_Model
 	// 		master_user.tanggal_lahir as tanggal_lahir_master_user,
 	// 		master_user.pemotongan as pemotongan_master_user,
 	// 		master_user.type_pemotongan as type_pemotongan_master_user,
-	
+
 	// 		absensi.tanggal_absen,
 	// 		absensi.photo,
 	// 		absensi.check_in_const,
@@ -77,12 +82,12 @@ class Config_waktu_detail_model extends CI_Model
 	// 		absensi.init_time,
 	// 		absensi.is_check_in,
 	// 		absensi.status,
-	
+
 	// 		config_waktu_master.id as id_config_master,
 	// 		config_waktu_master.kode as kode_config_master,
 	// 		config_waktu_master.bulan_tahun as bulan_tahun_config_master,
 	// 		config_waktu_master.keterangan as keterangan_config_master,
-	
+
 	// 		mapel_detail.nama_mapel,
 	// 		mapel_detail.jam_mulai,
 	// 		mapel_detail.jam_selesai,

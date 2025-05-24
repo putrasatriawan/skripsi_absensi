@@ -54,7 +54,15 @@
                     </tr>
                     <tr>
                       <th>Gaji Per Jam</th>
-                      <td>: Rp <?= number_format($master_user[0]->gaji, 0, ',', '.') ?></td>
+                      <td>:
+                        <?php
+                        if (!empty($master_user) && isset($master_user[0]->gaji) && $master_user[0]->gaji !== "" && $master_user[0]->gaji !== null) {
+                          echo "Rp " . number_format((float) $master_user[0]->gaji, 0, ',', '.');
+                        } else {
+                          echo "-";
+                        }
+                        ?>
+                      </td>
                     </tr>
                     <tr>
                       <th>Pemotongan</th>

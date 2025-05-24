@@ -18,8 +18,7 @@ class Privileges extends Admin_Controller
 		$this->load->helper('url');
 		if ($this->data['is_can_read']) {
 			$this->data['content'] = 'admin/privilleges/list_v';
-		} 
-		else {
+		} else {
 			$this->data['content'] = 'errors/html/restrict';
 		}
 		$this->load->view('admin/layouts/page', $this->data);
@@ -75,24 +74,19 @@ class Privileges extends Admin_Controller
 				if ($status) {
 					$this->session->set_flashdata('message', "Privilleges Baru Berhasil Disimpan");
 					redirect("privileges");
-				} 
-				else {
+				} else {
 					$this->session->set_flashdata('message_error', "Privilleges Baru Gagal Disimpan");
 					redirect("privileges");
 				}
-			} 
-			else {
+			} else {
 				$this->session->set_flashdata('message_error', "Privilleges Menu Fungsi wajib diisi");
 				redirect("privileges/create");
 			}
-
-		} 
-		else {
+		} else {
 			if (!empty($_POST)) {
 				$this->session->set_flashdata('message_error', validation_errors());
 				return redirect("privileges/create/");
-			} 
-			else {
+			} else {
 				$this->data['roles'] = $this->roles_model->getAllById();
 
 				$menus = $this->menu_model->getAllById();
@@ -156,13 +150,11 @@ class Privileges extends Admin_Controller
 			if ($status) {
 				$this->session->set_flashdata('message', "Privilleges Berhasil Diubah");
 				redirect("privileges", "refresh");
-			} 
-			else {
+			} else {
 				$this->session->set_flashdata('message_error', "Privilleges Gagal Diubah");
 				redirect("privileges", "refresh");
 			}
-		} 
-		else {
+		} else {
 			$this->load->model("menu_model");
 			$this->load->model("function_model");
 			$menus = $this->menu_model->getAllById();
@@ -183,8 +175,7 @@ class Privileges extends Admin_Controller
 			if (!empty($_POST)) {
 				$this->session->set_flashdata('message_error', validation_errors());
 				return redirect("privileges/edit/" . $id);
-			} 
-			else {
+			} else {
 				$this->data['id'] = $id;
 				$data = $this->privilleges_model->getOneBy(array("roles.id" => $this->data['id']));
 				$data_role = $this->roles_model->getOneBy(["ID" => $this->data['id']]);
@@ -264,8 +255,7 @@ class Privileges extends Admin_Controller
 			$id = $this->input->post('id');
 			$this->session->set_flashdata('message_error', validation_errors());
 			return redirect("privileges/edit/" . $id);
-		} 
-		else {
+		} else {
 			$this->data['id'] = $this->uri->segment(3);
 			$data = $this->privilleges_model->getAllById(array("role_id" => $this->data['id']));
 			$dataMenus = array();
@@ -306,9 +296,8 @@ class Privileges extends Admin_Controller
 			$search = array(
 				"roles.name" => $search_value
 			);
-			$totalFiltered = $this->roles_model->getCountAllBy($limit, $start, $search, $order, $dir, );
-		} 
-		else {
+			$totalFiltered = $this->roles_model->getCountAllByRoles($limit, $start, $search, $order, $dir,);
+		} else {
 			$totalFiltered = $totalData;
 		}
 
@@ -327,9 +316,9 @@ class Privileges extends Admin_Controller
 					$edit_url = "<a href='" . base_url() . "privileges/edit/" . $data->id . "' class='btn btn-sm btn-info white'><i class='fas fa-edit'></i> Ubah</a>";
 				}
 
-				if ($this->data['is_can_delete']) {
-					$delete_url = "<a  href='#' url='" . base_url() . "privileges/destroy/" . $data->id . "' class='btn btn-sm btn-danger white delete'><i class='fa fa-times'></i> Non Aktifkan</a>";
-				}
+				// if ($this->data['is_can_delete']) {
+				// 	$delete_url = "<a  href='#' url='" . base_url() . "privileges/destroy/" . $data->id . "' class='btn btn-sm btn-danger white delete'><i class='fa fa-times'></i> Non Aktifkan</a>";
+				// }
 
 				$nestedData['id'] = $start + $key + 1;
 				$nestedData['role_name'] = $data->name;
@@ -361,8 +350,7 @@ class Privileges extends Admin_Controller
 
 			$response_data['data'] = $where;
 			$response_data['status'] = true;
-		} 
-		else {
+		} else {
 			$response_data['msg'] = "ID Harus Diisi";
 		}
 		echo json_encode($response_data);

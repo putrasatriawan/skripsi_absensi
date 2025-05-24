@@ -202,10 +202,16 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
             id_config_master: id_config_master,
            }),
           success: function (res) {
-            toastr.success('Berhasil disimpan');
+            toastr.success('Config Berhasil disimpan');
+            setTimeout(function () {
+              window.location.href = App.baseUrl + "master_user/";
+          }, 1000);   
           },
           error: function () {
-            toastr.error('Gagal menyimpan');
+            toastr.error('Config Gagal menyimpan');
+            setTimeout(function () {
+              window.location.href = App.baseUrl + "master_user/";
+          }, 1000);   
           }
         });
       });      

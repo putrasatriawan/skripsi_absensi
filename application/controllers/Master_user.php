@@ -173,18 +173,18 @@ class Master_user extends Admin_Controller
 		}
 	}
 
-/*************  ✨ Windsurf Command ⭐  *************/
-/**
- * Fetches the adjacent records for a given user ID.
- *
- * This function retrieves the previous and next records based on the current user ID
- * submitted via POST request. It queries the database for the closest previous and next
- * records in terms of IDs and returns their IDs, if available, in JSON format.
- *
- * @return void Outputs a JSON response with the previous and next record IDs.
- */
+	/*************  ✨ Windsurf Command ⭐  *************/
+	/**
+	 * Fetches the adjacent records for a given user ID.
+	 *
+	 * This function retrieves the previous and next records based on the current user ID
+	 * submitted via POST request. It queries the database for the closest previous and next
+	 * records in terms of IDs and returns their IDs, if available, in JSON format.
+	 *
+	 * @return void Outputs a JSON response with the previous and next record IDs.
+	 */
 
-/*******  4a71ed38-0048-42d7-9ca1-de92acb9d1a6  *******/	public function getAdjacentRecords()
+	/*******  4a71ed38-0048-42d7-9ca1-de92acb9d1a6  *******/	public function getAdjacentRecords()
 	{
 		$id = $this->input->post('id');
 
@@ -262,7 +262,7 @@ class Master_user extends Admin_Controller
 				$nestedData['name'] = $data->name;
 				$nestedData['nip'] = substr(strip_tags($data->nip), 0, 50);
 				$nestedData['jenis_kelamin'] = $data->jenis_kelamin;
-				$nestedData['action'] = $edit_url . " " . $mapel_url . " " .  $delete_url . " ". $delete_url_hard;
+				$nestedData['action'] = $edit_url . " " . $mapel_url . " " .  $delete_url . " " . $delete_url_hard;
 				$new_data[] = $nestedData;
 			}
 		}
@@ -370,7 +370,7 @@ class Master_user extends Admin_Controller
 
 
 
-	
+
 		$this->data['selected_pengampu'] = $selected;
 		$this->data['mapel_by_hari'] = $mapel_by_hari;
 		$this->data['content'] = 'admin/master_user/waktu_v';
@@ -378,9 +378,9 @@ class Master_user extends Admin_Controller
 	}
 
 	public function save_config_detail()
-{
-    $json = file_get_contents('php://input');
-    $decoded = json_decode($json, true);
+	{
+		$json = file_get_contents('php://input');
+		$decoded = json_decode($json, true);
 		// echo "<pre>";
 		// print_r($decoded);
 		// die;
@@ -393,27 +393,27 @@ class Master_user extends Admin_Controller
 		$this->master_user_model->delete_existing_config([
 			'id_config_master' => $decoded['id_config_master'],
 		]);
-    if (!empty($decoded['data'])) {
-      
+		if (!empty($decoded['data'])) {
 
-        // Insert semua data baru
-        foreach ($decoded['data'] as $row) {
-            $item = [
-                'hari' => $row['hari'],
-                'tanggal' => $row['tanggal'],
-                'id_user' => $row['id_user'],
-                'id_mapel' => $row['id_mapel'] ?? null,
-                'id_config_master' => $row['id_config_master'],
-                'is_deleted' => 0
-            ];
-            $this->master_user_model->insert_config($item);
-        }
 
-        echo json_encode(['status' => 'success']);
-    } else {
-        echo json_encode(['status' => 'empty']);
-    }
-}
+			// Insert semua data baru
+			foreach ($decoded['data'] as $row) {
+				$item = [
+					'hari' => $row['hari'],
+					'tanggal' => $row['tanggal'],
+					'id_user' => $row['id_user'],
+					'id_mapel' => $row['id_mapel'] ?? null,
+					'id_config_master' => $row['id_config_master'],
+					'is_deleted' => 0
+				];
+				$this->master_user_model->insert_config($item);
+			}
+
+			echo json_encode(['status' => 'success']);
+		} else {
+			echo json_encode(['status' => 'empty']);
+		}
+	}
 
 
 	private function getHariIndo($dayNumber)
@@ -689,7 +689,7 @@ class Master_user extends Admin_Controller
 				$nestedData['kode'] = $data->kode;
 				$nestedData['bulan_tahun'] = $data->bulan_tahun;
 				$nestedData['keterangan'] = $data->keterangan;
-				$nestedData['action'] =  $config_url . " " . $delete_url . " " . $delete_url_hard ;
+				$nestedData['action'] =  $config_url . " " . $delete_url . " " . $delete_url_hard;
 				$new_data[] = $nestedData;
 			}
 		}
@@ -772,7 +772,8 @@ class Master_user extends Admin_Controller
 			'bulan_tahun' => $formatted_bulan,
 			'kode'        => $kode,
 			'keterangan'  => $keterangan,
-			'created_at'  => date('Y-m-d H:i:s')
+			'created_at'  => date('Y-m-d H:i:s'),
+			'is_deleted'  => 0
 		];
 
 		// Load model dan simpan data

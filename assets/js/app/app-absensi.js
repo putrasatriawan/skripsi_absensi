@@ -168,7 +168,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
         console.log("Dalam radius yang diizinkan, membuka kamera...");
         // camera.classList.remove("d-none");
         redSignal.classList.add("d-none");
-        greenSignal.classList.remove("d-none"); 
+        greenSignal.classList.remove("d-znone"); 
 
 
         document.getElementById("status-info").innerText = "Work From Office";
@@ -258,10 +258,12 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (
           if (res.status === "success") {
             document.getElementById("submit-status").innerText = res.message;
             toastr.success(res.message);
-            // location.reload(); // aktifkan jika perlu reload
+            setTimeout(function () {
+              window.location.href = App.baseUrl + "absensi/";
+             }, 1000);  
           } else {
             document.getElementById("submit-status").innerText = res.message;
-            toastr.warning(res.message); // gunakan warning untuk 'tidak diizinkan'
+            toastr.warning(res.message); 
           }
         },
         error: function () {

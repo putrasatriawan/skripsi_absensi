@@ -78,21 +78,18 @@ define([
                             url: form.action,
                             data: $(form).serialize(),
                             dataType: 'json', 
-                            success: function (response) {
-                                if (response.status === 'success') {
-                                    toastr.success(response.message);
-                                    setTimeout(function() {
-                                        window.location.href = App.baseUrl + "role/";
-                                    }, 1000);
-                                } 
-                                else {
+                              success: function (response) {
+                                if(response.status === 'error'){
                                     toastr.error(response.message);
+                                    return false;
+                                } else {
+                                    toastr.success(response.message);
+                                    setTimeout(function () {
+                                        window.location.href = App.baseUrl + "role/";
+                                    }, 1000);   
                                 }
                             },
                             error: function (xhr, status, error) {
-                                console.log("Error Status:", status);
-                                console.log("XHR Object:", xhr);
-                                console.log("Error Thrown:", error);
                                 toastr.error("Gagal menyimpan data!");
                             },
                         });
@@ -108,12 +105,19 @@ define([
                     $.ajax({
                         method: "GET",
                         url: url,
-                      }).done(function (msg) {
-                        toastr.success("Data berhasil dihapus!");
+                    }).done(function (response) {
+                        var res = JSON.parse(response);
+                        if (res.status) {
+                            toastr.success(res.msg);
+                        } else {
+                            toastr.error(res.msg || "Terjadi kesalahan!");
+                        }
                         App.table.ajax.reload(null, true);
-                      }).fail(function () {
+                    }).fail(function () {
                         toastr.error("Gagal menghapus data!");
-                      });
+                    });
+                    
+                    
                 })
             });
         }
