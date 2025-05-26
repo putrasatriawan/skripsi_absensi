@@ -751,7 +751,6 @@ class Master_user extends Admin_Controller
 	}
 	public function save_config_waktu()
 	{
-		// Validasi input
 		$this->form_validation->set_rules('bulan', 'Bulan dan Tahun', 'required');
 		$this->form_validation->set_rules('kode', 'Kode Konfigurasi', 'required');
 		$this->form_validation->set_rules('keterangan', 'Keterangan', 'required');
@@ -765,9 +764,9 @@ class Master_user extends Admin_Controller
 		$kode       = $this->input->post('kode');
 		$keterangan = $this->input->post('keterangan');
 
-		$parts = explode('/', $bulan);
-		$formatted_bulan = $parts[1] . '-' . $parts[0];
-		// Siapkan data untuk disimpan
+		$parts = explode('/', $bulan); // Format: MM/YYYY
+		$formatted_bulan = $parts[1] . '-' . $parts[0]; // YYYY-MM
+
 		$data = [
 			'bulan_tahun' => $formatted_bulan,
 			'kode'        => $kode,
@@ -776,13 +775,16 @@ class Master_user extends Admin_Controller
 			'is_deleted'  => 0
 		];
 
-		// Load model dan simpan data
-		$insert_id = $this->config_waktu_master_model->insert($data);
-
-		if ($insert_id) {
-			$this->session->set_flashdata('message', 'Konfigurasi berhasil disimpan.');
+		// Cek apakah data sudah ada
+		if ($this->config_waktu_master_model->is_exist($formatted_bulan, $kode)) {
+			$this->session->set_flashdata('message', 'Data sudah ada. Tidak bisa disimpan dua kali.');
 		} else {
-			$this->session->set_flashdata('message', 'Gagal menyimpan konfigurasi.');
+			$insert_id = $this->config_waktu_master_model->insert($data);
+			if ($insert_id) {
+				$this->session->set_flashdata('message', 'Konfigurasi berhasil disimpan.');
+			} else {
+				$this->session->set_flashdata('message', 'Gagal menyimpan konfigurasi.');
+			}
 		}
 
 		redirect('master_user');

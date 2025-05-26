@@ -196,12 +196,20 @@ class Penggajian extends Admin_Controller
 
 
 
+		// echo "<pre>";
+		// print_r($config_detail);
+		// die;
+		// foreach ($config_detail as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		foreach ($config_detail as $detail) {
 			$tanggal_detail = (int) $detail->tanggal;
 
 			$absen_hari_ini = array_filter($absensi, function ($absen) use ($tanggal_detail, $detail) {
 				return (int) date('d', strtotime($absen->tanggal_absen)) === $tanggal_detail
-					&& isset($absen->id_mapel) && $absen->id_mapel == $detail->id_mapel;
+					&& isset($absen->id_mapel);
 			});
 
 			if (!empty($absen_hari_ini)) {

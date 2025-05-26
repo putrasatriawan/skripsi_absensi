@@ -25,8 +25,8 @@ class Absensi extends Admin_Controller
         $config = $this->absensi_model->getOneConfig(array('config_check.roles_id' => $role_id));
         $config_mapel = $this->absensi_model->getMapelTerdekat($id_user);
 
-        
-        if (empty($config)) { 
+
+        if (empty($config)) {
             $this->data['content'] = 'admin/absensi/error_absen_v';
             $this->load->view('admin/layouts/page', $this->data);
             return;
@@ -38,18 +38,18 @@ class Absensi extends Admin_Controller
         }
 
 
-      
+
         $this->data['photo'] = null;
         $this->data['show_view'] = false;
         $this->data['label_check'] = 'Belum Ada Data Absensi';
-       
+
         $id_user = $this->data['users']->id;
         $role_id = $this->data['users_groups']->id;
         $this->data['user_master'] = $this->user_model->getAndMaster(["users.id" => $id_user]);
         $this->data['longitude'] = $this->config_model->get_setting('longitude');
         $this->data['latitude'] = $this->config_model->get_setting('latitude');
         $this->data['config_check'] = $this->config_model->get_config_chcek($role_id);
-        
+
         // echo "<pre>";
         // print_r($this->data['config_check']);
         // die;
@@ -111,19 +111,50 @@ class Absensi extends Admin_Controller
             return;
         }
 
+
+
+        // if ($check_done_absen) {
+        //     echo json_encode([
+        //         'status' => 'error',
+        //         'message' => 'Anda Sudah Check In Hari ini ' . $check_done_absen->tanggal_insert . '. Tidak dapat melakukan absensi lagi'
+        //     ]);
+        //     return;
+        // }
+
         $role_id = $this->data['users_groups']->id;
 
         // Konversi waktu menjadi timestamp
         $initTimestamp = strtotime($init_time);
-        $checkInTimestamp = strtotime($config->check_in );
+        $checkInTimestamp = strtotime($config->check_in);
         $checkOutTimestamp = strtotime($config->check_out);
-      
-        
+
+
+        $check_done_absen = $this->absensi_model->getOneBy([
+            'absensi.id_user' => $id_user,
+            'absensi.tanggal_absen' => date('Y-m-d'),
+            'absensi.is_check_in' => 'check_in',
+        ]);
+
         $check_absen = $this->absensi_model->getOneBy([
             'absensi.id_user' => $id_user,
             'absensi.tanggal_absen' => date('Y-m-d')
         ]);
-        
+        $can_check_out = $this->canCheckOut($check_absen, $config);
+        // var_dump($can_check_out);
+        // die;
+        if ($check_done_absen) {
+            if (!$can_check_out) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Anda Sudah Check In Hari ini ' . $check_done_absen->tanggal_insert . '. Tidak dapat melakukan absensi lagi'
+                ]);
+                return;
+            }
+        }
+
+        // var_dump($check_absen);
+        // die;
+
         if ($initTimestamp <= $checkInTimestamp) {
             $status = 'Tepat Waktu';
             $is_check_in = 'check_in';
@@ -141,7 +172,7 @@ class Absensi extends Admin_Controller
             $is_check_in = 'unknown';
         }
 
-        
+
         // echo "<pre>";
         // print_r($check_absen);
         // die;
@@ -167,7 +198,7 @@ class Absensi extends Admin_Controller
             ]);
             return;
         }
-        
+
         // Jika belum ada data absen atau belum check-in → boleh check-in
         if (!$check_absen || $check_absen->is_check_in == null || $check_absen->is_check_in == '') {
             $data = array(
@@ -183,7 +214,7 @@ class Absensi extends Admin_Controller
                 'is_check_in' => $is_check_in,
                 'is_deleted' => 0
             );
-    
+
             $this->absensi_model->insert($data);
             echo json_encode([
                 'status' => 'success',
@@ -191,7 +222,7 @@ class Absensi extends Admin_Controller
             ]);
             return;
         }
-        
+
         // Jika sudah check-in dan ingin check-out → validasi jam
         $status_checkout = $this->canCheckOut($check_absen, $config);
         if (!$status_checkout) {
@@ -201,7 +232,7 @@ class Absensi extends Admin_Controller
             ]);
             return;
         }
-    
+
         $data = array(
             'id_user' => $id_user,
             'tanggal_absen' => date('Y-m-d'),
@@ -224,10 +255,6 @@ class Absensi extends Admin_Controller
             'message' => 'Check-out berhasil dilakukan.'
         ));
         return;
-
-
-     
-      
     }
     private function canCheckOut($check_absen, $config)
     {
@@ -247,6 +274,5 @@ class Absensi extends Admin_Controller
         }
 
         return false;
-        }
-
+    }
 }

@@ -39,6 +39,14 @@ class Config_waktu_master_model extends CI_Model
 		return $this->db->insert_id();
 	}
 
+	public function is_exist($bulan_tahun, $kode)
+	{
+		return $this->db->where('bulan_tahun', $bulan_tahun)
+			->where('kode', $kode)
+			->where('is_deleted', 0)
+			->count_all_results('config_waktu_master') > 0;
+	}
+
 	public function update($data, $where)
 	{
 		$this->db->update('config_waktu_master', $data, $where);

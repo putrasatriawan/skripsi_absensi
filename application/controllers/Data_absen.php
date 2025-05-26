@@ -80,7 +80,8 @@ class Data_absen extends Admin_Controller
 
 			foreach ($datas as $key => $data) {
 
-				$mapel = $this->absensi_model->getMapelTerdekatNotOne($data->id_user);
+				$mapel = $this->absensi_model->getMapelTerdekatNotOne($data->id_user, $data->tanggal_absen);
+
 				$absen = $this->absensi_model->getStatusMapelByAbsenId($data->id);
 
 				foreach ($mapel as &$item) {
@@ -92,6 +93,19 @@ class Data_absen extends Admin_Controller
 						}
 					}
 				}
+
+
+
+				$mapel_terfilter = [];
+
+				foreach ($mapel as &$item) {
+					if ($this->absensi_model->checkMapelDiKonfigurasi($data->id_user, $data->tanggal_absen, $item->id)) {
+						$mapel_terfilter[] = $item;
+					}
+				}
+
+				$mapel = $mapel_terfilter;
+
 
 				$data_mapel_json = htmlspecialchars(json_encode($mapel), ENT_QUOTES, 'UTF-8');
 
@@ -154,6 +168,12 @@ class Data_absen extends Admin_Controller
 					case 'Pulang':
 						$statusButton = '<button class="mb-2 mr-2 btn-pill btn btn-secondary">Pulang</button>';
 						break;
+					case 'Sakit':
+						$statusButton = '<button class="mb-2 mr-2 btn-pill btn btn-secondary">Sakit</button>';
+						break;
+					case 'Izin':
+						$statusButton = '<button class="mb-2 mr-2 btn-pill btn btn-secondary">Izin</button>';
+						break;
 					default:
 						$statusButton = '<button class="mb-2 mr-2 btn-pill btn btn-dark">Tidak Diketahui</button>';
 						break;
@@ -178,6 +198,14 @@ class Data_absen extends Admin_Controller
 				$nestedData['action'] = $edit_url . " " . $detail_url . " " . $absen_mapel_url;
 				$new_data[] = $nestedData;
 			}
+			// echo "<pre>";
+			// print_r($mapel);
+			// die;
+			// foreach ($mapel as $value) {
+			// 	echo "<pre>";
+			// 	print_r($value);
+			// }
+			// die;
 		}
 
 
@@ -217,6 +245,8 @@ class Data_absen extends Admin_Controller
 	{
 		$nama_user = $this->input->post('nama_user');
 		$tgl_absen = $this->input->post('tgl_absen');
+		// var_dump($tgl_absen);
+		// die;
 		$init_time = $this->input->post('init_time');
 		$status_work = $this->input->post('status_work');
 		$status = $this->input->post('status');
@@ -228,18 +258,32 @@ class Data_absen extends Admin_Controller
 			$id_user = null;
 			$id_role = null;
 		}
+		$check_done_absen = $this->absensi_model->getOneBy([
+			'absensi.id_user' => $id_user,
+			'absensi.tanggal_absen' => $tgl_absen,
+			'absensi.is_check_in' => 'check_in',
+		]);
+		if ($check_done_absen) {
+			$this->session->set_flashdata('message', 'Sudah Check In Hari ini ' .
+				$check_done_absen->tanggal_insert);
+			redirect('data_absen');
+		}
+
+		// return;
 
 		$data = array(
 			'id_user' => $id_user,
+			'tanggal_absen' => $tgl_absen,
 			'is_check_in' => $is_check_in,
 			'id_role' => $id_role,
-			'tanggal_absen' => $tgl_absen,
 			'init_time' => $init_time . ':00',
 			'tanggal_insert' => date('Y-m-d H:i:s'),
 			'status_work' => $status_work,
 			'status' => $status,
 			'is_deleted' => 0
 		);
+
+
 
 
 		$this->absensi_model->insert($data);

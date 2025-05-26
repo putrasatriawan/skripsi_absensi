@@ -93,11 +93,14 @@ class Absensi_model extends CI_Model
 
         return $this->db->get()->row();
     }
-    public function getMapelTerdekatNotOne($id_user)
+    public function getMapelTerdekatNotOne($id_user, $tanggal_absen)
     {
-        $now = date('H:i:s');
-        $hari_ini = date('l');
+        $tanggal_real = formatTanggal($tanggal_absen); // contoh: "Senin, 26 Mei 2025"
 
+        // Ambil hari dari $tanggal_absen, bukan dari waktu saat ini
+        $hari_en = date('l', strtotime($tanggal_absen)); // hasil: Monday, Tuesday, etc
+
+        // Mapping ke Bahasa Indonesia
         $hari_indonesia = [
             'Sunday' => 'Minggu',
             'Monday' => 'Senin',
@@ -107,17 +110,37 @@ class Absensi_model extends CI_Model
             'Friday' => 'Jumat',
             'Saturday' => 'Sabtu',
         ];
-        $hari_db = $hari_indonesia[$hari_ini];
 
-        // var_dump($id_user);die;
-        $this->db->select('*')
+        $hari_db = $hari_indonesia[$hari_en]; // hasil: "Senin", dst
+
+        // Query berdasarkan hari dari tanggal absen yang dimasukkan
+        return $this->db->select('*')
             ->from('mapel_detail')
             ->where('id_user', $id_user)
             ->where('is_deleted', 0)
-            ->where('hari', $hari_db);
-
-        return $this->db->get()->result();
+            ->where('hari', $hari_db)
+            ->get()
+            ->result();
     }
+
+    public function checkMapelDiKonfigurasi($id_user, $tanggal_absen, $id_mapel)
+    {
+        $bulan_tahun = date('Y-m', strtotime($tanggal_absen));
+        // var_dump($id_mapel);
+        // die;
+
+        $master = $this->db->get_where('config_waktu_master', ['bulan_tahun' => $bulan_tahun])->row();
+        if (!$master) return false;
+
+        $detail = $this->db->get_where('config_waktu_detail', [
+            'id_user' => $id_user,
+            'id_config_master' => $master->id,
+            'id_mapel' => $id_mapel
+        ])->row();
+
+        return $detail ? true : false;
+    }
+
 
     public function getStatusMapelByAbsenId($absen_id)
     {

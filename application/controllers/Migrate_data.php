@@ -15,9 +15,10 @@ class Migrate_data extends CI_Controller
 		$this->insert_menu_function();
 		// $this->insert_users();
 		// $this->insert_users_roles();
-		$this->insert_roles();
+		// $this->insert_roles();
 		$this->insert_menu_master_data();
 		$this->insert_menu_function_master_data();
+		$this->delete_data_absen();
 		redirect("/");
 	}
 
@@ -166,5 +167,12 @@ class Migrate_data extends CI_Controller
 			}
 		}
 		$this->db->insert_batch($table, $data);
+	}
+	function delete_data_absen()
+	{
+		$table_absen = 'absensi';
+		$this->db->truncate($table_absen);
+		$table_mapel = 'absensi_mapel';
+		$this->db->truncate($table_mapel);
 	}
 }
