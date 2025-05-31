@@ -55,6 +55,34 @@ class Absensi_model extends CI_Model
         return FALSE;
     }
 
+    public function getLastAbsenAndValidate($id_user)
+    {
+        // Ambil data terakhir TANPA filter is_check_in atau tanggal
+        $sql = "
+            SELECT * FROM absensi
+            WHERE id_user = ?
+              AND is_deleted = 0
+            ORDER BY id DESC
+            LIMIT 1
+        ";
+
+        $query = $this->db->query($sql, [$id_user]);
+        $absen = $query->row();
+
+        // Validasi di PHP: jika tidak check_out dan bukan hari ini
+        if ($absen) {
+            $is_check_out = $absen->is_check_in === 'check_out';
+            $is_today = date('Y-m-d', strtotime($absen->tanggal_absen)) === date('Y-m-d');
+
+            if (!$is_check_out && !$is_today) {
+                return $absen; // hanya kalau lolos validasi
+            }
+        }
+
+        return false; // tidak ada yang valid
+    }
+
+
     public function getOneConfig($where = array())
     {
         $this->db->select("config_check.*")->from("config_check");

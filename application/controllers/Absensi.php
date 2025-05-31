@@ -135,6 +135,43 @@ class Absensi extends Admin_Controller
             'absensi.is_check_in' => 'check_in',
         ]);
 
+        $check_not_check_out_done_absen = $this->absensi_model->getLastByUserNotCheckIn($id_user);
+        if (!empty($check_not_check_out_done_absen)) {
+            $status = 'Pulang';
+            $is_check_in = 'check_out';
+            $data = array(
+                'id_user' => $id_user,
+                'tanggal_absen' => $check_not_check_out_done_absen->tanggal_absen,
+                'photo' => $photoData,
+                'id_role' => $role_id,
+                'distance' => $distance,
+                // ' => '',
+                // 'ch' => '',
+                'init_time' => $init_time,
+                'status_work' => $status_kerja,
+                'status' => $status,
+                'tanggal_insert' => date('Y-m-d H:i:s'),
+                'is_check_in' => $is_check_in,
+                'is_deleted' => 0
+            );
+
+            // echo "<pre>";
+            // print_r($data);
+            // die;
+            // foreach ($data  as $value) {
+            //     echo "<pre>";
+            //     print_r($value);
+            // }
+            // die;
+
+            $this->absensi_model->insert($data);
+
+            echo json_encode(array(
+                'status' => 'success',
+                'message' => 'Check-out hari sebelumya telah dilakukan, silahkan check_in ulang'
+            ));
+            return;
+        }
         $check_absen = $this->absensi_model->getOneBy([
             'absensi.id_user' => $id_user,
             'absensi.tanggal_absen' => date('Y-m-d')
@@ -173,14 +210,6 @@ class Absensi extends Admin_Controller
         }
 
 
-        // echo "<pre>";
-        // print_r($check_absen);
-        // die;
-        // foreach ($check_absen  as $value) {
-        //     echo "<pre>";
-        //     print_r($value);
-        // }
-        // die;
 
         //Jika sudah check-out, tidak boleh check-in lagi
         if ($check_absen && $check_absen->is_check_in === 'check_out') {
