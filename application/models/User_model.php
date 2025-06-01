@@ -17,7 +17,7 @@ class User_model extends CI_Model
 		$this->db->where("roles.is_deleted", 0);
 
 		$roles_default = array('1');
-		// $this->db->where_not_in('roles.id', $roles_default);
+		$this->db->where_not_in('roles.id', $roles_default);
 		$this->db->where($where);
 
 		$query = $this->db->get();

@@ -114,8 +114,16 @@
                     </td>
                     <td>
                         <?php if (!empty($detail->absen_list)): ?>
-                            <ul style="margin:0; padding-left:15px;">
-                                <?php foreach ($detail->absen_list as $absen): ?>
+                            <ul class="list-unstyled mb-0 ps-3">
+                                <?php
+                                $seen = [];
+                                foreach ($detail->absen_list as $absen):
+                                    $key = $absen->init_time . '|' . $absen->is_check_in . '|' . $absen->status . '|' . $absen->status_work;
+
+                                    if (in_array($key, $seen)) continue;
+
+                                    $seen[] = $key;
+                                ?>
                                     <li>
                                         <?= date('H:i', strtotime($absen->init_time)) ?> -
                                         <?= ucfirst($absen->is_check_in) ?> |
@@ -125,7 +133,7 @@
                                 <?php endforeach; ?>
                             </ul>
                         <?php else: ?>
-                            Tidak Ada Absensi
+                            <span class="text-danger">Tidak Ada Absensi</span>
                         <?php endif; ?>
                     </td>
                 </tr>

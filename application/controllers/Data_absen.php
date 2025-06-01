@@ -266,6 +266,14 @@ class Data_absen extends Admin_Controller
 
 	public function create()
 	{
+		// echo "<pre>";
+		// print_r($_POST);
+		// die;
+		// foreach ($_POST as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		$nama_user = $this->input->post('nama_user');
 		$tgl_absen = $this->input->post('tgl_absen');
 		// var_dump($tgl_absen);
@@ -286,7 +294,7 @@ class Data_absen extends Admin_Controller
 			'absensi.tanggal_absen' => $tgl_absen,
 			'absensi.is_check_in' => 'check_in',
 		]);
-		if ($check_done_absen) {
+		if ($check_done_absen && $is_check_in == 'check_in') {
 			$this->session->set_flashdata('message', 'Sudah Check In Hari ini ' .
 				$check_done_absen->tanggal_insert);
 			redirect('data_absen');
