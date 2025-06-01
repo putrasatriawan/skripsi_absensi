@@ -5,9 +5,9 @@ define(["highcharts", "datepicker"], function (Highcharts, datepicker) {
     init: function () {
       App.initFunc();
       App.initEvent();
-      App.unitAndYear();
-      App.resetSearch();
-      App.yearPicker();
+      // // App.unitAndYear();
+      // App.resetSearch();
+      // App.yearPicker();
       $(".loadingpage").hide();
     },
     initEvent: function () {
@@ -22,7 +22,6 @@ define(["highcharts", "datepicker"], function (Highcharts, datepicker) {
         App.graphAttendance();
       });
 
-      App.graphAll();
       App.graphUser();
       App.graphAttendance();
       // App.graphProsedur();
@@ -30,84 +29,7 @@ define(["highcharts", "datepicker"], function (Highcharts, datepicker) {
       // App.graphFormulir();
       // App.graphDataRekaman();
     },
-    graphAll: function () {
-      $.ajax({
-        url: App.baseUrl + "dashboard/get_all",
-        type: "GET",
-        dataType: "json",
-        success: function (response) {
-          var categories = [];
-          var seriesData = [];
-
-          for (var table in response) {
-            var tableData = [];
-            var tableTotal = response[table].total;
-            var tableAlias = response[table].alias; // Mengambil alias kustom dari data yang diterima
-
-            response[table].data.forEach(function (item) {
-              categories.push(item.name);
-              tableData.push({
-                y: parseInt(item.count),
-                name: tableAlias, // Menggunakan alias kustom sebagai nama table
-              });
-            });
-
-            seriesData.push({
-              name: tableAlias,
-              data: tableData,
-              total: tableTotal,
-            });
-          }
-
-          Highcharts.chart("graph-all", {
-            chart: {
-              type: "bar",
-            },
-            title: {
-              text: "Total Semua Per Unit",
-              align: "center",
-            },
-            xAxis: {
-              categories: categories,
-              title: {
-                text: null,
-              },
-            },
-            yAxis: {
-              min: 0,
-              title: {
-                text: "Total Data",
-                align: "high",
-              },
-              labels: {
-                overflow: "justify",
-                format: "{value}",
-              },
-              tickInterval: 1,
-              gridLineWidth: 0,
-            },
-            legend: {
-              align: "right",
-              verticalAlign: "top",
-              layout: "vertical",
-            },
-            tooltip: {
-              formatter: function () {
-                return this.point.name + ": " + this.point.y + " Unit";
-              },
-            },
-            credits: {
-              enabled: false,
-            },
-            series: seriesData,
-          });
-        },
-        error: function (xhr, status, error) {
-          console.error("Error fetching data:", error);
-        },
-      });
-    },
-
+   
     graphUser: function () {
       $.ajax({
         url: App.baseUrl + "dashboard/get_user",
@@ -145,63 +67,35 @@ define(["highcharts", "datepicker"], function (Highcharts, datepicker) {
 
     graphAttendance: function () {
       $.ajax({
-        url: App.baseUrl + "dashboard/get_attendance",
+        url: App.baseUrl + "dashboard/get_absen",
         type: "GET",
-        data: { date: App.selectedDate },
         dataType: "json",
         success: function (response) {
-          var categories = [];
-          var hadirData = [];
-          var alpaData = [];
-          var sakitData = [];
-
-          response.forEach(function (item) {
-            categories.push(item.kode_kelas);
-            hadirData.push(parseInt(item.Hadir));
-            alpaData.push(parseInt(item.Alpa));
-            sakitData.push(parseInt(item.Sakit));
+          console.log(response);
+    
+          const countByDate = {};
+          response.forEach(item => {
+            const tanggal = item.tanggal_absen;
+            if (!countByDate[tanggal]) {
+              countByDate[tanggal] = 0;
+            }
+            countByDate[tanggal]++;
           });
     
-          Highcharts.chart("attendanceBarChart", {
-            chart: {
-              type: "column"
-            },
-            title: {
-              text: "Laporan Kehadiran"
-            },
-            xAxis: {
-              categories: categories,
-              crosshair: true
-            },
+          const categories = Object.keys(countByDate).sort(); // urutkan tanggal
+          const data = categories.map(date => countByDate[date]);
+    
+          Highcharts.chart('barChartAbsensi', {
+            chart: { type: 'column' },
+            title: { text: 'Jumlah Kehadiran 7 Hari Terakhir' },
+            xAxis: { categories, title: { text: 'Tanggal' } },
             yAxis: {
               min: 0,
-              title: {
-                text: "Kehadiran"
-              }
-            },
-            tooltip: {
-              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-              pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y}</b></td></tr>',
-              footerFormat: '</table>',
-              shared: true,
-              useHTML: true
-            },
-            plotOptions: {
-              column: {
-                pointPadding: 0.2,
-                borderWidth: 0
-              }
+              title: { text: 'Jumlah Kehadiran' }
             },
             series: [{
-              name: "Hadir",
-              data: hadirData
-            }, {
-              name: "Alpa",
-              data: alpaData
-            }, {
-              name: "Sakit",
-              data: sakitData
+              name: 'Check-In',
+              data
             }]
           });
         },
@@ -209,8 +103,7 @@ define(["highcharts", "datepicker"], function (Highcharts, datepicker) {
           console.error("Error fetching attendance data:", error);
         },
       });
-    },
-    
+    },    
 
     graphProsedur: function () {
       $.ajax({
