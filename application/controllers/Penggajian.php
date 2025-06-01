@@ -165,7 +165,8 @@ class Penggajian extends Admin_Controller
 
 		$absensi_where = [
 			'absensi.id_user' => $id,
-			"absensi.tanggal_absen LIKE '{$bulanTahun}%'" => null
+			"absensi.tanggal_absen LIKE '{$bulanTahun}%'" => null,
+			"absensi.is_deleted" => 0
 		];
 		$absensi = $this->absensi_model->getAllByIdMapelDetail($absensi_where);
 		if ($absensi == null || empty($absensi)) {

@@ -27,19 +27,21 @@
                     <div class="alert alert-info">
                         <?php print_r($this->session->flashdata('message_error')); ?>
                     </div> <?php } ?>
-                <table class="table table-striped dt-responsive " id="table" style="width:100%; text-align: center;">
-                    <thead>
-                        <th class="w-1">No</th>
-                        <th>Tanggal</th>
-                        <th>Nama</th>
-                        <th>Check In</th>
-                        <th>Check Out</th>
-                        <th>Status Kerja</th>
-                        <th>Status</th>
-                        <th>Foto</th>
-                        <th>Aksi</th>
-                    </thead>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-striped dt-responsive " id="table" style="width:100%; text-align: center;">
+                        <thead>
+                            <th class="w-1">No</th>
+                            <th>Tanggal</th>
+                            <th>Nama</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Status Kerja</th>
+                            <th>Status</th>
+                            <th>Foto</th>
+                            <th>Aksi</th>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

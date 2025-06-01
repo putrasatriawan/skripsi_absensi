@@ -112,6 +112,9 @@ class Data_absen extends Admin_Controller
 
 				$edit_url = "";
 				$absen_mapel_url = "";
+				$delete_url = "";
+				$delete_url_hard = "";
+				$detail_url = "";
 
 				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
 					$edit_url = "<button class='btn btn-sm btn-info white edit-button' 
@@ -148,6 +151,26 @@ class Data_absen extends Admin_Controller
 									</button>";
 				}
 
+
+				if ($this->data['is_can_delete']) {
+					if ($data->is_deleted == 0) {
+						$delete_url = "<a href='#' 
+	        				url='" . base_url() . "data_absen/destroy/" . $data->id . "/" . $data->is_deleted . "'
+	        				class='btn btn-sm white btn-danger delete'><i class='fas fa-times'></i> NonAktifkan
+	        				</a>";
+					} else {
+						$delete_url = "<a href='#' 
+	        				url='" . base_url() . "data_absen/destroy/" . $data->id . "/" . $data->is_deleted . "'
+	        				class='btn btn-sm btn-primary white delete' 
+	        				 ><i class='fas fa-check'></i> Aktifkan
+	        				</a>";
+						$delete_url_hard = "<a href='#' 
+	        				url='" . base_url() . "data_absen/destroy_hard/" . $data->id . "/" . $data->is_deleted . "'
+	        				class='btn btn-sm btn-danger white delete' 
+	        				 ><i class='fas fa-trash'></i> Delete 
+	        				</a>";
+					}
+				}
 
 				if (!empty($data->photo)) {
 					$photo = '<img src="data:image/jpeg;base64,' . $data->photo . '" alt="Foto" width="150" height="auto">';
@@ -195,7 +218,7 @@ class Data_absen extends Admin_Controller
 				$nestedData['status_kerja'] = $data->status_work;
 				$nestedData['status'] = $statusButton;
 				$nestedData['foto'] = $photo;
-				$nestedData['action'] = $edit_url . " " . $detail_url . " " . $absen_mapel_url;
+				$nestedData['action'] = $edit_url . " " . $detail_url . " " . $absen_mapel_url . " " . $delete_url . "  " . $delete_url_hard;
 				$new_data[] = $nestedData;
 			}
 			// echo "<pre>";
@@ -315,55 +338,53 @@ class Data_absen extends Admin_Controller
 	}
 
 
-	// public function destroy()
-	// {
-	// 	$response_data = array();
-	// 	$response_data['status'] = false;
-	// 	$response_data['msg'] = "";
-	// 	$response_data['data'] = array();
+	public function destroy()
+	{
+		$response_data = array();
+		$response_data['status'] = false;
+		$response_data['msg'] = "";
+		$response_data['data'] = array();
 
-	// 	$id = $this->uri->segment(3);
-	// 	$is_deleted = $this->uri->segment(4);
-	// 	if (!empty($id)) {
-	// 		$this->load->model("kelompok_kelas_model");
-	// 		$data = array(
-	// 			'is_deleted' => ($is_deleted == 1) ? 0 : 1
-	// 		);
-	// 		$update = $this->kelompok_kelas_model->update($data, array("id" => $id));
+		$id = $this->uri->segment(3);
+		$is_deleted = $this->uri->segment(4);
+		if (!empty($id)) {
+			$data = array(
+				'is_deleted' => ($is_deleted == 1) ? 0 : 1
+			);
+			$update = $this->absensi_model->update($data, array("id" => $id));
 
-	// 		$response_data['data'] = $data;
-	// 		$response_data['status'] = true;
-	// 	} else {
-	// 		$response_data['msg'] = "ID Harus Diisi";
-	// 	}
+			$response_data['data'] = $data;
+			$response_data['status'] = true;
+		} else {
+			$response_data['msg'] = "ID Harus Diisi";
+		}
 
-	// 	echo json_encode($response_data);
-	// }
+		echo json_encode($response_data);
+	}
 
-	// public function destroy_hard()
-	// {
-	// 	$response_data = array();
-	// 	$response_data['status'] = false;
-	// 	$response_data['msg'] = "";
-	// 	$response_data['data'] = array();
+	public function destroy_hard()
+	{
+		$response_data = array();
+		$response_data['status'] = false;
+		$response_data['msg'] = "";
+		$response_data['data'] = array();
 
-	// 	$id = $this->uri->segment(3);
-	// 	$is_deleted = $this->uri->segment(4);
-	// 	if (!empty($id)) {
-	// 		$this->load->model("kelompok_kelas_model");
-	// 		$data = array(
-	// 			'is_deleted' => ($is_deleted == 1) ? 0 : 1
-	// 		);
-	// 		$update = $this->kelompok_kelas_model->delete(array("id" => $id));
+		$id = $this->uri->segment(3);
+		$is_deleted = $this->uri->segment(4);
+		if (!empty($id)) {
+			$data = array(
+				'is_deleted' => ($is_deleted == 1) ? 0 : 1
+			);
+			$update = $this->absensi_model->delete(array("id" => $id));
 
-	// 		$response_data['data'] = $data;
-	// 		$response_data['status'] = true;
-	// 	} else {
-	// 		$response_data['msg'] = "ID Harus Diisi";
-	// 	}
+			$response_data['data'] = $data;
+			$response_data['status'] = true;
+		} else {
+			$response_data['msg'] = "ID Harus Diisi";
+		}
 
-	// 	echo json_encode($response_data);
-	// }
+		echo json_encode($response_data);
+	}
 
 	// public function import_data()
 	// {
