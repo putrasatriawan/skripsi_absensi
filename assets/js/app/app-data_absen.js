@@ -10,6 +10,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
       App.detailAbsen();
       App.dataAbsenMapel();
       App.initAbsenMapel();
+      App.changeModal();
       $(".loadingpage").hide();
     },
     initEvent: function () {
@@ -111,6 +112,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
           },
         });
       }
+      
     },
     initConfirm: function () {
       $("#table tbody").on("click", ".delete", function () {
@@ -261,7 +263,25 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
         });
       });
       
-    }    
+    },    
     
+    changeModal: function () {
+      $(document).on('change', '#create-status, #create-is_check_in', function () {
+        console.log("Status:", $('#create-status').val());
+        const status = $('#create-status').val();
+        const isCheckIn = $('#create-is_check_in').val();
+    
+        // Sembunyikan is_check_in jika Izin atau Sakit
+        if (status === 'Izin' || status === 'Sakit') {
+          $('#group-is-check-in').addClass('d-none');
+        } else {
+          $('#group-is-check-in').removeClass('d-none');
+        }
+    
+        console.log("isCheckIn:", isCheckIn);
+        // Ganti label input waktu
+        $('.label-init-time').text(isCheckIn === 'check_out' ? 'Check Out' : 'Check In');
+      });
+    }
   };
 });

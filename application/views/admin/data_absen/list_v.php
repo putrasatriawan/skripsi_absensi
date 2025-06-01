@@ -134,8 +134,8 @@
                         <input type="date" class="form-control" name="tgl_absen" id="create-tgl_absen" required>
                     </div>
 
-                    <div class="form-group">
-                        <label id="label-init-time">Check In</label>
+                    <div class="form-group" id="group-init-time">
+                        <label class="label-init-time">Check In</label>
                         <input type="time" class="form-control" name="init_time" id="create-init_time">
                     </div>
 
@@ -147,8 +147,8 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="status_work">Is Check In?</label>
+                    <div class="form-group" id="group-is-check-in">
+                        <label for="is_check_in">Is Check In?</label>
                         <select class="form-control" name="is_check_in" id="create-is_check_in">
                             <option value="check_in">Check In</option>
                             <option value="check_out">Check Out</option>
