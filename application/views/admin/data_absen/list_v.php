@@ -27,6 +27,36 @@
                     <div class="alert alert-info">
                         <?php print_r($this->session->flashdata('message_error')); ?>
                     </div> <?php } ?>
+                <?php if ($this->data['is_can_create']) { ?>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label for="filter-user" class="col-form-label">Filter User</label>
+                            <select id="filter-user" class="form-control form-control-sm">
+                                <option value="">-- Semua User --</option>
+                                <?php foreach ($user as $u): ?>
+                                    <option value="<?= $u->id ?>"><?= $u->first_name ?> (<?= $u->username ?>)</option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="filter-date" class="col-form-label">Filter Tanggal</label>
+                            <input type="date" id="filter-date" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+
+                    <!-- Clear Filter Button positioned below Filter Tanggal -->
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <button type="button" id="clear-filters" class="btn btn-warning btn-sm">
+                                Clear Filter
+                            </button>
+                        </div>
+                    </div>
+                <?php } ?>
+
+
+
                 <div class="table-responsive">
                     <table class="table table-striped dt-responsive " id="table" style="width:100%; text-align: center;">
                         <thead>

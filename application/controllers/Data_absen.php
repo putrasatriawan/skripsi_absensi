@@ -47,6 +47,15 @@ class Data_absen extends Admin_Controller
 				"absensi.id_user" => $this->data['users']->id,
 			);
 		}
+		if ($this->input->get('user_id')) {
+			$user_id = $this->input->get('user_id');
+			$where['absensi.id_user'] = $user_id;
+		}
+		if ($this->input->get('tanggal_absen')) {
+			$tanggal_absen = $this->input->get('tanggal_absen');
+			$where['absensi.tanggal_absen'] = $tanggal_absen;
+		}
+
 
 		$order = $columns[$this->input->post('order')[0]['column']];
 		$dir = $this->input->post('order')[0]['dir'];
@@ -60,7 +69,7 @@ class Data_absen extends Admin_Controller
 			// $isSearchColumn = true;
 			$search_value = $this->input->post('search')['value'];
 			$search = array(
-				"absensi.tanggal" => $search_value,
+				"absensi.status_work" => $search_value,
 			);
 			//  }
 			// if($isSearchColumn){

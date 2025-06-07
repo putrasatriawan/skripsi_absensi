@@ -172,19 +172,7 @@ class Master_user extends Admin_Controller
 			echo json_encode(array('status' => 'error', 'message' => 'Guru not found'));
 		}
 	}
-
-	/*************  ✨ Windsurf Command ⭐  *************/
-	/**
-	 * Fetches the adjacent records for a given user ID.
-	 *
-	 * This function retrieves the previous and next records based on the current user ID
-	 * submitted via POST request. It queries the database for the closest previous and next
-	 * records in terms of IDs and returns their IDs, if available, in JSON format.
-	 *
-	 * @return void Outputs a JSON response with the previous and next record IDs.
-	 */
-
-	/*******  4a71ed38-0048-42d7-9ca1-de92acb9d1a6  *******/	public function getAdjacentRecords()
+	public function getAdjacentRecords()
 	{
 		$id = $this->input->post('id');
 
@@ -306,7 +294,7 @@ class Master_user extends Admin_Controller
 		$this->load->view('admin/layouts/page', $this->data);
 	}
 
-	public function waktu($id)
+	public function waktu($id) //di use case jadi getDataWaktuDetail
 	{
 		$this->data['id_config_master'] = $id;
 
@@ -430,7 +418,7 @@ class Master_user extends Admin_Controller
 		return $hari[$dayNumber];
 	}
 
-	public function get_mapel()
+	public function get_mapel() //di use case jadi getJadwalDetail
 	{
 		$data = $this->master_user_jadwal_model->getAllById();
 		echo json_encode($data);

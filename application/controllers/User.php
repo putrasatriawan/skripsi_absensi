@@ -219,14 +219,14 @@ class User extends Admin_Controller
 
 				$this->data['first_name'] = $data->first_name;
 				$this->data['last_name'] = $data->last_name;
-				$this->data['username'] = $data->username;
-				$this->data['address'] = $data->address;
 				$this->data['email'] = $data->email;
 				$this->data['username'] = $data->username;
 				$this->data['phone'] = $data->phone;
 				$this->data['role_id'] = $data->role_id;
 
 				$this->data['photo'] = (!empty($data->photo)) ? $data->photo : "";
+				$this->data['username'] = $data->username;
+				$this->data['address'] = $data->address;
 
 				$this->data['content'] = 'admin/user/edit_v';
 				$this->load->view('admin/layouts/page', $this->data);

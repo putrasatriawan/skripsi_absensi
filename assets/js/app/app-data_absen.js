@@ -11,6 +11,7 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
       App.dataAbsenMapel();
       App.initAbsenMapel();
       App.changeModal();
+      App.filters();
       $(".loadingpage").hide();
     },
     initEvent: function () {
@@ -281,6 +282,22 @@ define(["datatablesBS4", "jqvalidate", "toastr"], function (datatablesBS4, jqval
         console.log("isCheckIn:", isCheckIn);
         // Ganti label input waktu
         $('.label-init-time').text(isCheckIn === 'check_out' ? 'Check Out' : 'Check In');
+      });
+    },
+    filters: function() {
+        $('#filter-user').on('change', function () {
+          var userId = $(this).val();
+          App.table.ajax.url(App.baseUrl + 'data_absen/dataList?user_id=' + userId).load();
+      });
+      $('#filter-date').on('change', function () {
+          var selectedDate = $(this).val();
+            var userId = $('#filter-user').val();  // get the selected user filter value
+            App.table.ajax.url(App.baseUrl + 'data_absen/dataList?user_id=' + userId + '&tanggal_absen=' + selectedDate).load();
+        });
+      $('#clear-filters').on('click', function () {
+        $('#filter-user').val('');
+        $('#filter-date').val('');
+        App.table.ajax.url(App.baseUrl + 'data_absen/dataList').load();
       });
     }
   };
