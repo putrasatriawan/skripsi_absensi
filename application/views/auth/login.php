@@ -18,11 +18,13 @@
             background: #FFF;
         }
 
-        .sidenav {
+         .sidenav {
             height: 100%;
-            background-color: #2c3e50;
+            background-color: #2c3e50; /* Dark blue color */
             overflow-x: hidden;
-            padding-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .main {
@@ -81,14 +83,23 @@
             background-color: #000 !important;
             color: #fff;
         }
+
+        /* Style for the logo */
+        .logo {
+            width: 150px; /* Adjust the size */
+            height: auto;
+            margin-right: 15px;
+        }
     </style>
 </head>
 
 <body>
     <div class="sidenav">
         <div class="login-main-text">
-            <h2>Absensi Guru<br>Sistem Informasi</h2>
+            <!-- Logo Added here -->
+            <h2><br>Sistem Informasi <br>Absensi Guru</h2>
             <p>Silakan login untuk melakukan presensi harian.</p>
+            <img src="<?php  echo base_url(); ?>uploads/logo.png?>" class="logo" alt="Logo">  
         </div>
     </div>
 

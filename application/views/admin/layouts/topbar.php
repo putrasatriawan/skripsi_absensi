@@ -1,8 +1,9 @@
   <!--Header START-->
   <div class="app-header header-shadow">
       <div class="app-header__logo">
-          <!-- <img class="<?php echo base_url(); ?>assets/images/logo.png"></img> -->
-          <div class="logo-src"></div>
+          <div class="logo">
+              <h4 class="text-uppercase font-weight-bold">SMA YPPKP</h4>
+          </div>
           <div class="header__pane ml-auto">
               <div>
                   <button type="button" class="hamburger close-sidebar-btn hamburger--elastic"
@@ -33,7 +34,7 @@
           </span>
       </div>
       <div class="app-header__content">
-          <div class="app-header-left">
+          <!-- <div class="app-header-left">
               <div class="search-wrapper">
                   <div class="input-holder">
                       <input type="text" class="search-input" placeholder="Type to search">
@@ -41,7 +42,7 @@
                   </div>
                   <button class="close"></button>
               </div>
-          </div>
+          </div> -->
 
           <div class="app-header-right">
               <div class="header-btn-lg pr-0">
@@ -99,8 +100,8 @@
                                             ? base_url('uploads/photo_profile/' . $this->data['users']->photo)
                                             : base_url('assets/images/avatars/default-user.png');
                                         ?>
-                                        <img width="42" class="rounded-circle" src="<?= $profilePhoto ?>" alt="User Profile Picture">
-                                        <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                                      <img width="42" class="rounded-circle" src="<?= $profilePhoto ?>" alt="User Profile Picture">
+                                      <i class="fa fa-angle-down ml-2 opacity-8"></i>
 
                                   </a>
 
@@ -115,12 +116,12 @@
                                                   <div class="widget-content p-0">
                                                       <div class="widget-content-wrapper">
                                                           <div class="widget-content-left mr-3">
-                                                          <?php
-                                                                $foto = !empty($this->data['users']->photo) 
+                                                              <?php
+                                                                $foto = !empty($this->data['users']->photo)
                                                                     ? base_url('uploads/photo_profile/' . $this->data['users']->photo)
                                                                     : base_url('assets\images\avatars\default-user.png');
                                                                 ?>
-                                                                <img width="42" class="rounded-circle" src="<?= $foto ?>" alt="User Photo">
+                                                              <img width="42" class="rounded-circle" src="<?= $foto ?>" alt="User Photo">
 
                                                           </div>
 
