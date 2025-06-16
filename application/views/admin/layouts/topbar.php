@@ -2,7 +2,7 @@
   <div class="app-header header-shadow">
       <div class="app-header__logo">
           <div class="logo">
-              <h4 class="text-uppercase font-weight-bold">SMA YPPKP</h4>
+              <h4 class="text-uppercase font-weight-bold">SMA YPKKP</h4>
           </div>
           <div class="header__pane ml-auto">
               <div>

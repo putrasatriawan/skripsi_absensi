@@ -9991,7 +9991,7 @@ button,
 .app-header__logo .logo-src {
   height: 23px;
   width: 97px;
-  background: url("../images/logo-inverse.png");
+  background: url("../uploads/logo.png");
 }
 
 .app-header__menu,
@@ -10225,7 +10225,7 @@ button,
 }
 
 .app-header.header-text-light .app-header__logo .logo-src {
-  background: url("../assets/images/logo.png");
+  background: url("../uploads/logo.png");
 }
 
 .app-header.header-text-light .app-header__mobile-menu .hamburger-inner,
@@ -10602,7 +10602,7 @@ button,
 }
 
 .app-sidebar.sidebar-text-light .app-header__logo .logo-src {
-  background: url("../assets/images/logo.png");
+  background: url("../uploads/logo.png");
 }
 
 .app-sidebar.sidebar-text-light .app-header__logo .hamburger-inner,
@@ -19715,7 +19715,7 @@ legend {
 .app-logo-inverse {
   height: 23px;
   width: 97px;
-  background: url("../assets/images/logo.png");
+  background: url("../uploads/logo.png");
 }
 
 .app-login-box .app-logo {

@@ -19,7 +19,7 @@
   width: 200px !important;
 }
 .app-logo-inverse {
-  background: url("../../assets/images/logo.png");
+  background: url("../../uploads/logo.png");
   background-size: contain;
   background-repeat: no-repeat;
   height: 50px;
