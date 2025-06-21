@@ -4,7 +4,7 @@
                 <div class="page-title-wrapper">
                     <div class="page-title-heading">
                         <div>Penggajian
-                            <div class="page-title-subheading">Data Penggajian</div>
+                            <div class="page-title-subheading">Data Penggajian Per Periode</div>
                         </div>
                     </div>
                     <div class="page-title-actions">

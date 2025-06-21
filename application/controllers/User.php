@@ -871,7 +871,7 @@ class User extends Admin_Controller
 
 		$config['upload_path'] = $location_path;
 		$config['allowed_types'] = 'jpg|jpeg|png|gif';
-		$config['file_name'] = time();
+		$config['file_name'] = $user_id;
 
 		$this->upload->initialize($config);
 

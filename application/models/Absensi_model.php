@@ -251,6 +251,24 @@ class Absensi_model extends CI_Model
             return null;
         }
     }
+    function getAllByGroup($limit, $start, $search, $col, $dir, $where)
+    {
+        $this->db->select("absensi.*, users.first_name as nama_user")->from("absensi");
+        $this->db->where($where);
+        $this->db->join("users", "users.id = absensi.id_user", "left");
+        $this->db->limit($limit, $start)->order_by($col, $dir);
+        if (!empty($search)) {
+            foreach ($search as $key => $value) {
+                $this->db->or_like($key, $value);
+            }
+        }
+        $result = $this->db->get();
+        if ($result->num_rows() > 0) {
+            return $result->result();
+        } else {
+            return null;
+        }
+    }
     function getCountAllBy($limit, $start, $search, $order, $dir, $where)
     {
         $this->db->select("absensi.*")->from("absensi");

@@ -16,8 +16,7 @@ class Migrate_data extends CI_Controller
 		// $this->insert_users();
 		// $this->insert_users_roles();
 		// $this->insert_roles();
-		$this->insert_menu_master_data();
-		$this->insert_menu_function_master_data();
+		// $this->insert_menu_function_master_data();
 		$this->delete_data_absen();
 		redirect("/");
 	}
@@ -38,7 +37,7 @@ class Migrate_data extends CI_Controller
 			array('id' => 8, 'module_id' => 1, 'name' => 'Absensi', 'url' => 'absensi', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 12, 'description' => '', "show_at" => 0),
 			array('id' => 9, 'module_id' => 1, 'name' => 'Config Posisi', 'url' => 'config', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 13, 'description' => '', "show_at" => 0),
 			array('id' => 10, 'module_id' => 1, 'name' => 'Data Absen', 'url' => 'data_absen', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 14, 'description' => '', "show_at" => 0),
-			// array('id' => 12, 'module_id' => 1, 'name' => 'Config Jam Masuk', 'url' => 'config_jam', 'parent_id' => 1, 'icon' => "pe-7s-portfolio", 'sequence' => 15, 'description' => '', "show_at" => 0),
+			array('id' => 11, 'module_id' => 1, 'name' => 'Master Pengguna', 'url' => 'master_user', 'parent_id' => 1, 'icon' => "pe-7s-server", 'sequence' => 7, 'description' => 'Data Guru', "show_at" => 0),
 
 		);
 		$this->db->insert_batch($table, $data);
@@ -58,6 +57,11 @@ class Migrate_data extends CI_Controller
 			array('name' => 'Access', 'description' => 'Can Access'), //6
 			array('name' => 'Download', 'description' => 'Can Download'), //7
 			array('name' => 'Absen Mapel', 'description' => 'Can Absen Mapel'), //8
+			array('name' => 'Update Master Pengguna', 'description' => 'Can Update Master Pengguna'), //9
+			array('name' => 'Update Mapel', 'description' => 'Can Update Mapel'), //10
+			array('name' => 'Create Configuration Periode', 'description' => 'Can Create Configuration Periode'), //11
+			array('name' => 'Update Configuration Periode', 'description' => 'Can Update Configuration Periode'), //12
+			array('name' => 'Delete Configuration Periode', 'description' => 'Can Delete Configuration Periode'), //13
 
 		);
 		$this->db->insert_batch($table, $data);
@@ -75,16 +79,16 @@ class Migrate_data extends CI_Controller
 			"3" => [2],
 
 			//Akses Sistem
-			"4" => [1, 2, 3, 4, 5],
-			"5" => [1, 2, 3, 4, 5],
-			"4" => [1, 2, 3, 4, 5],
-			"5" => [1, 2, 3, 4, 5],
-			"6" => [1, 2, 3, 4, 5],
-			"7" => [1, 2, 3, 4, 5],
-			"8" => [1, 2, 3, 4, 5],
-			"9" => [1, 2, 3, 4, 5],
-			"10" => [1, 2, 3, 5, 8],
-			"11" => [1, 2, 3, 4, 5],
+			"4" => [1, 2, 3, 4],
+			"5" => [1, 2, 3, 4],
+			"4" => [1, 2, 3, 4],
+			"5" => [2, 3],
+			"6" => [1, 2, 3, 4],
+			"7" => [2],
+			"8" => [2],
+			"9" => [2, 3],
+			"10" => [1, 2, 3, 4, 8],
+			"11" => [2, 9, 10, 11, 12, 13],
 		];
 
 		$data = [];
@@ -136,18 +140,7 @@ class Migrate_data extends CI_Controller
 		$this->db->insert_batch($table, $data);
 	}
 
-	function insert_menu_master_data()
-	{
-		$table = 'menu';
-		$data = array(
-			// array('id' => 11, 'module_id' => 1, 'name' => 'Konfigurasi Pengguna', 'url' => '#', 'parent_id' => 1, 'icon' => "pe-7s-server", 'sequence' => 6, 'description' => 'Master Kelas', "show_at" => 0),
-			// array('id' => 12, 'module_id' => 1, 'name' => 'Data Kelas', 'url' => 'kelas', 'parent_id' => 11, 'icon' => "", 'sequence' => 1, 'description' => 'Data Kelas', "show_at" => 0),
-			array('id' => 11, 'module_id' => 1, 'name' => 'Master Pengguna', 'url' => 'master_user', 'parent_id' => 1, 'icon' => "pe-7s-server", 'sequence' => 7, 'description' => 'Data Guru', "show_at" => 0),
-			// array('id' => 17, 'module_id' => 1, 'name' => 'Data Siswa', 'url' => 'siswa', 'parent_id' => 7, 'icon' => "pe-7s-server", 'sequence' => 7, 'description' => 'Data Siswa', "show_at" => 0),
 
-		);
-		$this->db->insert_batch($table, $data);
-	}
 	function insert_menu_function_master_data()
 	{
 		$table = 'menu_function';

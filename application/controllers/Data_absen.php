@@ -81,7 +81,14 @@ class Data_absen extends Admin_Controller
 		$limit = $this->input->post('length');
 		$start = $this->input->post('start');
 		$datas = $this->absensi_model->getAllBy($limit, $start, $search, $order, $dir,  $where);
-
+		// echo "<pre>";
+		// print_r($datas);
+		// die;
+		// foreach ($datas as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 
 		$mapel = array();
 		$new_data = array();
@@ -103,8 +110,6 @@ class Data_absen extends Admin_Controller
 					}
 				}
 
-
-
 				$mapel_terfilter = [];
 
 				foreach ($mapel as &$item) {
@@ -112,12 +117,9 @@ class Data_absen extends Admin_Controller
 						$mapel_terfilter[] = $item;
 					}
 				}
-
 				$mapel = $mapel_terfilter;
 
-
 				$data_mapel_json = htmlspecialchars(json_encode($mapel), ENT_QUOTES, 'UTF-8');
-
 
 				$edit_url = "";
 				$absen_mapel_url = "";
@@ -230,14 +232,6 @@ class Data_absen extends Admin_Controller
 				$nestedData['action'] = $edit_url . " " . $detail_url . " " . $absen_mapel_url . " " . $delete_url . "  " . $delete_url_hard;
 				$new_data[] = $nestedData;
 			}
-			// echo "<pre>";
-			// print_r($mapel);
-			// die;
-			// foreach ($mapel as $value) {
-			// 	echo "<pre>";
-			// 	print_r($value);
-			// }
-			// die;
 		}
 
 

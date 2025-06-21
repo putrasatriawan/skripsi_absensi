@@ -36,6 +36,11 @@ class Admin_Controller extends CI_Controller
 		$this->data['is_can_delete'] = false;
 		$this->data['is_can_download'] = false;
 		$this->data['is_can_absen_mapel'] = false;
+		$this->data['is_can_update_master_pengguna'] = false;
+		$this->data['is_can_update_mapel'] = false;
+		$this->data['is_can_create_configuration_periode'] = false;
+		$this->data['is_can_update_configuration_periode'] = false;
+		$this->data['is_can_delete_configuration_periode'] = false;
 		$this->load->model("menu_model");
 
 		if ($this->ion_auth->in_group(1)) {
@@ -58,6 +63,11 @@ class Admin_Controller extends CI_Controller
 			$this->data['is_can_approval'] = true;
 			$this->data['is_can_download'] = true;
 			$this->data['is_can_absen_mapel'] = true;
+			$this->data['is_can_update_master_pengguna'] = true;
+			$this->data['is_can_update_mapel'] = true;
+			$this->data['is_can_create_configuration_periode'] = true;
+			$this->data['is_can_update_configuration_periode'] = true;
+			$this->data['is_can_delete_configuration_periode'] = true;
 		} else {
 			$this->load->model("privilleges_model");
 			$dataPrivilleges = $this->privilleges_model->getOneBy(
@@ -74,6 +84,11 @@ class Admin_Controller extends CI_Controller
 			$this->data['is_can_access'] = ($this->isInPrivilleges($dataPrivilleges, 6));
 			$this->data['is_can_download'] = ($this->isInPrivilleges($dataPrivilleges, 7));
 			$this->data['is_can_absen_mapel'] = ($this->isInPrivilleges($dataPrivilleges, 8));
+			$this->data['is_can_update_master_pengguna'] = ($this->isInPrivilleges($dataPrivilleges, 9));
+			$this->data['is_can_update_mapel'] = ($this->isInPrivilleges($dataPrivilleges, 10));
+			$this->data['is_can_create_configuration_periode'] = ($this->isInPrivilleges($dataPrivilleges, 11));
+			$this->data['is_can_update_configuration_periode'] = ($this->isInPrivilleges($dataPrivilleges, 12));
+			$this->data['is_can_delete_configuration_periode'] = ($this->isInPrivilleges($dataPrivilleges, 13));
 		}
 	}
 	private function isInPrivilleges($data, $id)

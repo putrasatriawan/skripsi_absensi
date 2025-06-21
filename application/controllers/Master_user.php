@@ -238,11 +238,11 @@ class Master_user extends Admin_Controller
 				$delete_url = "";
 				$delete_url_hard = "";
 
-				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
+				if ($this->data['is_can_update_master_pengguna'] && $data->is_deleted == 0) {
 					$edit_url = "<button class='btn btn-sm btn-info white edit-button' data-id='" . $data->id . "'  data-users-id='" . $data->users_id . "'><i class='fas fa-edit'></i> Ubah</button>";
 				}
 
-				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
+				if ($this->data['is_can_update_mapel'] && $data->is_deleted == 0) {
 					$mapel_url = "<a href='" . base_url() . "master_user/mapel/" . $data->users_id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Mapel</a>";
 				}
 
@@ -267,28 +267,6 @@ class Master_user extends Admin_Controller
 	{
 
 		$this->data['id'] = $id;
-		// $data = $this->user_model->getOneBy(array("users.id" => $this->data['id']));
-
-		// if (empty($data)) {
-		// 	$this->session->set_flashdata('message_error', 'User not found');
-		// 	return redirect('user');
-		// }
-
-		// $this->data['photo'] = (!empty($data)) ? $data->photo : "";
-
-		// $this->data['roles'] = $this->roles_model->getAllById();
-		// $this->data['kelas'] = $this->kelas_model->getAllById();
-
-		// $this->data['first_name'] = $data->first_name;
-		// $this->data['last_name'] = $data->last_name;
-		// $this->data['username'] = $data->username;
-		// $this->data['address'] = $data->address;
-		// $this->data['email'] = $data->email;
-		// $this->data['nik'] = $data->nik;
-		// $this->data['phone'] = $data->phone;
-		// $this->data['role_id'] = $data->role_id;
-
-		// $this->data['photo'] = (!empty($data->photo)) ? $data->photo : "";
 
 		$this->data['content'] = 'admin/master_user/mapel_v';
 		$this->load->view('admin/layouts/page', $this->data);
@@ -649,10 +627,10 @@ class Master_user extends Admin_Controller
 				$delete_url_hard = "";
 
 
-				if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
+				if ($this->data['is_can_update_configuration_periode'] && $data->is_deleted == 0) {
 					$config_url = "<a href='" . base_url() . "master_user/waktu/" . $data->id . "' class='btn btn-sm white btn-warning'><i class='fas fa-edit'></i> Config</a>";
 				}
-				if ($this->data['is_can_delete']) {
+				if ($this->data['is_can_delete_configuration_periode']) {
 					if ($data->is_deleted == 0) {
 						$delete_url = "<a href='#' 
 	        				url='" . base_url() . "master_user/destroy_waktu/" . $data->id . "/" . $data->is_deleted . "'

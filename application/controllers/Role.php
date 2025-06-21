@@ -159,24 +159,24 @@ class Role extends Admin_Controller
 					if ($this->data['is_can_edit'] && $data->is_deleted == 0) {
 						$edit_url = "<a href='" . base_url() . "role/edit/" . $data->id . "' class='btn btn-sm btn-info white'><i class='fas fa-edit'></i> Ubah</a>";
 					}
-					if ($this->data['is_can_delete']) {
-						if ($data->is_deleted == 0) {
-							$delete_url = "<a href='#' 
-								url='" . base_url() . "role/destroy/" . $data->id . "/" . $data->is_deleted . "'
-								class='btn btn-sm btn-danger white delete' ><i class='fa fa-times'></i> Non Aktifkan
-								</a>";
-						} else {
-							$delete_url = "<a href='#' 
-								url='" . base_url() . "role/destroy/" . $data->id . "/" . $data->is_deleted . "'
-								class='btn btn-sm btn-primary white delete' 
-								><i class='fas fa-check'></i> Aktifkan
-								</a>";
-							$delete_url_hard = "<a href='#' 
-								url='" . base_url() . "role/destroy_hard/" . $data->id . "/" . $data->is_deleted . "'
-								class='btn btn-sm btn-danger white delete' 
-								><i class='fas fa-trash'></i> Delete
-								</a>";
-						}
+				}
+				if ($this->data['is_can_delete']) {
+					if ($data->is_deleted == 0) {
+						$delete_url = "<a href='#' 
+							url='" . base_url() . "role/destroy/" . $data->id . "/" . $data->is_deleted . "'
+							class='btn btn-sm btn-danger white delete' ><i class='fa fa-times'></i> Non Aktifkan
+							</a>";
+					} else {
+						$delete_url = "<a href='#' 
+							url='" . base_url() . "role/destroy/" . $data->id . "/" . $data->is_deleted . "'
+							class='btn btn-sm btn-primary white delete' 
+							><i class='fas fa-check'></i> Aktifkan
+							</a>";
+						$delete_url_hard = "<a href='#' 
+							url='" . base_url() . "role/destroy_hard/" . $data->id . "/" . $data->is_deleted . "'
+							class='btn btn-sm btn-danger white delete' 
+							><i class='fas fa-trash'></i> Delete
+							</a>";
 					}
 				}
 				$nestedData['id'] = $start + $key + 1;

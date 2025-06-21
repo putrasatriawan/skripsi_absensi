@@ -93,8 +93,8 @@
                 <th>Jam Mulai</th>
                 <th>Jam Selesai</th>
                 <th>Durasi</th>
-                <th>Status Mapel</th>
-                <th>Log Absensi</th>
+                <th>Kehadiran Mapel</th>
+                <th>Log Mapel</th>
             </tr>
         </thead>
         <tbody>
@@ -109,7 +109,22 @@
                     <td><?= $detail->durasi ?></td>
                     <td>
                         <?php
-                        echo !empty($detail->absen_list) ? ucfirst($detail->absen_list[0]->status_mapel ?? '-') : 'Belum Absen';
+                        if (!empty($detail->absen_list)) {
+                            $filtered_absensi = array_filter($detail->absen_list, function ($absen) use ($detail) {
+                                return $absen->id_mapel == $detail->id_mapel;
+                            });
+                            if (!empty($filtered_absensi)) {
+                                $status_list = [];
+                                foreach ($filtered_absensi as $absen) {
+                                    $status_list[] = ucfirst($absen->status_mapel ?? '-');
+                                }
+                                echo implode(', ', $status_list);
+                            } else {
+                                echo '<span class="text-muted">Belum Absen</span>';
+                            }
+                        } else {
+                            echo '<span class="text-muted">Belum Absen</span>';
+                        }
                         ?>
                     </td>
                     <td>
