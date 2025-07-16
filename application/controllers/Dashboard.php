@@ -11,9 +11,18 @@ class Dashboard extends Admin_Controller
 	}
 	public function index()
 	{
+		$id = $this->data['users']->id;
 		$this->load->helper('url');
-
-		$users = $this->user_model->getAllByIdWithOutSuperAdmin(array('users.is_deleted' => 0));
+		if ($this->data['users']->id = 1) {
+			$users = $this->user_model->getAllByIdWithOutSuperAdmin(array('users.is_deleted' => 0));
+		} else {
+			$users = $this->user_model->getAllByIdWithOutSuperAdmin(
+				array(
+					'users.is_deleted' => 0,
+					'users.id' => 0
+				)
+			);
+		}
 		$grouped_absensi = $this->groupByRoleName($users);
 		$get_absen_this_month = $this->absensi_model->getAllByIdDashboard([
 			'absensi.is_check_in' => 'check_in',
@@ -39,14 +48,17 @@ class Dashboard extends Admin_Controller
 	{
 		$result = [];
 
-		foreach ($absensi_data as $row) {
-			$role = $row->role_name ?? 'Tanpa Role';
-			if (!isset($result[$role])) {
-				$result[$role] = [];
+		if (!empty($absensi_data)) {
+			foreach ($absensi_data as $row) {
+				$role = $row->role_name ?? 'Tanpa Role';
+				if (!isset($result[$role])) {
+					$result[$role] = [];
+				}
+				$result[$role][] = $row;
 			}
-			$result[$role][] = $row;
+		} else {
+			$result = [];
 		}
-
 		return $result;
 	}
 
@@ -58,10 +70,19 @@ class Dashboard extends Admin_Controller
 	}
 	public function get_absen()
 	{
-		$get_absen = $this->absensi_model->getAllByIdDashboard([
-			'absensi.is_check_in' => 'check_in',
-			'absensi.tanggal_absen >=' => date('Y-m-d', strtotime('-7 days'))
-		]);
+		$id = $this->data['users']->id;
+		if ($this->data['users']->id == 1) {
+			$get_absen = $this->absensi_model->getAllByIdDashboard([
+				'absensi.is_check_in' => 'check_in',
+				'absensi.tanggal_absen >=' => date('Y-m-d', strtotime('-7 days'))
+			]);
+		} else {
+			$get_absen = $this->absensi_model->getAllByIdDashboard([
+				'absensi.is_check_in' => 'check_in',
+				'absensi.id_user' => $id,
+				'absensi.tanggal_absen >=' => date('Y-m-d', strtotime('-7 days'))
+			]);
+		}
 		echo json_encode($get_absen);
 	}
 

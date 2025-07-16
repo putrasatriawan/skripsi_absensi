@@ -98,6 +98,7 @@ class Data_absen extends Admin_Controller
 
 				$mapel = $this->absensi_model->getMapelTerdekatNotOne($data->id_user, $data->tanggal_absen);
 
+
 				$absen = $this->absensi_model->getStatusMapelByAbsenId($data->id);
 
 				foreach ($mapel as &$item) {
@@ -118,6 +119,7 @@ class Data_absen extends Admin_Controller
 					}
 				}
 				$mapel = $mapel_terfilter;
+
 
 				$data_mapel_json = htmlspecialchars(json_encode($mapel), ENT_QUOTES, 'UTF-8');
 

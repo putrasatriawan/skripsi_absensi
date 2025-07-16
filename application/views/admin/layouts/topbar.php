@@ -45,7 +45,7 @@
           </div> -->
 
           <div class="app-header-right">
-              <div class="header-btn-lg pr-0">
+              <!-- <div class="header-btn-lg pr-0">
                   <div class="widget-content p-0">
                       <div class="widget-content-wrapper">
                           <div class="widget-content-left">
@@ -80,14 +80,14 @@
                                       </div>
                                       <div class="dropdown-menu-footer text-center">
                                           <a href="<?php echo base_url() ?>pengumuman_all_user"
-                                              class="text-center">Lihat Semua</a> <!-- Tautan "Lihat Semua" -->
+                                              class="text-center">Lihat Semua</a> 
                                       </div>
                                   </div>
                               </div>
                           </div>
                       </div>
                   </div>
-              </div>
+              </div> -->
               <div class="header-btn-lg pr-0">
                   <div class="widget-content p-0">
                       <div class="widget-content-wrapper">

@@ -113,6 +113,31 @@ class Absensi_model extends CI_Model
         return FALSE;
     }
 
+    public function getUser($where = array())
+    {
+        $this->db->select("users.*")->from("users");
+        $this->db->where('users.is_deleted', 0);
+        $this->db->where($where);
+
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->row();
+        }
+        return FALSE;
+    }
+
+
+    public function getConfigMaster($id_user)
+    {
+        $this->db->select('config_waktu_master.*, config_waktu_detail.*');
+        $this->db->from('config_waktu_master');
+        $this->db->join('config_waktu_detail', 'config_waktu_detail.id_config_master = config_waktu_master.id');
+        $this->db->where('config_waktu_detail.id_user', $id_user);
+        $this->db->where('config_waktu_master.is_deleted', 0);
+
+        return $this->db->get()->result();
+    }
+
     public function getMapelTerdekat($id_user)
     {
         $now = date('H:i:s');
@@ -169,11 +194,11 @@ class Absensi_model extends CI_Model
             ->result();
     }
 
+
     public function checkMapelDiKonfigurasi($id_user, $tanggal_absen, $id_mapel)
     {
         $bulan_tahun = date('Y-m', strtotime($tanggal_absen));
-        // var_dump($id_mapel);
-        // die;
+        $tanggal = ltrim(date('d', strtotime($tanggal_absen)), '0');
 
         $master = $this->db->get_where('config_waktu_master', ['bulan_tahun' => $bulan_tahun])->row();
         if (!$master) return false;
@@ -181,7 +206,8 @@ class Absensi_model extends CI_Model
         $detail = $this->db->get_where('config_waktu_detail', [
             'id_user' => $id_user,
             'id_config_master' => $master->id,
-            'id_mapel' => $id_mapel
+            'id_mapel' => $id_mapel,
+            'tanggal' => $tanggal,
         ])->row();
 
         return $detail ? true : false;

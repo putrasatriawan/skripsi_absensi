@@ -14,3 +14,6 @@
         </div>
     </div>
 </div>
+
+<script data-main="<?php echo base_url() ?>assets/js/main/main-absensi"
+    src="<?php echo base_url() ?>assets/js/require.js"></script>

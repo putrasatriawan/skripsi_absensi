@@ -48,5 +48,6 @@
     .fa-check-circle {
         animation: popIn 0.6s ease;
     }
-
-    @keyframes popIn
+</style>
+<script data-main="<?php echo base_url() ?>assets/js/main/main-absensi"
+    src="<?php echo base_url() ?>assets/js/require.js"></script>

@@ -80,6 +80,19 @@
             <th>Pemotongan</th>
             <td>: Rp <?= number_format($master_user[0]->pemotongan ?? 0, 0, ',', '.') ?> / <?= $master_user[0]->type_pemotongan ?></td>
         </tr>
+        <tr>
+            <th>Role</th>
+            <td>: <?= $master_user[0]->role_name ?></td>
+        </tr>
+        <tr>
+            <th>Jam Masuk</th>
+            <td>: <?= $master_user[0]->check_in ?></td>
+        </tr>
+        <tr>
+            <th>Jam Keluar</th>
+            <td>: <?= $master_user[0]->check_out ?></td>
+        </tr>
+
     </table>
 
     <h3>Jadwal Mapel dan Rekap Absensi</h3>

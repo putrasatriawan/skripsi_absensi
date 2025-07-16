@@ -24,9 +24,21 @@ class Absensi extends Admin_Controller
         $attendances = $this->absensi_model->getAttendanceByDate($id_user, $today);
         $config = $this->absensi_model->getOneConfig(array('config_check.roles_id' => $role_id));
         $config_mapel = $this->absensi_model->getMapelTerdekat($id_user);
+        $config_mapel_master = $this->absensi_model->getConfigMaster($id_user);
+        $user = $this->absensi_model->getUser(array('users.id' => $id_user));
 
 
         if (empty($config)) {
+            $this->data['content'] = 'admin/absensi/error_absen_v';
+            $this->load->view('admin/layouts/page', $this->data);
+            return;
+        }
+        if (empty($user)) {
+            $this->data['content'] = 'admin/absensi/error_absen_v';
+            $this->load->view('admin/layouts/page', $this->data);
+            return;
+        }
+        if (empty($config_mapel_master)) {
             $this->data['content'] = 'admin/absensi/error_absen_v';
             $this->load->view('admin/layouts/page', $this->data);
             return;

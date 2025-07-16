@@ -95,6 +95,8 @@ class Master_user extends Admin_Controller
 			// }
 			// die;
 			$update = $this->master_user_model->update($data, array("id" => $id));
+			// var_dump($update);
+			// die;
 
 			if ($update) {
 				$data_user = array(
@@ -103,10 +105,10 @@ class Master_user extends Admin_Controller
 				);
 				$this->user_model->update($data_user, array("id" => $users_id));
 				echo json_encode(['status' => 'success', 'message' => 'Data Guru Berhasil Diubah!']);
-				redirect("master_user", "refresh");
+				// redirect("master_user", "refresh");
 			} else {
 				echo json_encode(['status' => 'error', 'message' => 'Data Guru Gagal Diubah!']);
-				redirect("master_user", "refresh");
+				// redirect("master_user", "refresh");
 			}
 		} else {
 			if (!empty($_POST)) {
@@ -311,14 +313,19 @@ class Master_user extends Admin_Controller
 		// 	print_r($value);
 		// }
 		// die;
-		$mapel_by_hari = [];
-		foreach ($mapel_raw as $row) {
-			$mapel_by_hari[$row->hari][] = [
-				'name' => $row->name,
-				'id_user' => $row->id_user,
-				'id_mapel' => $row->id_mapel,
-				'nama_mapel' => $row->nama_mapel,
-			];
+		if (!empty($mapel_raw)) {
+
+			$mapel_by_hari = [];
+			foreach ($mapel_raw as $row) {
+				$mapel_by_hari[$row->hari][] = [
+					'name' => $row->name,
+					'id_user' => $row->id_user,
+					'id_mapel' => $row->id_mapel,
+					'nama_mapel' => $row->nama_mapel,
+				];
+			}
+		} else {
+			$mapel_by_hari = [];
 		}
 
 		// Get saved configurations
@@ -639,7 +646,7 @@ class Master_user extends Admin_Controller
 					} else {
 						$delete_url = "<a href='#' 
 	        				url='" . base_url() . "master_user/destroy_waktu/" . $data->id . "/" . $data->is_deleted . "'
-	        				class='btn btn-sm btn-primary white delete-config' 
+	        				class='btn btn-sm btn-primary white aktif-config' 
 	        				 ><i class='fas fa-check'></i> Aktifkan
 	        				</a>";
 						$delete_url_hard = "<a href='#' 

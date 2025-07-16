@@ -271,6 +271,20 @@ define(["datatablesBS4", "jqvalidate", "toastr", "datepicker", "select2"], funct
           });
         });
       });
+      $("#table_waktu").on("click", ".aktif-config", function () {
+        var url = $(this).attr("url");
+        App.confirm("Apakah Anda yakin ingin mengaktifkan data ini?", function () {
+          $.ajax({
+            method: "GET",
+            url: url,
+          }).done(function () {
+            toastr.success("Data berhasil dihapus/ubah status!");
+            App.tableWaktu.ajax.reload(null, false); // <- ini penting
+          }).fail(function () {
+            toastr.error("Gagal menghapus/ubah status data!");
+          });
+        });
+      });
     },
     
     initSend: function () {

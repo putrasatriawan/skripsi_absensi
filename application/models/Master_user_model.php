@@ -52,7 +52,7 @@ class Master_user_model extends CI_Model
 	public function update($data, $where)
 	{
 		$this->db->update('master_user', $data, $where);
-		return $this->db->affected_rows();
+		return true;
 	}
 
 	public function delete($where)

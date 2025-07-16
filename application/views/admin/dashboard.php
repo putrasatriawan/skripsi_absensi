@@ -16,84 +16,88 @@
 
 
         <!-- Statistik Singkat -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card bg-light p-3 shadow-sm">
-                    <h5 class="text-muted">Total Guru</h5>
-                    <h3 class="text-primary"><?php echo $total_guru ?></h3>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card bg-light p-3 shadow-sm">
-                    <h5 class="text-muted">Kehadiran Bulan Ini</h5>
-                    <h3 class="text-success"><?php echo $get_absen_this_month ?></h3>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <!-- Collapse Utama -->
-                <div class="card shadow-sm mb-3">
-                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                        <strong>Pengguna Berdasarkan Role</strong>
-                        <button class="btn btn-sm btn-light" data-toggle="collapse" data-target="#collapseRoleMain" aria-expanded="false" aria-controls="collapseRoleMain">
-                            Tampilkan Semua
-                        </button>
+        <div class="alert alert-primary shadow-sm text-center mb-4">
+            <h5 class="mb-0">👋 Selamat Datang di <strong>Sistem Informasi Absensi </strong>SMA YPPKP</h5>
+            <p class="mb-0 small">Silahkan Melakukan Absensi</p>
+        </div>
+        <?php if ($this->data['users']->first_name == 'super admin') : ?>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card  p-3 shadow-sm">
+                        <h5 class="text-muted">Total Guru</h5>
+                        <h3 class="text-primary"><?php echo $total_guru ?></h3>
                     </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card  p-3 shadow-sm">
+                        <h5 class="text-muted">Kehadiran Bulan Ini</h5>
+                        <h3 class="text-success"><?php echo $get_absen_this_month ?></h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <!-- Collapse Utama -->
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <strong>Pengguna Berdasarkan Role</strong>
+                            <button class="btn btn-sm btn-light" data-toggle="collapse" data-target="#collapseRoleMain" aria-expanded="false" aria-controls="collapseRoleMain">
+                                Tampilkan Semua
+                            </button>
+                        </div>
 
-                    <div id="collapseRoleMain" class="collapse">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <?php if (!empty($grouped_absensi)): ?>
-                                        <?php $index = 0;
-                                        foreach ($grouped_absensi as $role => $users): ?>
-                                            <?php $collapseId = 'collapseRole' . $index++; ?>
-                                            <div class="card mb-2 shadow-sm">
-                                                <div class="card-header bg-light d-flex justify-content-between align-items-center py-2 px-3">
-                                                    <strong class="small"><?= htmlspecialchars($role) ?></strong>
-                                                    <button class="btn btn-sm btn-link p-0 text-primary" data-toggle="collapse" data-target="#<?= $collapseId ?>" aria-expanded="false" aria-controls="<?= $collapseId ?>">
-                                                        ▼
-                                                    </button>
-                                                </div>
-                                                <div id="<?= $collapseId ?>" class="collapse">
-                                                    <div class="card-body p-2">
-                                                        <ul class="list-group list-group-flush small">
-                                                            <?php foreach ($users as $user): ?>
-                                                                <li class="list-group-item py-1 px-2">
-                                                                    <strong><?= htmlspecialchars($user->first_name) ?></strong>
-                                                                    (<?= htmlspecialchars($user->username) ?> - <?= htmlspecialchars($user->email) ?>)
-                                                                </li>
-                                                            <?php endforeach; ?>
-                                                        </ul>
+                        <div id="collapseRoleMain" class="collapse">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <?php if (!empty($grouped_absensi)): ?>
+                                            <?php $index = 0;
+                                            foreach ($grouped_absensi as $role => $users): ?>
+                                                <?php $collapseId = 'collapseRole' . $index++; ?>
+                                                <div class="card mb-2 shadow-sm">
+                                                    <div class="card-header bg-light d-flex justify-content-between align-items-center py-2 px-3">
+                                                        <strong class="small"><?= htmlspecialchars($role) ?></strong>
+                                                        <button class="btn btn-sm btn-link p-0 text-primary" data-toggle="collapse" data-target="#<?= $collapseId ?>" aria-expanded="false" aria-controls="<?= $collapseId ?>">
+                                                            ▼
+                                                        </button>
+                                                    </div>
+                                                    <div id="<?= $collapseId ?>" class="collapse">
+                                                        <div class="card-body p-2">
+                                                            <ul class="list-group list-group-flush small">
+                                                                <?php foreach ($users as $user): ?>
+                                                                    <li class="list-group-item py-1 px-2">
+                                                                        <strong><?= htmlspecialchars($user->first_name) ?></strong>
+                                                                        (<?= htmlspecialchars($user->username) ?> - <?= htmlspecialchars($user->email) ?>)
+                                                                    </li>
+                                                                <?php endforeach; ?>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <div class="alert alert-warning small">Tidak ada data pengguna tersedia.</div>
-                                    <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <div class="alert alert-warning small">Tidak ada data pengguna tersedia.</div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        <?php endif; ?>
         <!-- Pie Chart Total User -->
         <div class="row mb-5">
-            <div class="col-md-6">
-                <div id="userRolesPieChart" style="width: 100%; height: 400px;"></div>
-            </div>
+            <?php if ($this->data['users']->first_name == 'super admin') : ?>
+                <div class="col-md-6">
+                    <div id="userRolesPieChart" style="width: 100%; height: 400px;"></div>
+                </div>
+            <?php endif; ?>
 
-            <div class="col-md-6">
+            <div class="<?= ($this->data['users']->first_name == 'super admin') ? 'col-md-6' : 'col-md-12' ?>">
                 <div id="barChartAbsensi" style="width: 100%; height: 400px;"></div>
             </div>
+
         </div>
-
-
-
         <!-- Daftar Pengguna Per Role -->
-
     </div>
 </div>
 

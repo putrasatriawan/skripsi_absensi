@@ -105,6 +105,14 @@ class Admin_Controller extends CI_Controller
 	}
 	private function createTree($parent, $menu, $parent_id, $path_active_name)
 	{
+		// echo "<pre>";
+		// print_r($menu);
+		// die;
+		// foreach ($menu  as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		$html = "";
 		if (isset($menu['parents'][$parent])) {
 			if ($parent == 1) {
@@ -187,6 +195,15 @@ class Admin_Controller extends CI_Controller
 			// 	}
 			// 	die;
 		}
+
+		// echo "<pre>";
+		// print_r($menus);
+		// die;
+		// foreach ($menus  as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		if (empty($menus))
 			return "";
 

@@ -25,36 +25,48 @@
                 <div class="col-md-6">
                   <table class="table table-sm table-borderless">
                     <tr>
-                      <th>Nama</th>
-                      <td>: <?= $master_user[0]->name ?></td>
+                      <th class="text-left">Nama</th>
+                      <td class="text-left">: <?= $master_user[0]->name ?></td>
                     </tr>
                     <tr>
-                      <th>Username</th>
-                      <td>: <?= $master_user[0]->nip ?></td>
+                      <th class="text-left">Username</th>
+                      <td class="text-left">: <?= $master_user[0]->nip ?></td>
                     </tr>
                     <tr>
-                      <th>Jenis Kelamin</th>
-                      <td>: <?= $master_user[0]->jenis_kelamin ?></td>
+                      <th class="text-left">Jenis Kelamin</th>
+                      <td class="text-left">: <?= $master_user[0]->jenis_kelamin ?></td>
                     </tr>
                     <tr>
-                      <th>Agama</th>
-                      <td>: <?= $master_user[0]->agama ?></td>
+                      <th class="text-left">Agama</th>
+                      <td class="text-left">: <?= $master_user[0]->agama ?></td>
+                    </tr>
+                    <tr>
+                      <th class="text-left">Role</th>
+                      <td class="text-left">: <?= $master_user[0]->role_name ?></td>
+                    </tr>
+                    <tr>
+                      <th class="text-left">Jam Masuk</th>
+                      <td class="text-left">: <?= $master_user[0]->check_in ?></td>
+                    </tr>
+                    <tr>
+                      <th class="text-left">Jam Keluar</th>
+                      <td class="text-left">: <?= $master_user[0]->check_out ?></td>
                     </tr>
                   </table>
                 </div>
                 <div class="col-md-6">
                   <table class="table table-sm table-borderless">
                     <tr>
-                      <th>No. HP</th>
-                      <td>: <?= $master_user[0]->no_hp ?></td>
+                      <th class="text-left">No. HP</th>
+                      <td class="text-left">: <?= $master_user[0]->no_hp ?></td>
                     </tr>
                     <tr>
-                      <th>Alamat</th>
-                      <td>: <?= $master_user[0]->alamat ?></td>
+                      <th class="text-left">Alamat</th>
+                      <td class="text-left">: <?= $master_user[0]->alamat ?></td>
                     </tr>
                     <tr>
-                      <th>Gaji Per Jam</th>
-                      <td>:
+                      <th class="text-left">Gaji Per Jam</th>
+                      <td class="text-left">:
                         <?php
                         if (!empty($master_user) && isset($master_user[0]->gaji) && $master_user[0]->gaji !== "" && $master_user[0]->gaji !== null) {
                           echo "Rp " . number_format((float) $master_user[0]->gaji, 0, ',', '.');
@@ -65,13 +77,14 @@
                       </td>
                     </tr>
                     <tr>
-                      <th>Pemotongan</th>
-                      <td>: Rp <?= number_format($master_user[0]->pemotongan ?? 0, 0, ',', '.') ?> / <?= $master_user[0]->type_pemotongan ?></td>
+                      <th class="text-left">Pemotongan</th>
+                      <td class="text-left">: Rp <?= number_format($master_user[0]->pemotongan ?? 0, 0, ',', '.') ?> / <?= $master_user[0]->type_pemotongan ?></td>
                     </tr>
                   </table>
                 </div>
               </div>
             </div>
+
           </div>
 
           <h5 class="card-title text-primary">Jadwal Mapel dan Rekap Absensi</h5>
@@ -83,8 +96,8 @@
                   <th>Hari</th>
                   <th>Tanggal</th>
                   <th>Nama Mapel</th>
-                  <th>Jam Mulai</th>
-                  <th>Jam Selesai</th>
+                  <th>Jam Mulai Mapel</th>
+                  <th>Jam Selesai Mapel</th>
                   <th>Durasi</th>
                   <th>Kehadiran Mapel</th>
                   <th>Log Mapel</th>
@@ -101,24 +114,24 @@
                     <td><?= $detail->jam_selesai ?></td>
                     <td><?= $detail->durasi ?></td>
                     <td>
-                        <?php
-                        if (!empty($detail->absen_list)) {
-                            $filtered_absensi = array_filter($detail->absen_list, function($absen) use ($detail) {
-                                return $absen->id_mapel == $detail->id_mapel;
-                            });
-                            if (!empty($filtered_absensi)) {
-                                $status_list = [];
-                                foreach ($filtered_absensi as $absen) {
-                                    $status_list[] = ucfirst($absen->status_mapel ?? '-');
-                                }
-                                echo implode(', ', $status_list);
-                            } else {
-                                echo '<span class="text-muted">Belum Absen</span>';
-                            }
+                      <?php
+                      if (!empty($detail->absen_list)) {
+                        $filtered_absensi = array_filter($detail->absen_list, function ($absen) use ($detail) {
+                          return $absen->id_mapel == $detail->id_mapel;
+                        });
+                        if (!empty($filtered_absensi)) {
+                          $status_list = [];
+                          foreach ($filtered_absensi as $absen) {
+                            $status_list[] = ucfirst($absen->status_mapel ?? '-');
+                          }
+                          echo implode(', ', $status_list);
                         } else {
-                            echo '<span class="text-muted">Belum Absen</span>';
+                          echo '<span class="text-muted">Belum Absen</span>';
                         }
-                        ?>
+                      } else {
+                        echo '<span class="text-muted">Belum Absen</span>';
+                      }
+                      ?>
                     </td>
                     <td class="text-start">
                       <?php if (!empty($detail->absen_list)): ?>

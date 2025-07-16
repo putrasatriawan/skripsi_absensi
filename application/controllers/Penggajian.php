@@ -24,6 +24,7 @@ class Penggajian extends Admin_Controller
 		$this->load->model('config_waktu_master_model');
 		$this->load->model('absensi_model');
 		$this->load->model('user_model');
+		$this->load->model('config_model');
 	}
 
 	public function index()
@@ -138,6 +139,13 @@ class Penggajian extends Admin_Controller
 
 	public function detail_gaji($id, $id_config_master)
 	{
+		$data_users = $this->user_model->getAllById(array('users.id' => $id));
+		$role_id = $data_users[0]->role_id;
+
+		$config_masuk_keluar =  $this->config_model->get_config_chcek($role_id);
+		$config_masuk = $config_masuk_keluar[0]->check_in;
+		$config_keluar = $config_masuk_keluar[0]->check_out;
+
 		//START GET CONFIG DETAIL
 		$config_detail_where = [
 			'config_waktu_detail.id_config_master' => $id_config_master,
@@ -281,24 +289,31 @@ class Penggajian extends Admin_Controller
 					// Jika status absensi 'hadir', tambahkan durasi
 					if (strtolower($absen->status_mapel ?? '') === 'hadir') {
 						$total_durasi_hadir += $dur;
+					}
+					// Cek keterlambatan jika status absensi adalah terlambat
+					if ($absen->status === 'Terlambat') {
+						$init_time = new DateTime($absen->init_time);
+						$diff = $check_in_jadwal->diff($init_time);
+						$diff_menit = ($diff->h * 60) + $diff->i;
 
-						// Cek keterlambatan jika status absensi adalah terlambat
-						if (strtolower($absen->status) === 'terlambat') {
-							$init_time = new DateTime($absen->init_time);
-							$diff = $check_in_jadwal->diff($init_time);
-							$diff_menit = ($diff->h * 60) + $diff->i;
-
-							if ($type_pemotongan === 'per_menit') {
-								$total_pemotongan += $diff_menit * $pemotongan_nominal;
-							} elseif ($type_pemotongan === 'per_jam') {
-								$total_pemotongan += ceil($diff_menit / 60) * $pemotongan_nominal;
-							}
+						if ($type_pemotongan === 'per_menit') {
+							$total_pemotongan += $diff_menit * $pemotongan_nominal;
+						} elseif ($type_pemotongan === 'per_jam') {
+							$total_pemotongan += ceil($diff_menit / 60) * $pemotongan_nominal;
 						}
 					}
 				}
 			}
 		}
 
+		// echo "<pre>";
+		// print_r($type_pemotongan);
+		// die;
+		// foreach ($type_pemotongan as $value) {
+		// 	echo "<pre>";
+		// 	print_r($value);
+		// }
+		// die;
 		$gaji_raw = isset($master_user[0]->gaji) && is_numeric($master_user[0]->gaji) ? (float) $master_user[0]->gaji : 0;
 		$total_gaji = $gaji_raw * $total_durasi_hadir;
 		$total_gaji_pemotongan = $total_gaji - $total_pemotongan;
@@ -315,15 +330,15 @@ class Penggajian extends Admin_Controller
 		$this->data['total_durasi'] = $total_durasi;
 		$this->data['total_durasi_hadir'] = $total_durasi_hadir;
 		$this->data['merged_detail_absen'] = $merged_detail_absen;
+		$this->data['master_user'] = $master_user;
 		// echo "<pre>";
-		// print_r($total_durasi_hadir);
+		// print_r($this->data['master_user']);
 		// die;
-		// foreach ($total_durasi_hadir as $value) {
+		// foreach ($this->data['master_user'] as $value) {
 		// 	echo "<pre>";
 		// 	print_r($value);
 		// }
 		// die;
-		$this->data['master_user'] = $master_user;
 		$this->data['content'] = 'admin/penggajian/detail_gaji_v';
 		$this->load->view('admin/layouts/page', $this->data);
 	}
